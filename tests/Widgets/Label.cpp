@@ -130,13 +130,13 @@ TEST_CASE("[Label]")
 
     SECTION("ScrollbarPolicy")
     {
-        REQUIRE(label->getScrollbarPolicy() == tgui::Scrollbar::Policy::Never);
+        REQUIRE(label->getScrollbarPolicy() == tgui::Scrollbar::Policy::Automatic);
         label->setScrollbarPolicy(tgui::Scrollbar::Policy::Always);
         REQUIRE(label->getScrollbarPolicy() == tgui::Scrollbar::Policy::Always);
-        label->setScrollbarPolicy(tgui::Scrollbar::Policy::Automatic);
-        REQUIRE(label->getScrollbarPolicy() == tgui::Scrollbar::Policy::Automatic);
         label->setScrollbarPolicy(tgui::Scrollbar::Policy::Never);
         REQUIRE(label->getScrollbarPolicy() == tgui::Scrollbar::Policy::Never);
+        label->setScrollbarPolicy(tgui::Scrollbar::Policy::Automatic);
+        REQUIRE(label->getScrollbarPolicy() == tgui::Scrollbar::Policy::Automatic);
     }
 
     SECTION("IgnoreMouseEvents")

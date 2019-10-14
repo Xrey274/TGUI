@@ -257,22 +257,22 @@ TEST_CASE("[ComboBox]")
 
     SECTION("ExpandDirection")
     {
-        REQUIRE(comboBox->getExpandDirection() == tgui::ComboBox::ExpandDirection::Down);
+        REQUIRE(comboBox->getExpandDirection() == tgui::ComboBox::ExpandDirection::Automatic);
         comboBox->setExpandDirection(tgui::ComboBox::ExpandDirection::Up);
         REQUIRE(comboBox->getExpandDirection() == tgui::ComboBox::ExpandDirection::Up);
-        comboBox->setExpandDirection(tgui::ComboBox::ExpandDirection::Automatic);
-        REQUIRE(comboBox->getExpandDirection() == tgui::ComboBox::ExpandDirection::Automatic);
         comboBox->setExpandDirection(tgui::ComboBox::ExpandDirection::Down);
         REQUIRE(comboBox->getExpandDirection() == tgui::ComboBox::ExpandDirection::Down);
+        comboBox->setExpandDirection(tgui::ComboBox::ExpandDirection::Automatic);
+        REQUIRE(comboBox->getExpandDirection() == tgui::ComboBox::ExpandDirection::Automatic);
     }
 
     SECTION("ChangeItemOnScroll")
     {
-        REQUIRE(comboBox->getChangeItemOnScroll());
-        comboBox->setChangeItemOnScroll(false);
         REQUIRE(!comboBox->getChangeItemOnScroll());
         comboBox->setChangeItemOnScroll(true);
         REQUIRE(comboBox->getChangeItemOnScroll());
+        comboBox->setChangeItemOnScroll(false);
+        REQUIRE(!comboBox->getChangeItemOnScroll());
     }
 
     SECTION("Events / Signals")

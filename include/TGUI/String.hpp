@@ -46,11 +46,8 @@ namespace tgui
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// @brief Checks if a character is a whitespace character (space, tab, carriage return or line feed)
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#ifdef TGUI_NEXT
-    TGUI_API bool isWhitespace(char32_t character);
-#else
     TGUI_API bool isWhitespace(sf::Uint32 character);
-#endif
+
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// @brief Converts a string to an int
@@ -176,7 +173,7 @@ namespace tgui
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         String toUpper() const;
 
-#ifdef TGUI_NEXT // Code not working on GCC 4.9
+
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /// @brief Replaces all occurrences of a substring with a replacement string
         ///
@@ -186,8 +183,9 @@ namespace tgui
         /// @return Reference to this object.
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         String& replace(const String& searchFor, const String& replaceWith);
-#endif
 
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public:
 
         String() = default;
@@ -355,7 +353,7 @@ namespace tgui
         void shrink_to_fit();
 
         void clear() noexcept;
-#ifdef TGUI_NEXT // Code not working on GCC 4.9
+
         String& insert(std::size_t index, std::size_t count, char ch);
         String& insert(std::size_t index, std::size_t count, wchar_t ch);
         String& insert(std::size_t index, std::size_t count, char16_t ch);
@@ -407,7 +405,7 @@ namespace tgui
 
         iterator erase(const_iterator position);
         iterator erase(const_iterator first, const_iterator last);
-#endif
+
         void push_back(char ch);
         void push_back(wchar_t ch);
         void push_back(char16_t ch);
@@ -486,7 +484,7 @@ namespace tgui
         int compare(std::size_t pos1, std::size_t count1, const wchar_t* s, std::size_t count2) const;
         int compare(std::size_t pos1, std::size_t count1, const char16_t* s, std::size_t count2) const;
         int compare(std::size_t pos1, std::size_t count1, const char32_t* s, std::size_t count2) const;
-#ifdef TGUI_NEXT // Code not working on GCC 4.9
+
         String& replace(std::size_t pos, std::size_t count, const std::string& str);
         String& replace(std::size_t pos, std::size_t count, const std::wstring& str);
         String& replace(std::size_t pos, std::size_t count, const std::u16string& str);
@@ -544,7 +542,7 @@ namespace tgui
         String& replace(const_iterator first, const_iterator last, std::initializer_list<wchar_t> chars);
         String& replace(const_iterator first, const_iterator last, std::initializer_list<char16_t> chars);
         String& replace(const_iterator first, const_iterator last, std::initializer_list<char32_t> chars);
-#endif
+
         String substr(std::size_t pos = 0, std::size_t count = npos) const;
 
         std::size_t copy(char32_t* dest, std::size_t count, std::size_t pos = 0) const;
