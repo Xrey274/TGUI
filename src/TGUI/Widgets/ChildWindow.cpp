@@ -24,7 +24,7 @@
 
 
 #include <TGUI/Widgets/ChildWindow.hpp>
-#include <TGUI/Vector2f.hpp>
+#include <TGUI/Vector2.hpp>
 #include <TGUI/Clipping.hpp>
 #include <TGUI/SignalImpl.hpp>
 

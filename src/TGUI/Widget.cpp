@@ -26,7 +26,7 @@
 #include <TGUI/ToolTip.hpp>
 #include <TGUI/Container.hpp>
 #include <TGUI/Animation.hpp>
-#include <TGUI/Vector2f.hpp>
+#include <TGUI/Vector2.hpp>
 #include <TGUI/Loading/WidgetFactory.hpp>
 #include <SFML/System/Err.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>

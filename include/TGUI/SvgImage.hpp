@@ -26,7 +26,7 @@
 #ifndef TGUI_SVG_IMAGE_HPP
 #define TGUI_SVG_IMAGE_HPP
 
-#include <TGUI/Vector2f.hpp>
+#include <TGUI/Vector2.hpp>
 
 #include <SFML/System/String.hpp>
 

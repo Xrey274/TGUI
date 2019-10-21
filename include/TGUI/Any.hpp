@@ -27,6 +27,7 @@
 #ifndef TGUI_ANY_HPP
 #define TGUI_ANY_HPP
 
+#include <TGUI/Config.hpp>
 #include <type_traits>
 #include <utility>
 #include <typeinfo>
@@ -38,31 +39,31 @@ namespace tgui
         template<class T>
         using StorageType = typename std::decay<T>::type;
 
-        bool is_null() const
+        TGUI_CONSTEXPR bool is_null() const
         {
             return ptr == nullptr;
         }
 
-        bool not_null() const
+        TGUI_CONSTEXPR bool not_null() const
         {
             return ptr != nullptr;
         }
 
         template<typename U>
-        Any(U&& value)
+        TGUI_CONSTEXPR Any(U&& value)
             : ptr{new Derived<StorageType<U>>(std::forward<U>(value))}
         {
         }
 
         template<class U>
-        bool is() const
+        TGUI_CONSTEXPR bool is() const
         {
             typedef StorageType<U> T;
             return dynamic_cast<Derived<T>*>(ptr);
         }
 
         template<class U>
-        StorageType<U>& as() const
+        TGUI_CONSTEXPR StorageType<U>& as() const
         {
             typedef StorageType<U> T;
             auto derived = dynamic_cast<Derived<T>*>(ptr);
@@ -73,12 +74,12 @@ namespace tgui
         }
 
         template<class U>
-        operator U()
+        TGUI_CONSTEXPR operator U()
         {
             return as<StorageType<U>>();
         }
 
-        Any()
+        TGUI_CONSTEXPR Any()
             : ptr(nullptr)
         {
         }
@@ -88,7 +89,7 @@ namespace tgui
         {
         }
 
-        Any(Any&& that) noexcept
+        TGUI_CONSTEXPR Any(Any&& that) noexcept
             : ptr(that.ptr)
         {
             that.ptr = nullptr;

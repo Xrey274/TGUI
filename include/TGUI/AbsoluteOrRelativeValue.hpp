@@ -133,7 +133,7 @@ namespace tgui
         ///
         /// @param newParentSize  New size from which to take the relative value
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        void updateParentSize(float newParentSize)
+        TGUI_CONSTEXPR void updateParentSize(float newParentSize)
         {
             if (!m_constant)
             {

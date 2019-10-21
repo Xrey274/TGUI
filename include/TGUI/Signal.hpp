@@ -29,7 +29,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include <TGUI/Global.hpp>
-#include <TGUI/Vector2f.hpp>
+#include <TGUI/Vector2.hpp>
 #include <TGUI/Animation.hpp>
 #include <SFML/System/String.hpp>
 #include <type_traits>

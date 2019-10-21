@@ -52,7 +52,7 @@ namespace tgui
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /// @brief Returns the color with its alpha channel multiplied with the alpha parameter
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        static Color calcColorOpacity(const Color& color, float alpha)
+        static TGUI_CONSTEXPR Color calcColorOpacity(const Color& color, float alpha)
         {
             return {color.getRed(), color.getGreen(), color.getBlue(), static_cast<std::uint8_t>(color.getAlpha() * alpha)};
         }
@@ -65,8 +65,12 @@ namespace tgui
         ///
         /// The isSet() function will return false when the object was created using this constructor.
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        Color() :
-            m_isSet{false}
+        TGUI_CONSTEXPR Color() :
+            m_isSet{false},
+            m_red  {0},
+            m_green{0},
+            m_blue {0},
+            m_alpha{255}
         {
         }
 
@@ -76,9 +80,12 @@ namespace tgui
         ///
         /// @param color  Color to set
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        Color(const sf::Color& color) :
+        TGUI_CONSTEXPR Color(const sf::Color& color) :
             m_isSet{true},
-            m_color{color}
+            m_red  {color.r},
+            m_green{color.g},
+            m_blue {color.b},
+            m_alpha{color.a}
         {
         }
 
@@ -91,9 +98,12 @@ namespace tgui
         /// @param blue  Blue component
         /// @param alpha Alpha component
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        Color(std::uint8_t red, std::uint8_t green, std::uint8_t blue, std::uint8_t alpha = 255) :
+        TGUI_CONSTEXPR Color(std::uint8_t red, std::uint8_t green, std::uint8_t blue, std::uint8_t alpha = 255) :
             m_isSet{true},
-            m_color{red, green, blue, alpha}
+            m_red  {red},
+            m_green{green},
+            m_blue {blue},
+            m_alpha{alpha}
         {
         }
 
@@ -133,7 +143,10 @@ namespace tgui
         ///
         /// @return True if a color was passed to the constructor, false when the default constructor was used
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        bool isSet() const;
+        TGUI_CONSTEXPR bool isSet() const
+        {
+            return m_isSet;
+        }
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -141,7 +154,10 @@ namespace tgui
         ///
         /// @return The color stored in this object, or the default color if no color was set
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        operator sf::Color() const;
+        operator sf::Color() const
+        {
+            return sf::Color(m_red, m_green, m_blue, m_alpha);
+        }
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -149,7 +165,10 @@ namespace tgui
         ///
         /// @return Red component of the stored color or the one from the default color is no color was set
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        std::uint8_t getRed() const;
+        TGUI_CONSTEXPR std::uint8_t getRed() const
+        {
+            return m_red;
+        }
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -157,7 +176,10 @@ namespace tgui
         ///
         /// @return Green component of the stored color or the one from the default color is no color was set
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        std::uint8_t getGreen() const;
+        TGUI_CONSTEXPR std::uint8_t getGreen() const
+        {
+            return m_green;
+        }
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -165,7 +187,10 @@ namespace tgui
         ///
         /// @return Blue component of the stored color or the one from the default color is no color was set
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        std::uint8_t getBlue() const;
+        TGUI_CONSTEXPR std::uint8_t getBlue() const
+        {
+            return m_blue;
+        }
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -173,31 +198,32 @@ namespace tgui
         ///
         /// @return Alpha component of the stored color or the one from the default color is no color was set
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        std::uint8_t getAlpha() const;
+        TGUI_CONSTEXPR std::uint8_t getAlpha() const
+        {
+            return m_alpha;
+        }
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /// @brief Compares the color with another one
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        bool operator==(const Color& right) const;
+        TGUI_CONSTEXPR bool operator==(const Color& rhs) const
+        {
+            return (m_isSet == rhs.m_isSet)
+                && (m_red == rhs.m_red)
+                && (m_green == rhs.m_green)
+                && (m_blue == rhs.m_blue)
+                && (m_alpha == rhs.m_alpha);
+        }
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /// @brief Compares the color with another one
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        bool operator!=(const Color& right) const;
-
-
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        /// @brief Compares the color with another one
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        bool operator==(const sf::Color& right) const;
-
-
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        /// @brief Compares the color with another one
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        bool operator!=(const sf::Color& right) const;
+        TGUI_CONSTEXPR bool operator!=(const Color& right) const
+        {
+            return !(*this == right);
+        }
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -219,8 +245,11 @@ namespace tgui
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     private:
 
-        bool      m_isSet;
-        sf::Color m_color;
+        bool m_isSet;
+        std::uint8_t m_red;
+        std::uint8_t m_green;
+        std::uint8_t m_blue;
+        std::uint8_t m_alpha;
     };
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

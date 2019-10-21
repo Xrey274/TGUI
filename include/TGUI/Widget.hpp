@@ -33,7 +33,7 @@
 #include <TGUI/Sprite.hpp>
 #include <TGUI/Layout.hpp>
 #include <TGUI/String.hpp>
-#include <TGUI/Vector2f.hpp>
+#include <TGUI/Vector2.hpp>
 #include <TGUI/Loading/Theme.hpp>
 #include <TGUI/Loading/DataIO.hpp>
 #include <TGUI/Loading/Serializer.hpp>

@@ -28,7 +28,7 @@
 
 #include <TGUI/Font.hpp>
 #include <TGUI/Color.hpp>
-#include <TGUI/Vector2f.hpp>
+#include <TGUI/Vector2.hpp>
 #include <TGUI/TextStyle.hpp>
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/Graphics/Transformable.hpp>

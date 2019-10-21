@@ -218,8 +218,8 @@ namespace tgui
                 return true;
 
             // Check if the mouse is on top of the text
-            if (FloatRect{0, 0, m_text.getSize().x, m_text.getSize().y}.contains(pos.x - (getSize().x + (getSize().x * m_textDistanceRatioCached)),
-                                                                                 pos.y - ((getSize().y - m_text.getSize().y) / 2.0f)))
+            if (FloatRect{0, 0, m_text.getSize().x, m_text.getSize().y}.contains({pos.x - (getSize().x + (getSize().x * m_textDistanceRatioCached)),
+                                                                                  pos.y - ((getSize().y - m_text.getSize().y) / 2.0f)}))
                 return true;
         }
         else // You are not allowed to click on the text

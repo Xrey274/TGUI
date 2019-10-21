@@ -150,7 +150,7 @@ namespace tgui
                 pos.y = getSize().y;
         }
         else // There is no rotation
-            pos -= getPosition();
+            pos -= Vector2f(getPosition());
 
         if ((pos.x < 0) || (pos.y < 0) || (pos.x >= getSize().x) || (pos.y >= getSize().y))
             return true;
@@ -411,7 +411,7 @@ namespace tgui
             Vector2f pos = {getTransform().transformRect(FloatRect({}, getSize())).left,
                             getTransform().transformRect(FloatRect({}, getSize())).top};
 
-            states.transform.translate(getPosition() - pos);
+            states.transform.translate(Vector2f(getPosition()) - pos);
         }
 
         states.transform *= getTransform();

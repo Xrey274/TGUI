@@ -27,7 +27,7 @@
 #define TGUI_LAYOUT_HPP
 
 #include <TGUI/Config.hpp>
-#include <TGUI/Vector2f.hpp>
+#include <TGUI/Vector2.hpp>
 #include <type_traits>
 #include <functional>
 #include <memory>

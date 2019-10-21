@@ -28,7 +28,7 @@
 
 #include <TGUI/Widgets/ClickableWidget.hpp>
 #include <TGUI/Renderers/EditBoxRenderer.hpp>
-#include <TGUI/FloatRect.hpp>
+#include <TGUI/Rect.hpp>
 #include <TGUI/Text.hpp>
 #include <regex>
 

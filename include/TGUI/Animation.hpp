@@ -26,7 +26,7 @@
 #ifndef TGUI_ANIMATION_HPP
 #define TGUI_ANIMATION_HPP
 
-#include <TGUI/Vector2f.hpp>
+#include <TGUI/Vector2.hpp>
 #include <SFML/System/Time.hpp>
 #include <functional>
 #include <memory>

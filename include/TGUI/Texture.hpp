@@ -29,7 +29,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include <TGUI/TextureData.hpp>
-#include <TGUI/Vector2f.hpp>
+#include <TGUI/Vector2.hpp>
 #include <TGUI/Color.hpp>
 #include <SFML/System/String.hpp>
 #include <functional>
