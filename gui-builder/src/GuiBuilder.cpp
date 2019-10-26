@@ -209,7 +209,7 @@ namespace
         return true;
     }
 
-    sf::Vector2f parseSize(std::string str)
+    tgui::Vector2f parseSize(std::string str)
     {
         if (str.empty())
             return {800, 600};
@@ -315,7 +315,7 @@ void GuiBuilder::mainLoop()
                         else if (m_selectedForm->rightMouseClick({event.mouseButton.x, event.mouseButton.y}))
                         {
                             auto panel = tgui::Panel::create({"100%", "100%"});
-                            panel->getRenderer()->setBackgroundColor(sf::Color::Transparent);
+                            panel->getRenderer()->setBackgroundColor(tgui::Color::Transparent);
                             m_gui.add(panel);
 
                             m_popupMenu = tgui::ListBox::create();
@@ -335,7 +335,7 @@ void GuiBuilder::mainLoop()
                             if (m_popupMenu->getItemCount() > 0)
                             {
                                 const tgui::Outline outline = m_popupMenu->getSharedRenderer()->getPadding() + m_popupMenu->getSharedRenderer()->getBorders();
-                                m_popupMenu->setPosition(sf::Vector2f{sf::Vector2i{event.mouseButton.x, event.mouseButton.y}});
+                                m_popupMenu->setPosition({static_cast<float>(event.mouseButton.x), static_cast<float>(event.mouseButton.y)});
                                 m_popupMenu->setSize({150, (m_popupMenu->getItemHeight() * m_popupMenu->getItemCount()) + outline.getTop() + outline.getBottom()});
 
                                 panel->connect("Clicked", [this]{ removePopupMenu(); });
@@ -890,7 +890,7 @@ void GuiBuilder::loadToolbox()
         verticalLayout->getRenderer()->setPadding({2});
 
         auto panel = tgui::Panel::create();
-        panel->getRenderer()->setBackgroundColor(sf::Color::Transparent);
+        panel->getRenderer()->setBackgroundColor(tgui::Color::Transparent);
         panel->add(icon);
         panel->add(name);
         verticalLayout->add(panel);
@@ -1481,7 +1481,7 @@ void GuiBuilder::addPropertyValueColor(const std::string& property, const sf::St
 
         colorPreviewPanel = tgui::Panel::create();
         colorPreviewPanel->getRenderer()->setBorders(1);
-        colorPreviewPanel->getRenderer()->setBorderColor(sf::Color::Black);
+        colorPreviewPanel->getRenderer()->setBorderColor(tgui::Color::Black);
         m_propertiesContainer->add(colorPreviewPanel, "ValueColorPanel" + property);
     }
 
@@ -1494,7 +1494,7 @@ void GuiBuilder::addPropertyValueColor(const std::string& property, const sf::St
     if (value != "None")
         colorPreviewPanel->getRenderer()->setBackgroundColor(value);
     else
-        colorPreviewPanel->getRenderer()->setBackgroundColor(sf::Color::Transparent);
+        colorPreviewPanel->getRenderer()->setBackgroundColor(tgui::Color::Transparent);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1604,7 +1604,7 @@ void GuiBuilder::addPropertyValueStringList(const std::string& property, const s
 {
     addPropertyValueEditBox(property, value, onChange, topPosition, EDIT_BOX_HEIGHT - 1);
 
-    auto setArrowColor = [](tgui::BitmapButton::Ptr button, sf::Color color){
+    auto setArrowColor = [](tgui::BitmapButton::Ptr button, tgui::Color color){
         tgui::Texture texture = button->getImage();
         texture.setColor(color);
         button->setImage(texture);
@@ -1732,7 +1732,7 @@ void GuiBuilder::addPropertyValueTexture(const std::string& property, const sf::
         auto editBoxPartRect = textureWindow->get<tgui::EditBox>("EditPartRect");
         auto editBoxMiddleRect = textureWindow->get<tgui::EditBox>("EditMiddleRect");
 
-        auto deserializeRect = [=](std::string str) -> sf::IntRect {
+        auto deserializeRect = [=](std::string str) -> tgui::UIntRect {
             if (str.empty())
                 return {};
 
@@ -1741,14 +1741,14 @@ void GuiBuilder::addPropertyValueTexture(const std::string& property, const sf::
 
             const std::vector<std::string> tokens = tgui::Deserializer::split(str, ',');
             if (tokens.size() == 4)
-                return {tgui::strToInt(tokens[0]), tgui::strToInt(tokens[1]), tgui::strToInt(tokens[2]), tgui::strToInt(tokens[3])};
+                return {tgui::strToUInt(tokens[0]), tgui::strToUInt(tokens[1]), tgui::strToUInt(tokens[2]), tgui::strToUInt(tokens[3])};
             else
                 return {};
         };
 
         previewCanvas->setUserData(std::make_shared<tgui::Texture>());
 
-        auto updateForm = [=](sf::String filename, sf::IntRect partRect, sf::IntRect middleRect, bool resetPartRect, bool resetMiddleRect, bool resetSize){
+        auto updateForm = [=](sf::String filename, tgui::UIntRect partRect, tgui::UIntRect middleRect, bool resetPartRect, bool resetMiddleRect, bool resetSize){
             auto texture = previewCanvas->getUserData<std::shared_ptr<tgui::Texture>>();
             if (resetSize)
             {
@@ -1764,9 +1764,9 @@ void GuiBuilder::addPropertyValueTexture(const std::string& property, const sf::
                 buttonSelectFile->setUserData(filename); // Not using texture.getId() as it would be empty if file didn't exist
             }
 
-            const sf::Vector2f imageSize = texture->getImageSize();
-            const sf::Vector2f extraSpace{20, 135};
-            const sf::Vector2f minSize{235, 140};
+            const tgui::Vector2u imageSize = texture->getImageSize();
+            const tgui::Vector2f extraSpace{20, 135};
+            const tgui::Vector2f minSize{235, 140};
             const tgui::Layout2d maxSize{tgui::bindWidth(m_gui) - 50, tgui::bindHeight(m_gui) - 50};
             const tgui::Layout scaling = tgui::bindMin(1.f, tgui::bindMin((maxSize.x - extraSpace.x) / imageSize.x, (maxSize.y - extraSpace.y) / imageSize.y));
             if (resetSize)
@@ -1780,10 +1780,10 @@ void GuiBuilder::addPropertyValueTexture(const std::string& property, const sf::
 
             if (resetPartRect)
             {
-                if (texture->getData() && (texture->getData()->rect == sf::IntRect{}))
-                    partRect = {0, 0, static_cast<int>(imageSize.x), static_cast<int>(imageSize.y)};
+                if (texture->getData() && (texture->getData()->rect == tgui::UIntRect{}))
+                    partRect = {0, 0, imageSize.x, imageSize.y};
                 else
-                    partRect = texture->getData() ? texture->getData()->rect : sf::IntRect{};
+                    partRect = texture->getData() ? texture->getData()->rect : tgui::UIntRect{};
 
                 editBoxPartRect->onTextChange.setEnabled(false);
                 editBoxPartRect->setText("(" + tgui::to_string(partRect.left) + ", " + tgui::to_string(partRect.top)
@@ -1804,28 +1804,28 @@ void GuiBuilder::addPropertyValueTexture(const std::string& property, const sf::
             tgui::Sprite sprite{*texture};
             sprite.setScale({scaling.getValue(), scaling.getValue()});
 
-            previewCanvas->clear(sf::Color::Transparent);
+            previewCanvas->clear(tgui::Color::Transparent);
             previewCanvas->draw(sprite);
 
-            if ((middleRect != sf::IntRect{}) && (middleRect != sf::IntRect{0, 0, static_cast<int>(imageSize.x), static_cast<int>(imageSize.y)}))
+            if ((middleRect != tgui::UIntRect{}) && (middleRect != tgui::UIntRect{0, 0, imageSize.x, imageSize.y}))
             {
                 std::vector<sf::Vertex> lines;
-                if ((middleRect.left != 0) || (middleRect.width != static_cast<int>(imageSize.x)))
+                if ((middleRect.left != 0) || (middleRect.width != imageSize.x))
                 {
                     lines.push_back({sf::Vector2f{middleRect.left + 0.5f, 0} * scaling.getValue(), sf::Color{255, 128, 255}});
-                    lines.push_back({sf::Vector2f{middleRect.left + 0.5f, imageSize.y} * scaling.getValue(), sf::Color{255, 128, 255}});
+                    lines.push_back({sf::Vector2f{middleRect.left + 0.5f, static_cast<float>(imageSize.y)} * scaling.getValue(), sf::Color{255, 128, 255}});
 
                     lines.push_back({sf::Vector2f{middleRect.left + middleRect.width - 0.5f, 0} * scaling.getValue(), sf::Color{255, 128, 255}});
-                    lines.push_back({sf::Vector2f{middleRect.left + middleRect.width - 0.5f, imageSize.y} * scaling.getValue(), sf::Color{255, 128, 255}});
+                    lines.push_back({sf::Vector2f{middleRect.left + middleRect.width - 0.5f, static_cast<float>(imageSize.y)} * scaling.getValue(), sf::Color{255, 128, 255}});
                 }
 
-                if ((middleRect.top != 0) || (middleRect.height != static_cast<int>(imageSize.y)))
+                if ((middleRect.top != 0) || (middleRect.height != imageSize.y))
                 {
                     lines.push_back({sf::Vector2f{0, middleRect.top + 0.5f} * scaling.getValue(), sf::Color{255, 128, 255}});
-                    lines.push_back({sf::Vector2f{imageSize.x, middleRect.top + 0.5f} * scaling.getValue(), sf::Color{255, 128, 255}});
+                    lines.push_back({sf::Vector2f{static_cast<float>(imageSize.x), middleRect.top + 0.5f} * scaling.getValue(), sf::Color{255, 128, 255}});
 
                     lines.push_back({sf::Vector2f{0, middleRect.top + middleRect.height - 0.5f} * scaling.getValue(), sf::Color{255, 128, 255}});
-                    lines.push_back({sf::Vector2f{imageSize.x, middleRect.top + middleRect.height - 0.5f} * scaling.getValue(), sf::Color{255, 128, 255}});
+                    lines.push_back({sf::Vector2f{static_cast<float>(imageSize.x), middleRect.top + middleRect.height - 0.5f} * scaling.getValue(), sf::Color{255, 128, 255}});
                 }
 
                 if (!lines.empty())
@@ -1856,8 +1856,8 @@ void GuiBuilder::addPropertyValueTexture(const std::string& property, const sf::
         }
 
         sf::String originalFilename = originalTexture.getId();
-        sf::IntRect originalPartRect = originalTexture.getData() ? originalTexture.getData()->rect : sf::IntRect{};
-        sf::IntRect originalMiddleRect = originalTexture.getMiddleRect();
+        tgui::UIntRect originalPartRect = originalTexture.getData() ? originalTexture.getData()->rect : tgui::UIntRect{};
+        tgui::UIntRect originalMiddleRect = originalTexture.getMiddleRect();
         updateForm(originalFilename, originalPartRect, originalMiddleRect, true, true, true);
 
         buttonSelectFile->connect("pressed", [=]{

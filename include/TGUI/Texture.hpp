@@ -31,6 +31,7 @@
 #include <TGUI/TextureData.hpp>
 #include <TGUI/Vector2.hpp>
 #include <TGUI/Color.hpp>
+#include <TGUI/Rect.hpp>
 #include <SFML/System/String.hpp>
 #include <functional>
 
@@ -44,7 +45,7 @@ namespace tgui
 
         using CallbackFunc = std::function<void(std::shared_ptr<TextureData>)>;
         using ImageLoaderFunc = std::function<std::unique_ptr<sf::Image>(const sf::String&)>;
-        using TextureLoaderFunc = std::function<std::shared_ptr<TextureData>(Texture&, const sf::String&, const sf::IntRect&)>;
+        using TextureLoaderFunc = std::function<std::shared_ptr<TextureData>(Texture&, const sf::String&, const UIntRect&)>;
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -64,8 +65,8 @@ namespace tgui
         ///
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         Texture(const char* id,
-                const sf::IntRect& partRect = sf::IntRect(0, 0, 0, 0),
-                const sf::IntRect& middlePart = sf::IntRect(0, 0, 0, 0),
+                const UIntRect& partRect = UIntRect(0, 0, 0, 0),
+                const UIntRect& middlePart = UIntRect(0, 0, 0, 0),
                 bool smooth = false)
             : Texture(sf::String{id}, partRect, middlePart, smooth)
         {
@@ -84,8 +85,8 @@ namespace tgui
         ///
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         Texture(const std::string& id,
-                const sf::IntRect& partRect = sf::IntRect(0, 0, 0, 0),
-                const sf::IntRect& middlePart = sf::IntRect(0, 0, 0, 0),
+                const UIntRect& partRect = UIntRect(0, 0, 0, 0),
+                const UIntRect& middlePart = UIntRect(0, 0, 0, 0),
                 bool smooth = false)
             : Texture(sf::String{id}, partRect, middlePart, smooth)
         {
@@ -104,8 +105,8 @@ namespace tgui
         ///
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         Texture(const sf::String& id,
-                const sf::IntRect& partRect = sf::IntRect(0, 0, 0, 0),
-                const sf::IntRect& middlePart = sf::IntRect(0, 0, 0, 0),
+                const UIntRect& partRect = UIntRect(0, 0, 0, 0),
+                const UIntRect& middlePart = UIntRect(0, 0, 0, 0),
                 bool smooth = false);
 
 
@@ -122,8 +123,8 @@ namespace tgui
         ///
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         Texture(const sf::Texture& texture,
-                const sf::IntRect& partRect = sf::IntRect(0, 0, 0, 0),
-                const sf::IntRect& middlePart = sf::IntRect(0, 0, 0, 0));
+                const UIntRect& partRect = UIntRect(0, 0, 0, 0),
+                const UIntRect& middlePart = UIntRect(0, 0, 0, 0));
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -162,8 +163,8 @@ namespace tgui
         ///
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         void load(const sf::String& id,
-                  const sf::IntRect& partRect = {},
-                  const sf::IntRect& middleRect = {},
+                  const UIntRect& partRect = {},
+                  const UIntRect& middleRect = {},
                   bool smooth = false);
 
 
@@ -178,8 +179,8 @@ namespace tgui
         ///
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         void load(const sf::Texture& texture,
-                  const sf::IntRect& partRect = {},
-                  const sf::IntRect& middleRect = {});
+                  const UIntRect& partRect = {},
+                  const UIntRect& middleRect = {});
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -206,7 +207,7 @@ namespace tgui
         /// @return Size of the image like it was when loaded (no scaling applied)
         ///
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        Vector2f getImageSize() const;
+        Vector2u getImageSize() const;
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -282,7 +283,7 @@ namespace tgui
         /// @return Middle rect of the texture
         ///
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        sf::IntRect getMiddleRect() const;
+        UIntRect getMiddleRect() const;
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -293,7 +294,7 @@ namespace tgui
         /// @return True when the pixel is transparent, false when it is not
         ///
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        bool isTransparentPixel(sf::Vector2u pos) const;
+        bool isTransparentPixel(Vector2u pos) const;
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -388,7 +389,7 @@ namespace tgui
         /// @param middleRect Choose the middle part of the image part to determine scaling (e.g. 9-slice scaling)
         ///
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        void setTextureData(std::shared_ptr<TextureData> data, const sf::IntRect& middleRect = {});
+        void setTextureData(std::shared_ptr<TextureData> data, const UIntRect& middleRect = {});
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -397,7 +398,7 @@ namespace tgui
         std::shared_ptr<TextureData> m_data = nullptr;
         Color m_color = Color::White;
         sf::Shader* m_shader = nullptr;
-        sf::IntRect m_middleRect;
+        UIntRect m_middleRect;
         sf::String  m_id;
 
         CallbackFunc m_copyCallback;

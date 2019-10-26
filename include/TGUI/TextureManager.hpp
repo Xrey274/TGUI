@@ -56,7 +56,7 @@ namespace tgui
         /// @return Texture data when loaded successfully, nullptr otherwise
         ///
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        static std::shared_ptr<TextureData> getTexture(Texture& texture, const sf::String& filename, const sf::IntRect& partRect = sf::IntRect(0, 0, 0, 0));
+        static std::shared_ptr<TextureData> getTexture(Texture& texture, const sf::String& filename, const UIntRect& partRect = UIntRect(0, 0, 0, 0));
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

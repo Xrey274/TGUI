@@ -49,7 +49,7 @@ TEST_CASE("[Canvas]")
     SECTION("constructor")
     {
         canvas = tgui::Canvas::create({200, 100});
-        REQUIRE(canvas->getSize() == sf::Vector2f(200, 100));
+        REQUIRE(canvas->getSize() == tgui::Vector2f(200, 100));
     }
 
     SECTION("view")
@@ -113,13 +113,13 @@ TEST_CASE("[Canvas]")
         sprite.setPosition({15, 20});
 
         std::vector<sf::Vertex> vertices = {
-                {{80, 90}, sf::Color::Red},
-                {{80, 115}, sf::Color::Red},
-                {{100, 90}, sf::Color::Red},
-                {{100, 115}, sf::Color::Red}
+                {{80, 90}, tgui::Color::Red},
+                {{80, 115}, tgui::Color::Red},
+                {{100, 90}, tgui::Color::Red},
+                {{100, 115}, tgui::Color::Red}
             };
 
-        canvas->clear(sf::Color::Yellow);
+        canvas->clear(tgui::Color::Yellow);
         canvas->draw(sprite);
         canvas->draw(vertices.data(), vertices.size(), sf::PrimitiveType::TrianglesStrip);
         canvas->display();

@@ -35,7 +35,7 @@ namespace tgui
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    std::shared_ptr<TextureData> TextureManager::getTexture(Texture& texture, const sf::String& filename, const sf::IntRect& partRect)
+    std::shared_ptr<TextureData> TextureManager::getTexture(Texture& texture, const sf::String& filename, const UIntRect& partRect)
     {
         // Look if we already had this image
         auto imageIt = m_imageMap.find(filename);
@@ -90,12 +90,15 @@ namespace tgui
             {
                 // Create a texture from the image
                 bool loadFromImageSuccess;
-                if (partRect == sf::IntRect{})
+                if (partRect == UIntRect{})
                     loadFromImageSuccess = data->texture.loadFromImage(*data->image);
                 else
                 {
-                    if ((partRect.left < static_cast<int>(data->image->getSize().x)) && (partRect.top < static_cast<int>(data->image->getSize().y)))
-                        loadFromImageSuccess = data->texture.loadFromImage(*data->image, partRect);
+                    if ((partRect.left < data->image->getSize().x) && (partRect.top < data->image->getSize().y))
+                    {
+                        loadFromImageSuccess = data->texture.loadFromImage(*data->image,
+                            sf::IntRect(partRect.left, partRect.top, partRect.width, partRect.height));
+                    }
                     else
                         loadFromImageSuccess = false;
                 }

@@ -423,13 +423,13 @@ namespace tgui
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // This function will search after which character the caret should be placed. It will not change the caret position.
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        sf::Vector2<std::size_t> findCaretPosition(Vector2f position) const;
+        Vector2<std::size_t> findCaretPosition(Vector2f position) const;
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Gets the index of either m_selStart or m_selEnd
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        std::size_t getIndexOfSelectionPos(sf::Vector2<std::size_t> selectionPos) const;
+        std::size_t getIndexOfSelectionPos(Vector2<std::size_t> selectionPos) const;
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -568,9 +568,9 @@ namespace tgui
         std::size_t m_visibleLines = 1;
 
         // Information about the selection
-        sf::Vector2<std::size_t> m_selStart;
-        sf::Vector2<std::size_t> m_selEnd;
-        std::pair<sf::Vector2<std::size_t>, sf::Vector2<std::size_t>> m_lastSelection;
+        Vector2<std::size_t> m_selStart;
+        Vector2<std::size_t> m_selEnd;
+        std::pair<Vector2<std::size_t>, Vector2<std::size_t>> m_lastSelection;
 
         // Information about the caret
         Vector2f m_caretPosition;

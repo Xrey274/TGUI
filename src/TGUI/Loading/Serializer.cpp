@@ -116,12 +116,12 @@ namespace tgui
 
         std::string serializeString(ObjectConverter&& value)
         {
-            sf::String result = value.getString();
+            std::string result = value.getString();
 
             bool encodingRequired = false;
-            if (result.isEmpty())
+            if (result.empty())
                 encodingRequired = true;
-            for (const sf::Uint32 c : result)
+            for (const char c : result)
             {
                 if ((c != '%') && (c != '/') && (c != '_') && (c != '@') && ((c < '0') || (c > '9')) && ((c < 'A') || (c > 'Z')) && ((c < 'a') || (c > 'z')))
                     encodingRequired = true;
@@ -136,7 +136,7 @@ namespace tgui
                     while ((pos = result.find(from, pos)) != std::string::npos)
                     {
                         result[pos] = to;
-                        result.insert(pos, '\\');
+                        result.insert(pos, 1, '\\');
                         pos += 2;
                     }
                 };
@@ -148,8 +148,7 @@ namespace tgui
             replace('\n', 'n');
             replace('\0', '0');
 
-            const std::basic_string<sf::Uint8>& resultUtf8 = result.toUtf8();
-            return "\"" + std::string(resultUtf8.begin(), resultUtf8.end()) + "\"";
+            return "\"" + result + "\"";
         }
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -176,14 +175,14 @@ namespace tgui
 
             std::string result = "\"" + texture.getId() + "\"";
 
-            if ((texture.getData()->rect != sf::IntRect{}) && texture.getData()->image
-             && (texture.getData()->rect != sf::IntRect{0, 0, static_cast<int>(texture.getData()->image->getSize().x), static_cast<int>(texture.getData()->image->getSize().y)}))
+            if ((texture.getData()->rect != UIntRect{}) && texture.getData()->image
+             && (texture.getData()->rect != UIntRect{0, 0, texture.getData()->image->getSize().x, texture.getData()->image->getSize().y}))
             {
                 result += " Part(" + to_string(texture.getData()->rect.left) + ", " + to_string(texture.getData()->rect.top)
                             + ", " + to_string(texture.getData()->rect.width) + ", " + to_string(texture.getData()->rect.height) + ")";
             }
 
-            if (texture.getMiddleRect() != sf::IntRect{0, 0, static_cast<int>(texture.getData()->texture.getSize().x), static_cast<int>(texture.getData()->texture.getSize().y)})
+            if (texture.getMiddleRect() != UIntRect{0, 0, texture.getData()->texture.getSize().x, texture.getData()->texture.getSize().y})
             {
                 result += " Middle(" + to_string(texture.getMiddleRect().left) + ", " + to_string(texture.getMiddleRect().top)
                               + ", " + to_string(texture.getMiddleRect().width) + ", " + to_string(texture.getMiddleRect().height) + ")";

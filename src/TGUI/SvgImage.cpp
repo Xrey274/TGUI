@@ -80,7 +80,7 @@ namespace tgui
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    void SvgImage::rasterize(sf::Texture& texture, sf::Vector2u size)
+    void SvgImage::rasterize(sf::Texture& texture, Vector2u size)
     {
         if (!m_svg)
             return;
@@ -88,7 +88,7 @@ namespace tgui
         if (!m_rasterizer)
             m_rasterizer = nsvgCreateRasterizer();
 
-        if (texture.getSize() != size)
+        if (Vector2u{texture.getSize()} != size)
         {
             if (!texture.create(size.x, size.y))
                 return;

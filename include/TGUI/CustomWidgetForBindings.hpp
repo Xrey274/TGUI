@@ -279,25 +279,25 @@ namespace tgui
 
     public:
 
-        std::function<void(sf::Vector2f)>               implPositionChanged;
-        std::function<void(sf::Vector2f)>               implSizeChanged;
+        std::function<void(Vector2f)>                   implPositionChanged;
+        std::function<void(Vector2f)>                   implSizeChanged;
         std::function<void(bool)>                       implVisibleChanged;
         std::function<void(bool)>                       implEnableChanged;
         std::function<void(bool)>                       implFocusChanged;
         std::function<bool()>                           implCanGainFocus;
-        std::function<sf::Vector2f()>                   implGetFullSize;
-        std::function<sf::Vector2f()>                   implGetAbsolutePosition;
-        std::function<sf::Vector2f()>                   implGetWidgetOffset;
+        std::function<Vector2f()>                       implGetFullSize;
+        std::function<Vector2f()>                       implGetAbsolutePosition;
+        std::function<Vector2f()>                       implGetWidgetOffset;
         std::function<void(sf::Time)>                   implUpdateFunction;
-        std::function<bool(sf::Vector2f)>               implMouseOnWidget;
-        std::function<void(sf::Vector2f)>               implLeftMousePressed;
-        std::function<void(sf::Vector2f)>               implLeftMouseReleased;
-        std::function<void(sf::Vector2f)>               implRightMousePressed;
-        std::function<void(sf::Vector2f)>               implRightMouseReleased;
-        std::function<void(sf::Vector2f)>               implMouseMoved;
+        std::function<bool(Vector2f)>                   implMouseOnWidget;
+        std::function<void(Vector2f)>                   implLeftMousePressed;
+        std::function<void(Vector2f)>                   implLeftMouseReleased;
+        std::function<void(Vector2f)>                   implRightMousePressed;
+        std::function<void(Vector2f)>                   implRightMouseReleased;
+        std::function<void(Vector2f)>                   implMouseMoved;
         std::function<void(const sf::Event::KeyEvent&)> implKeyPressed;
         std::function<void(std::uint32_t)>              implTextEntered;
-        std::function<bool(float, sf::Vector2f)>        implMouseWheelScrolled;
+        std::function<bool(float, Vector2f)>            implMouseWheelScrolled;
         std::function<void()>                           implMouseNoLongerOnWidget;
         std::function<void()>                           implMouseNoLongerDown; // TODO: Rename
         std::function<void()>                           implMouseEnteredWidget;

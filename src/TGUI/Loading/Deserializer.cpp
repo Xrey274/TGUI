@@ -71,14 +71,14 @@ namespace tgui
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        bool readIntRect(std::string value, sf::IntRect& rect)
+        bool readUIntRect(std::string value, UIntRect& rect)
         {
             if (!value.empty() && (value[0] == '(') && (value[value.length()-1] == ')'))
             {
                 std::vector<std::string> tokens = Deserializer::split(value.substr(1, value.size()-2), ',');
                 if (tokens.size() == 4)
                 {
-                    rect = {strToInt(tokens[0]), strToInt(tokens[1]), strToInt(tokens[2]), strToInt(tokens[3])};
+                    rect = {strToUInt(tokens[0]), strToUInt(tokens[1]), strToUInt(tokens[2]), strToUInt(tokens[3])};
                     return true;
                 }
             }
@@ -315,8 +315,8 @@ namespace tgui
                 throw Exception{"Failed to deserialize texture '" + value + "'. Failed to find the closing quote of the filename."};
 
             // There may be optional parameters
-            sf::IntRect partRect;
-            sf::IntRect middleRect;
+            UIntRect partRect;
+            UIntRect middleRect;
             bool smooth = false;
 
             while (removeWhitespace(value, c))
@@ -336,7 +336,7 @@ namespace tgui
                         throw Exception{"Failed to deserialize texture '" + value + "'. Invalid text found behind filename."};
                 }
 
-                sf::IntRect* rect = nullptr;
+                UIntRect* rect = nullptr;
                 if ((word == "Part") || (word == "part"))
                 {
                     rect = &partRect;
@@ -358,7 +358,7 @@ namespace tgui
                 auto closeBracketPos = value.find(')', c - value.begin());
                 if (closeBracketPos != std::string::npos)
                 {
-                    if (!readIntRect(value.substr(c - value.begin(), closeBracketPos - (c - value.begin()) + 1), *rect))
+                    if (!readUIntRect(value.substr(c - value.begin(), closeBracketPos - (c - value.begin()) + 1), *rect))
                         throw Exception{"Failed to parse " + word + " rectangle while deserializing texture '" + value + "'."};
                 }
                 else

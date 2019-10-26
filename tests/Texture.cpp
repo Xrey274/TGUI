@@ -50,8 +50,8 @@ TEST_CASE("[Texture]")
 
             REQUIRE(texture.getId() == "");
             REQUIRE(texture.getData() == nullptr);
-            REQUIRE(texture.getImageSize() == sf::Vector2f(0, 0));
-            REQUIRE(texture.getMiddleRect() == sf::IntRect());
+            REQUIRE(texture.getImageSize() == tgui::Vector2u(0, 0));
+            REQUIRE(texture.getMiddleRect() == tgui::UIntRect());
         }
 
         SECTION("Success")
@@ -65,9 +65,9 @@ TEST_CASE("[Texture]")
                 REQUIRE(texture.getData() != nullptr);
                 REQUIRE(texture.getData()->image != nullptr);
                 REQUIRE(texture.getData()->texture.getSize() == sf::Vector2u(50, 50));
-                REQUIRE(texture.getData()->rect == sf::IntRect());
-                REQUIRE(texture.getImageSize() == sf::Vector2f(50, 50));
-                REQUIRE(texture.getMiddleRect() == sf::IntRect(0, 0, 50, 50));
+                REQUIRE(texture.getData()->rect == tgui::UIntRect());
+                REQUIRE(texture.getImageSize() == tgui::Vector2u(50, 50));
+                REQUIRE(texture.getMiddleRect() == tgui::UIntRect(0, 0, 50, 50));
                 REQUIRE(texture.isSmooth() == false);
             }
 
@@ -79,9 +79,9 @@ TEST_CASE("[Texture]")
                 REQUIRE(texture.getData() != nullptr);
                 REQUIRE(texture.getData()->image != nullptr);
                 REQUIRE(texture.getData()->texture.getSize() == sf::Vector2u(40, 30));
-                REQUIRE(texture.getData()->rect == sf::IntRect(10, 5, 40, 30));
-                REQUIRE(texture.getImageSize() == sf::Vector2f(40, 30));
-                REQUIRE(texture.getMiddleRect() == sf::IntRect(6, 5, 28, 20));
+                REQUIRE(texture.getData()->rect == tgui::UIntRect(10, 5, 40, 30));
+                REQUIRE(texture.getImageSize() == tgui::Vector2u(40, 30));
+                REQUIRE(texture.getMiddleRect() == tgui::UIntRect(6, 5, 28, 20));
                 REQUIRE(texture.isSmooth() == false);
             }
         }
@@ -111,9 +111,9 @@ TEST_CASE("[Texture]")
             REQUIRE(texture.getData() != nullptr);
             REQUIRE(texture.getData()->image != nullptr);
             REQUIRE(texture.getData()->texture.getSize() == sf::Vector2u(50, 50));
-            REQUIRE(texture.getData()->rect == sf::IntRect());
-            REQUIRE(texture.getImageSize() == sf::Vector2f(50, 50));
-            REQUIRE(texture.getMiddleRect() == sf::IntRect(10, 0, 30, 50));
+            REQUIRE(texture.getData()->rect == tgui::UIntRect());
+            REQUIRE(texture.getImageSize() == tgui::Vector2u(50, 50));
+            REQUIRE(texture.getMiddleRect() == tgui::UIntRect(10, 0, 30, 50));
             REQUIRE(texture.isSmooth() == true);
 
             REQUIRE(copyCount == 0);
@@ -124,9 +124,9 @@ TEST_CASE("[Texture]")
                 REQUIRE(textureCopy.getData() != nullptr);
                 REQUIRE(textureCopy.getData()->image != nullptr);
                 REQUIRE(textureCopy.getData()->texture.getSize() == sf::Vector2u(50, 50));
-                REQUIRE(textureCopy.getData()->rect == sf::IntRect());
-                REQUIRE(textureCopy.getImageSize() == sf::Vector2f(50, 50));
-                REQUIRE(textureCopy.getMiddleRect() == sf::IntRect(10, 0, 30, 50));
+                REQUIRE(textureCopy.getData()->rect == tgui::UIntRect());
+                REQUIRE(textureCopy.getImageSize() == tgui::Vector2u(50, 50));
+                REQUIRE(textureCopy.getMiddleRect() == tgui::UIntRect(10, 0, 30, 50));
                 REQUIRE(textureCopy.isSmooth() == true);
 
                 REQUIRE(copyCount == 1);
@@ -143,9 +143,9 @@ TEST_CASE("[Texture]")
                 REQUIRE(textureCopy.getData() != nullptr);
                 REQUIRE(textureCopy.getData()->image != nullptr);
                 REQUIRE(textureCopy.getData()->texture.getSize() == sf::Vector2u(50, 50));
-                REQUIRE(textureCopy.getData()->rect == sf::IntRect());
-                REQUIRE(textureCopy.getImageSize() == sf::Vector2f(50, 50));
-                REQUIRE(textureCopy.getMiddleRect() == sf::IntRect(10, 0, 30, 50));
+                REQUIRE(textureCopy.getData()->rect == tgui::UIntRect());
+                REQUIRE(textureCopy.getImageSize() == tgui::Vector2u(50, 50));
+                REQUIRE(textureCopy.getMiddleRect() == tgui::UIntRect(10, 0, 30, 50));
                 REQUIRE(textureCopy.isSmooth() == true);
 
                 REQUIRE(copyCount == 2);
@@ -161,10 +161,10 @@ TEST_CASE("[Texture]")
     SECTION("MiddleRect")
     {
         tgui::Texture texture;
-        REQUIRE(texture.getMiddleRect() == sf::IntRect());
+        REQUIRE(texture.getMiddleRect() == tgui::UIntRect());
 
         texture.load("resources/image.png");
-        REQUIRE(texture.getMiddleRect() == sf::IntRect(0, 0, 50, 50));
+        REQUIRE(texture.getMiddleRect() == tgui::UIntRect(0, 0, 50, 50));
     }
 
     SECTION("Smooth")
@@ -182,10 +182,10 @@ TEST_CASE("[Texture]")
     SECTION("Color")
     {
         tgui::Texture texture{"resources/image.png"};
-        REQUIRE(texture.getColor() == sf::Color::White);
+        REQUIRE(texture.getColor() == tgui::Color::White);
 
         texture.setColor("red");
-        REQUIRE(texture.getColor() == sf::Color::Red);
+        REQUIRE(texture.getColor() == tgui::Color::Red);
     }
 
     SECTION("Shader")
@@ -219,7 +219,7 @@ TEST_CASE("[Texture]")
         unsigned int count = 0;
         auto oldTextureLoader = tgui::Texture::getTextureLoader();
 
-        auto func = [&](tgui::Texture&, const sf::String&, const sf::IntRect&){ count++; return std::make_shared<tgui::TextureData>(); };
+        auto func = [&](tgui::Texture&, const sf::String&, const tgui::UIntRect&){ count++; return std::make_shared<tgui::TextureData>(); };
         tgui::Texture::setTextureLoader(func);
         REQUIRE_NOTHROW(tgui::Texture{"resources/image.png"});
         REQUIRE(count == 1);

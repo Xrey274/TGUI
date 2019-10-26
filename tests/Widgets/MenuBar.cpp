@@ -58,17 +58,17 @@ TEST_CASE("[MenuBar]")
             menuBar->setPosition(40, 30);
             menuBar->setSize(150, 100);
 
-            REQUIRE(menuBar->getPosition() == sf::Vector2f(40, 30));
-            REQUIRE(menuBar->getSize() == sf::Vector2f(150, 100));
+            REQUIRE(menuBar->getPosition() == tgui::Vector2f(40, 30));
+            REQUIRE(menuBar->getSize() == tgui::Vector2f(150, 100));
             REQUIRE(menuBar->getFullSize() == menuBar->getSize());
-            REQUIRE(menuBar->getWidgetOffset() == sf::Vector2f(0, 0));
+            REQUIRE(menuBar->getWidgetOffset() == tgui::Vector2f(0, 0));
 
             SECTION("Width is unchanged when adding to parent")
             {
                 auto parent = tgui::Panel::create();
                 parent->add(menuBar);
 
-                REQUIRE(menuBar->getSize() == sf::Vector2f(150, 100));
+                REQUIRE(menuBar->getSize() == tgui::Vector2f(150, 100));
             }
         }
 
@@ -325,11 +325,11 @@ TEST_CASE("[MenuBar]")
 
             SECTION("set object property")
             {
-                REQUIRE_NOTHROW(renderer->setProperty("BackgroundColor", sf::Color{10, 20, 30}));
-                REQUIRE_NOTHROW(renderer->setProperty("SelectedBackgroundColor", sf::Color{40, 50, 60}));
-                REQUIRE_NOTHROW(renderer->setProperty("TextColor", sf::Color{70, 80, 90}));
-                REQUIRE_NOTHROW(renderer->setProperty("SelectedTextColor", sf::Color{100, 110, 120}));
-                REQUIRE_NOTHROW(renderer->setProperty("TextColorDisabled", sf::Color{130, 140, 150}));
+                REQUIRE_NOTHROW(renderer->setProperty("BackgroundColor", tgui::Color{10, 20, 30}));
+                REQUIRE_NOTHROW(renderer->setProperty("SelectedBackgroundColor", tgui::Color{40, 50, 60}));
+                REQUIRE_NOTHROW(renderer->setProperty("TextColor", tgui::Color{70, 80, 90}));
+                REQUIRE_NOTHROW(renderer->setProperty("SelectedTextColor", tgui::Color{100, 110, 120}));
+                REQUIRE_NOTHROW(renderer->setProperty("TextColorDisabled", tgui::Color{130, 140, 150}));
                 REQUIRE_NOTHROW(renderer->setProperty("DistanceToSide", 2));
             }
 
@@ -343,11 +343,11 @@ TEST_CASE("[MenuBar]")
                 renderer->setDistanceToSide(2);
             }
 
-            REQUIRE(renderer->getProperty("BackgroundColor").getColor() == sf::Color(10, 20, 30));
-            REQUIRE(renderer->getProperty("SelectedBackgroundColor").getColor() == sf::Color(40, 50, 60));
-            REQUIRE(renderer->getProperty("TextColor").getColor() == sf::Color(70, 80, 90));
-            REQUIRE(renderer->getProperty("SelectedTextColor").getColor() == sf::Color(100, 110, 120));
-            REQUIRE(renderer->getProperty("TextColorDisabled").getColor() == sf::Color(130, 140, 150));
+            REQUIRE(renderer->getProperty("BackgroundColor").getColor() == tgui::Color(10, 20, 30));
+            REQUIRE(renderer->getProperty("SelectedBackgroundColor").getColor() == tgui::Color(40, 50, 60));
+            REQUIRE(renderer->getProperty("TextColor").getColor() == tgui::Color(70, 80, 90));
+            REQUIRE(renderer->getProperty("SelectedTextColor").getColor() == tgui::Color(100, 110, 120));
+            REQUIRE(renderer->getProperty("TextColorDisabled").getColor() == tgui::Color(130, 140, 150));
             REQUIRE(renderer->getProperty("DistanceToSide").getNumber() == 2);
         }
 
@@ -426,11 +426,11 @@ TEST_CASE("[MenuBar]")
         menuBar->setMenuItemEnabled("Edit", "Redo", false);
 
         tgui::MenuBarRenderer renderer = tgui::RendererData::create();
-        renderer.setTextColor(sf::Color::Red);
-        renderer.setSelectedTextColor(sf::Color::Blue);
-        renderer.setTextColorDisabled(sf::Color::Black);
-        renderer.setBackgroundColor(sf::Color::Green);
-        renderer.setSelectedBackgroundColor(sf::Color::Yellow);
+        renderer.setTextColor(tgui::Color::Red);
+        renderer.setSelectedTextColor(tgui::Color::Blue);
+        renderer.setTextColorDisabled(tgui::Color::Black);
+        renderer.setBackgroundColor(tgui::Color::Green);
+        renderer.setSelectedBackgroundColor(tgui::Color::Yellow);
         renderer.setDistanceToSide(3);
         renderer.setOpacity(0.7f);
         menuBar->setRenderer(renderer.getData());
@@ -439,7 +439,7 @@ TEST_CASE("[MenuBar]")
         {
             TEST_DRAW("MenuBar.png")
 
-            sf::Vector2f mousePos = {25, 15};
+            tgui::Vector2f mousePos = {25, 15};
             menuBar->mouseMoved(mousePos);
             menuBar->leftMousePressed(mousePos);
             menuBar->leftMouseReleased(mousePos);
@@ -471,7 +471,7 @@ TEST_CASE("[MenuBar]")
 
             TEST_DRAW("MenuBar_Textured.png")
 
-            sf::Vector2f mousePos = {25, 15};
+            tgui::Vector2f mousePos = {25, 15};
             menuBar->mouseMoved(mousePos);
             menuBar->leftMousePressed(mousePos);
             menuBar->leftMouseReleased(mousePos);

@@ -35,7 +35,7 @@ class GuiBuilder;
 class Form
 {
 public:
-    Form(GuiBuilder* guiBuilder, const std::string& filename, tgui::ChildWindow::Ptr formWindow, sf::Vector2f formSize);
+    Form(GuiBuilder* guiBuilder, const std::string& filename, tgui::ChildWindow::Ptr formWindow, tgui::Vector2f formSize);
     std::string addWidget(tgui::Widget::Ptr widget, tgui::Container* parent, bool selectNewWidget = true);
     void removeWidget(const std::string& id);
     std::shared_ptr<WidgetInfo> getWidget(const std::string& id) const;
@@ -55,8 +55,8 @@ public:
     void arrowKeyPressed(const sf::Event::KeyEvent& keyEvent);
     void setFilename(const sf::String& filename);
     sf::String getFilename() const;
-    void setSize(sf::Vector2f size);
-    sf::Vector2f getSize() const;
+    void setSize(tgui::Vector2f size);
+    tgui::Vector2f getSize() const;
     void setChanged(bool changed);
     bool isChanged() const;
     void focus();
@@ -67,12 +67,12 @@ public:
 
 private:
     void importLoadedWidgets(tgui::Container::Ptr parent);
-    void onSelectionSquarePress(tgui::Button::Ptr square, sf::Vector2f pos);
-    tgui::Widget::Ptr getWidgetBelowMouse(tgui::Container::Ptr parent, sf::Vector2f pos);
-    void onFormMousePress(sf::Vector2f pos);
+    void onSelectionSquarePress(tgui::Button::Ptr square, tgui::Vector2f pos);
+    tgui::Widget::Ptr getWidgetBelowMouse(tgui::Container::Ptr parent, tgui::Vector2f pos);
+    void onFormMousePress(tgui::Vector2f pos);
     void onDrag(sf::Vector2i mousePos);
     void selectWidget(std::shared_ptr<WidgetInfo> widget);
-    void drawLine(sf::RenderWindow& window, sf::Vector2f startPoint, sf::Vector2f endPoint) const;
+    void drawLine(sf::RenderWindow& window, tgui::Vector2f startPoint, tgui::Vector2f endPoint) const;
 
 private:
 
@@ -86,9 +86,9 @@ private:
     bool m_changed = false;
     bool m_draggingWidget = false;
     tgui::Button::Ptr m_draggingSelectionSquare;
-    sf::Vector2f m_draggingPos;
+    tgui::Vector2f m_draggingPos;
     sf::String m_filename;
-    sf::Vector2f m_size;
+    tgui::Vector2f m_size;
 };
 
 #endif // TGUI_GUI_BUILDER_FORM_HPP

@@ -53,8 +53,10 @@ namespace tgui
         {
             if constexpr (std::is_same_v<Type, std::string>) // Signal handlers are allowed to have std::string parameters while the signal sends sf::String
                 return static_cast<std::string>(*static_cast<const sf::String*>(obj));
+    #if TGUI_USE_SFML_HELPER_FUNCTIONS == 1
             else if constexpr (std::is_same_v<Type, sf::Vector2f>) // Signal handlers are allowed to have sf::Vector2f parameters while the signal sends tgui::Vector2f
                 return static_cast<sf::Vector2f>(*static_cast<const Vector2f*>(obj));
+    #endif
             else
                 return *static_cast<const std::decay_t<Type>*>(obj);
         }
@@ -65,7 +67,7 @@ namespace tgui
             // Signal handlers are allowed to have std::string parameters while the signal sends sf::String
             return static_cast<std::string>(*static_cast<const sf::String*>(obj));
         }
-
+    #if TGUI_USE_SFML_HELPER_FUNCTIONS == 1
         template <typename Type, typename std::enable_if<std::is_same<Type, sf::Vector2f>::value>::type* = nullptr>
         decltype(auto) dereference(const void* obj)
         {
@@ -74,6 +76,9 @@ namespace tgui
         }
 
         template <typename Type, typename std::enable_if<!std::is_same<Type, std::string>::value && !std::is_same<Type, sf::Vector2f>::value>::type* = nullptr>
+    #else
+        template <typename Type, typename std::enable_if<!std::is_same<Type, std::string>::value>::type* = nullptr>
+    #endif
         decltype(auto) dereference(const void* obj)
         {
             return *static_cast<const typename std::decay<Type>::type*>(obj);

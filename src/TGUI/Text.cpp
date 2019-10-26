@@ -80,9 +80,9 @@ namespace tgui
         m_color = color;
 
 #if SFML_VERSION_MAJOR > 2 || (SFML_VERSION_MAJOR == 2 && SFML_VERSION_MINOR >= 4)
-        m_text.setFillColor(Color::calcColorOpacity(color, m_opacity));
+        m_text.setFillColor(sf::Color{Color::calcColorOpacity(color, m_opacity)});
 #else
-        m_text.setColor(Color::calcColorOpacity(color, m_opacity));
+        m_text.setColor(sf::Color{Color::calcColorOpacity(color, m_opacity)});
 #endif
     }
 
@@ -100,8 +100,8 @@ namespace tgui
         m_opacity = opacity;
 
 #if SFML_VERSION_MAJOR > 2 || (SFML_VERSION_MAJOR == 2 && SFML_VERSION_MINOR >= 4)
-        m_text.setFillColor(Color::calcColorOpacity(m_color, opacity));
-        m_text.setOutlineColor(Color::calcColorOpacity(m_outlineColor, opacity));
+        m_text.setFillColor(sf::Color{Color::calcColorOpacity(m_color, opacity)});
+        m_text.setOutlineColor(sf::Color{Color::calcColorOpacity(m_outlineColor, opacity)});
 #else
         m_text.setColor(Color::calcColorOpacity(m_color, opacity));
 #endif
@@ -133,8 +133,8 @@ namespace tgui
                 m_text.setStyle(getStyle());
 
 #if SFML_VERSION_MAJOR > 2 || (SFML_VERSION_MAJOR == 2 && SFML_VERSION_MINOR >= 4)
-                m_text.setFillColor(Color::calcColorOpacity(getColor(), getOpacity()));
-                m_text.setOutlineColor(Color::calcColorOpacity(getOutlineColor(), getOpacity()));
+                m_text.setFillColor(sf::Color{Color::calcColorOpacity(getColor(), getOpacity())});
+                m_text.setOutlineColor(sf::Color{Color::calcColorOpacity(getOutlineColor(), getOpacity())});
                 m_text.setOutlineThickness(getOutlineThickness());
 #else
                 m_text.setColor(Color::calcColorOpacity(getColor(), getOpacity()));
@@ -177,7 +177,7 @@ namespace tgui
         m_outlineColor = color;
 
 #if SFML_VERSION_MAJOR > 2 || (SFML_VERSION_MAJOR == 2 && SFML_VERSION_MINOR >= 4)
-        m_text.setOutlineColor(Color::calcColorOpacity(m_outlineColor, m_opacity));
+        m_text.setOutlineColor(sf::Color{Color::calcColorOpacity(m_outlineColor, m_opacity)});
 #endif
     }
 
@@ -214,7 +214,7 @@ namespace tgui
 
     Vector2f Text::findCharacterPos(std::size_t index) const
     {
-        return m_text.findCharacterPos(index);
+        return Vector2f{m_text.findCharacterPos(index)};
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

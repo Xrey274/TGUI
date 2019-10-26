@@ -32,17 +32,17 @@ TEST_CASE("[Signal]")
     SECTION("connect")
     {
         unsigned int id = widget->connect("PositionChanged", [](){});
-        REQUIRE(widget->connect("PositionChanged", [](sf::Vector2f){}) == ++id);
+        REQUIRE(widget->connect("PositionChanged", [](tgui::Vector2f){}) == ++id);
         REQUIRE(widget->connect("PositionChanged", [](tgui::Vector2f){}) == ++id);
         REQUIRE(widget->connect("PositionChanged", [](tgui::Widget::Ptr, std::string){}) == ++id);
-        REQUIRE(widget->connect("PositionChanged", [](tgui::Widget::Ptr, std::string, sf::Vector2f){}) == ++id);
+        REQUIRE(widget->connect("PositionChanged", [](tgui::Widget::Ptr, std::string, tgui::Vector2f){}) == ++id);
         REQUIRE(widget->connect("PositionChanged", [](tgui::Widget::Ptr, std::string, tgui::Vector2f){}) == ++id);
 
         REQUIRE(widget->connect("SizeChanged", [](){}) == ++id);
-        REQUIRE(widget->connect("SizeChanged", [](sf::Vector2f){}) == ++id);
+        REQUIRE(widget->connect("SizeChanged", [](tgui::Vector2f){}) == ++id);
         REQUIRE(widget->connect("SizeChanged", [](tgui::Vector2f){}) == ++id);
         REQUIRE(widget->connect("SizeChanged", [](tgui::Widget::Ptr, std::string){}) == ++id);
-        REQUIRE(widget->connect("SizeChanged", [](tgui::Widget::Ptr, std::string, sf::Vector2f){}) == ++id);
+        REQUIRE(widget->connect("SizeChanged", [](tgui::Widget::Ptr, std::string, tgui::Vector2f){}) == ++id);
         REQUIRE(widget->connect("SizeChanged", [](tgui::Widget::Ptr, std::string, tgui::Vector2f){}) == ++id);
 
         REQUIRE(widget->connect("Focused", [](){}) == ++id);

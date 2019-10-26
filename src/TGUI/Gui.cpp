@@ -130,7 +130,7 @@ namespace tgui
         {
             m_view = view;
 
-            m_container->m_size = view.getSize();
+            m_container->m_size = Vector2f{view.getSize()};
             m_container->onSizeChange.emit(m_container.get(), m_container->getSize());
 
             for (auto& layout : m_container->m_boundSizeLayouts)
@@ -165,7 +165,7 @@ namespace tgui
             {
                 case sf::Event::MouseMoved:
                 {
-                    mouseCoords = m_target->mapPixelToCoords({event.mouseMove.x, event.mouseMove.y}, m_view);
+                    mouseCoords = Vector2f{m_target->mapPixelToCoords({event.mouseMove.x, event.mouseMove.y}, m_view)};
                     event.mouseMove.x = static_cast<int>(mouseCoords.x + 0.5f);
                     event.mouseMove.y = static_cast<int>(mouseCoords.y + 0.5f);
                     break;
@@ -174,7 +174,7 @@ namespace tgui
                 case sf::Event::MouseButtonPressed:
                 case sf::Event::MouseButtonReleased:
                 {
-                    mouseCoords = m_target->mapPixelToCoords({event.mouseButton.x, event.mouseButton.y}, m_view);
+                    mouseCoords = Vector2f{m_target->mapPixelToCoords({event.mouseButton.x, event.mouseButton.y}, m_view)};
                     event.mouseButton.x = static_cast<int>(mouseCoords.x + 0.5f);
                     event.mouseButton.y = static_cast<int>(mouseCoords.y + 0.5f);
                     break;
@@ -182,7 +182,7 @@ namespace tgui
 
                 case sf::Event::MouseWheelScrolled:
                 {
-                    mouseCoords = m_target->mapPixelToCoords({event.mouseWheelScroll.x, event.mouseWheelScroll.y}, m_view);
+                    mouseCoords = Vector2f{m_target->mapPixelToCoords({event.mouseWheelScroll.x, event.mouseWheelScroll.y}, m_view)};
                     event.mouseWheelScroll.x = static_cast<int>(mouseCoords.x + 0.5f);
                     event.mouseWheelScroll.y = static_cast<int>(mouseCoords.y + 0.5f);
                     break;
@@ -192,7 +192,7 @@ namespace tgui
                 case sf::Event::TouchBegan:
                 case sf::Event::TouchEnded:
                 {
-                    mouseCoords = m_target->mapPixelToCoords({event.touch.x, event.touch.y}, m_view);
+                    mouseCoords = Vector2f{m_target->mapPixelToCoords({event.touch.x, event.touch.y}, m_view)};
                     event.touch.x = static_cast<int>(mouseCoords.x + 0.5f);
                     event.touch.y = static_cast<int>(mouseCoords.y + 0.5f);
                     break;

@@ -71,7 +71,7 @@ static const sf::Time DOUBLE_CLICK_TIMEOUT = sf::milliseconds(500);
 bool compareFiles(const std::string& leftFileName, const std::string& rightFileName);
 void compareImageFiles(const std::string& filename1, const std::string& filename2);
 
-void mouseCallback(unsigned int& count, sf::Vector2f pos);
+void mouseCallback(unsigned int& count, tgui::Vector2f pos);
 void genericCallback(unsigned int& count);
 
 void testWidgetSignals(tgui::Widget::Ptr widget);

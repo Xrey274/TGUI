@@ -182,7 +182,7 @@ namespace tgui
             const auto& texture = getSharedRenderer()->getTexture();
 
             if (!m_sprite.isSet() && (getSize() == Vector2f{0,0}))
-                setSize(texture.getImageSize());
+                setSize(Vector2f{texture.getImageSize()});
 
             m_sprite.setTexture(texture);
         }

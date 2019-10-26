@@ -274,7 +274,11 @@ namespace tgui
 
     unsigned int SignalVector2f::validateTypes(std::initializer_list<std::type_index> unboundParameters) const
     {
+#if TGUI_USE_SFML_HELPER_FUNCTIONS == 1
         if ((unboundParameters.size() == 1) && (checkParamType<Vector2f>(unboundParameters.begin()) || checkParamType<sf::Vector2f>(unboundParameters.begin())))
+#else
+        if ((unboundParameters.size() == 1) && checkParamType<Vector2f>(unboundParameters.begin()))
+#endif
             return 1;
         else
             return Signal::validateTypes(unboundParameters);

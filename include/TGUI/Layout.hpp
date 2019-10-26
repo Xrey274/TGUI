@@ -270,7 +270,7 @@ namespace tgui
         {
         }
 
-
+#if TGUI_USE_SFML_HELPER_FUNCTIONS == 1
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /// @brief Default constructor to implicitly construct from a sf::Vector2f.
         ///
@@ -281,7 +281,7 @@ namespace tgui
             y{constant.y}
         {
         }
-
+#endif
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /// @brief Constructor to create the Layout2d from two Layout classes

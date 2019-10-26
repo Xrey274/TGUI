@@ -28,11 +28,11 @@
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#include <TGUI/Rect.hpp>
 #include <TGUI/SvgImage.hpp>
 
 #include <SFML/Graphics/Image.hpp>
 #include <SFML/Graphics/Texture.hpp>
-#include <SFML/Graphics/Rect.hpp>
 #include <SFML/Graphics/Shader.hpp>
 
 #include <memory>
@@ -50,7 +50,7 @@ namespace tgui
         std::unique_ptr<sf::Image> image;
         std::unique_ptr<SvgImage> svgImage;
         sf::Texture texture;
-        sf::IntRect rect;
+        UIntRect rect;
     };
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

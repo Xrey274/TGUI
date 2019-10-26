@@ -245,7 +245,7 @@ namespace tgui
             return;
 
         if (m_relativeGlyphHeight == 0)
-            m_glyphSprite.setSize(m_glyphTexture.getImageSize());
+            m_glyphSprite.setSize(Vector2f{m_glyphTexture.getImageSize()});
         else
             m_glyphSprite.setSize({m_relativeGlyphHeight * getInnerSize().y,
                                    (m_relativeGlyphHeight * getInnerSize().y) / m_glyphTexture.getImageSize().y * m_glyphTexture.getImageSize().x});

@@ -31,7 +31,7 @@
 TEST_CASE("[ToolTip]")
 {
     sf::Time oldInitialDelay = tgui::ToolTip::getInitialDelay();
-    sf::Vector2f oldDistanceToMouse = tgui::ToolTip::getDistanceToMouse();
+    tgui::Vector2f oldDistanceToMouse = tgui::ToolTip::getDistanceToMouse();
 
     SECTION("InitialDelay")
     {
@@ -42,7 +42,7 @@ TEST_CASE("[ToolTip]")
     SECTION("DistanceToMouse")
     {
         tgui::ToolTip::setDistanceToMouse({5, 5});
-        REQUIRE(tgui::ToolTip::getDistanceToMouse() == sf::Vector2f(5, 5));
+        REQUIRE(tgui::ToolTip::getDistanceToMouse() == tgui::Vector2f(5, 5));
     }
 
     SECTION("Setting tool tip of widget")

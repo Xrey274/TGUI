@@ -54,7 +54,7 @@ namespace tgui
         if (isSet())
         {
             if (getSize() == Vector2f{})
-                setSize(texture.getImageSize());
+                setSize(Vector2f{texture.getImageSize()});
             else
                 updateVertices();
         }
@@ -100,7 +100,7 @@ namespace tgui
 
         const Color& vertexColor = Color::calcColorOpacity(m_vertexColor, m_opacity);
         for (auto& vertex : m_vertices)
-            vertex.color = vertexColor;
+            vertex.color = sf::Color{vertexColor};
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -133,10 +133,10 @@ namespace tgui
 
         if (getRotation() != 0)
         {
-            Vector2f offset = {getTransform().transformRect(FloatRect({}, getSize())).left,
-                               getTransform().transformRect(FloatRect({}, getSize())).top};
+            Vector2f offset = {getTransform().transformRect(sf::FloatRect{FloatRect{{}, getSize()}}).left,
+                               getTransform().transformRect(sf::FloatRect{FloatRect{{}, getSize()}}).top};
 
-            pos = getInverseTransform().transformPoint(pos) + getInverseTransform().transformPoint(offset);
+            pos = Vector2f{getInverseTransform().transformPoint(sf::Vector2f{pos}) + getInverseTransform().transformPoint(sf::Vector2f{offset})};
 
             // Watch out for rounding errors
             const float epsilon = 0.00001f;
@@ -156,84 +156,84 @@ namespace tgui
             return true;
 
         // Find out on which pixel the mouse is standing
-        sf::Vector2u pixel;
-        sf::IntRect middleRect = m_texture.getMiddleRect();
+        Vector2f pixel;
+        FloatRect middleRect = FloatRect{m_texture.getMiddleRect()};
         const sf::Texture& texture = m_texture.getData()->texture;
         switch (m_scalingType)
         {
             case ScalingType::Normal:
             {
-                pixel.x = static_cast<unsigned int>(pos.x / m_size.x * texture.getSize().x);
-                pixel.y = static_cast<unsigned int>(pos.y / m_size.y * texture.getSize().y);
+                pixel.x = pos.x / m_size.x * texture.getSize().x;
+                pixel.y = pos.y / m_size.y * texture.getSize().y;
                 break;
             }
             case ScalingType::Horizontal:
             {
                 if (pos.x >= m_size.x - (texture.getSize().x - middleRect.left - middleRect.width) * (m_size.y / texture.getSize().y))
                 {
-                    float xDiff = (pos.x - (m_size.x - (texture.getSize().x - middleRect.left - middleRect.width) * (m_size.y / texture.getSize().y)));
-                    pixel.x = static_cast<unsigned int>(middleRect.left + middleRect.width + (xDiff / m_size.y * texture.getSize().y));
+                    float xDiff = pos.x - (m_size.x - (texture.getSize().x - middleRect.left - middleRect.width) * (m_size.y / texture.getSize().y));
+                    pixel.x = middleRect.left + middleRect.width + (xDiff / m_size.y * texture.getSize().y);
                 }
                 else if (pos.x >= middleRect.left * (m_size.y / texture.getSize().y))
                 {
                     float xDiff = pos.x - (middleRect.left * (m_size.y / texture.getSize().y));
-                    pixel.x = static_cast<unsigned int>(middleRect.left + (xDiff / (m_size.x - ((texture.getSize().x - middleRect.width) * (m_size.y / texture.getSize().y))) * middleRect.width));
+                    pixel.x = middleRect.left + (xDiff / (m_size.x - ((texture.getSize().x - middleRect.width) * (m_size.y / texture.getSize().y))) * middleRect.width);
                 }
                 else // Mouse on the left part
                 {
-                    pixel.x = static_cast<unsigned int>(pos.x / m_size.y * texture.getSize().y);
+                    pixel.x = pos.x / m_size.y * texture.getSize().y;
                 }
 
-                pixel.y = static_cast<unsigned int>(pos.y / m_size.y * texture.getSize().y);
+                pixel.y = pos.y / m_size.y * texture.getSize().y;
                 break;
             }
             case ScalingType::Vertical:
             {
                 if (pos.y >= m_size.y - (texture.getSize().y - middleRect.top - middleRect.height) * (m_size.x / texture.getSize().x))
                 {
-                    float yDiff = (pos.y - (m_size.y - (texture.getSize().y - middleRect.top - middleRect.height) * (m_size.x / texture.getSize().x)));
-                    pixel.y = static_cast<unsigned int>(middleRect.top + middleRect.height + (yDiff / m_size.x * texture.getSize().x));
+                    float yDiff = pos.y - (m_size.y - (texture.getSize().y - middleRect.top - middleRect.height) * (m_size.x / texture.getSize().x));
+                    pixel.y = middleRect.top + middleRect.height + (yDiff / m_size.x * texture.getSize().x);
                 }
                 else if (pos.y >= middleRect.top * (m_size.x / texture.getSize().x))
                 {
                     float yDiff = pos.y - (middleRect.top * (m_size.x / texture.getSize().x));
-                    pixel.y = static_cast<unsigned int>(middleRect.top + (yDiff / (m_size.y - ((texture.getSize().y - middleRect.height) * (m_size.x / texture.getSize().x))) * middleRect.height));
+                    pixel.y = middleRect.top + (yDiff / (m_size.y - ((texture.getSize().y - middleRect.height) * (m_size.x / texture.getSize().x))) * middleRect.height);
                 }
                 else // Mouse on the top part
                 {
-                    pixel.y = static_cast<unsigned int>(pos.y / m_size.x * texture.getSize().x);
+                    pixel.y = pos.y / m_size.x * texture.getSize().x;
                 }
 
-                pixel.x = static_cast<unsigned int>(pos.x / m_size.x * texture.getSize().x);
+                pixel.x = pos.x / m_size.x * texture.getSize().x;
                 break;
             }
             case ScalingType::NineSlice:
             {
                 if (pos.x < middleRect.left)
-                    pixel.x = static_cast<unsigned int>(pos.x);
+                    pixel.x = pos.x;
                 else if (pos.x >= m_size.x - (texture.getSize().x - middleRect.width - middleRect.left))
-                    pixel.x = static_cast<unsigned int>(pos.x - m_size.x + texture.getSize().x);
+                    pixel.x = pos.x - m_size.x + texture.getSize().x;
                 else
                 {
                     float xDiff = (pos.x - middleRect.left) / (m_size.x - (texture.getSize().x - middleRect.width)) * middleRect.width;
-                    pixel.x = static_cast<unsigned int>(middleRect.left + xDiff);
+                    pixel.x = middleRect.left + xDiff;
                 }
 
                 if (pos.y < middleRect.top)
-                    pixel.y = static_cast<unsigned int>(pos.y);
+                    pixel.y = pos.y;
                 else if (pos.y >= m_size.y - (texture.getSize().y - middleRect.height - middleRect.top))
-                    pixel.y = static_cast<unsigned int>(pos.y - m_size.y + texture.getSize().y);
+                    pixel.y = pos.y - m_size.y + texture.getSize().y;
                 else
                 {
                     float yDiff = (pos.y - middleRect.top) / (m_size.y - (texture.getSize().y - middleRect.height)) * middleRect.height;
-                    pixel.y = static_cast<unsigned int>(middleRect.top + yDiff);
+                    pixel.y = middleRect.top + yDiff;
                 }
 
                 break;
             }
         };
 
-        return m_texture.isTransparentPixel(pixel);
+        return m_texture.isTransparentPixel({static_cast<unsigned int>(pixel.x), static_cast<unsigned int>(pixel.y)});
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -255,7 +255,7 @@ namespace tgui
             if (!m_svgTexture)
                 m_svgTexture = aurora::makeCopied<sf::Texture>();
 
-            const sf::Vector2u svgTextureSize{
+            const Vector2u svgTextureSize{
                 static_cast<unsigned int>(std::round(getSize().x)),
                 static_cast<unsigned int>(std::round(getSize().y))};
 
@@ -266,8 +266,8 @@ namespace tgui
         }
         else
         {
-            textureSize = m_texture.getImageSize();
-            middleRect = sf::FloatRect{m_texture.getMiddleRect()};
+            textureSize = Vector2f{m_texture.getImageSize()};
+            middleRect = FloatRect{m_texture.getMiddleRect()};
             if (middleRect == FloatRect(0, 0, textureSize.x, textureSize.y))
             {
                 m_scalingType = ScalingType::Normal;
