@@ -1561,12 +1561,12 @@ namespace tgui
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    void TextBox::update(sf::Time elapsedTime)
+    void TextBox::update(Duration elapsedTime)
     {
         Widget::update(elapsedTime);
 
         // Only show/hide the caret every half second
-        if (m_animationTimeElapsed >= sf::milliseconds(500))
+        if (m_animationTimeElapsed >= std::chrono::milliseconds(500))
         {
             // Reset the elapsed time
             m_animationTimeElapsed = {};

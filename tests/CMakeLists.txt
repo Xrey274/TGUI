@@ -8,6 +8,7 @@ set(TEST_SOURCES
     Clipping.cpp
     Color.cpp
     Container.cpp
+    Duration.cpp
     Focus.cpp
     Font.cpp
     Layouts.cpp

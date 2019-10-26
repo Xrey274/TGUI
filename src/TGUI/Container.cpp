@@ -845,7 +845,7 @@ namespace tgui
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    void Container::update(sf::Time elapsedTime)
+    void Container::update(Duration elapsedTime)
     {
         Widget::update(elapsedTime);
 

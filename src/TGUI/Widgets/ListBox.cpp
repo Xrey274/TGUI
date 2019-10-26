@@ -990,11 +990,11 @@ namespace tgui
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    void ListBox::update(sf::Time elapsedTime)
+    void ListBox::update(Duration elapsedTime)
     {
         Widget::update(elapsedTime);
 
-        if (m_animationTimeElapsed >= sf::milliseconds(getDoubleClickTime()))
+        if (m_animationTimeElapsed >= std::chrono::milliseconds(getDoubleClickTime()))
         {
             m_animationTimeElapsed = {};
             m_possibleDoubleClick = false;

@@ -464,7 +464,7 @@ namespace tgui
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    void Widget::showWithEffect(ShowAnimationType type, sf::Time duration)
+    void Widget::showWithEffect(ShowAnimationType type, Duration duration)
     {
         setVisible(true);
 
@@ -554,7 +554,7 @@ namespace tgui
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    void Widget::hideWithEffect(ShowAnimationType type, sf::Time duration)
+    void Widget::hideWithEffect(ShowAnimationType type, Duration duration)
     {
         // We store the state the widget is currently in. In the event another animation was already playing, we should try to
         // use the current state to start our animation at, but this is not the state that the widget should end at. We must
@@ -797,7 +797,7 @@ namespace tgui
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    void Widget::update(sf::Time elapsedTime)
+    void Widget::update(Duration elapsedTime)
     {
         m_animationTimeElapsed += elapsedTime;
 
@@ -1068,7 +1068,7 @@ namespace tgui
                 for (const auto& pair : childNode->propertyValuePairs)
                 {
                     if (pair.first == "initialdelay")
-                        ToolTip::setInitialDelay(sf::seconds(strToFloat(pair.second->value)));
+                        ToolTip::setInitialDelay(std::chrono::duration<float>(strToFloat(pair.second->value)));
                     else if (pair.first == "distancetomouse")
                         ToolTip::setDistanceToMouse(Vector2f{pair.second->value});
                 }

@@ -28,12 +28,12 @@
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#include <TGUI/Global.hpp>
 #include <TGUI/Signal.hpp>
 #include <TGUI/Sprite.hpp>
 #include <TGUI/Layout.hpp>
 #include <TGUI/String.hpp>
 #include <TGUI/Vector2.hpp>
+#include <TGUI/Duration.hpp>
 #include <TGUI/Loading/Theme.hpp>
 #include <TGUI/Loading/DataIO.hpp>
 #include <TGUI/Loading/Serializer.hpp>
@@ -276,8 +276,13 @@ namespace tgui
         /// @param duration Duration of the animation
         ///
         /// @see hideWithEffect
+        ///
+        /// Usage example:
+        /// @code
+        /// widget->showWithEffect(tgui::ShowAnimationType::SlideFromLeft, std::chrono::milliseconds(500));
+        /// @endcode
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        void showWithEffect(ShowAnimationType type, sf::Time duration);
+        void showWithEffect(ShowAnimationType type, Duration duration);
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -292,8 +297,13 @@ namespace tgui
         /// @param duration Duration of the animation
         ///
         /// @see showWithEffect
+        ///
+        /// Usage example:
+        /// @code
+        /// widget->hideWithEffect(tgui::ShowAnimationType::SlideToRight, std::chrono::milliseconds(500));
+        /// @endcode
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        void hideWithEffect(ShowAnimationType type, sf::Time duration);
+        void hideWithEffect(ShowAnimationType type, Duration duration);
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -532,7 +542,7 @@ namespace tgui
         /// @internal
         /// This function is called every frame with the time passed since the last frame.
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        virtual void update(sf::Time elapsedTime);
+        virtual void update(Duration elapsedTime);
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -835,7 +845,7 @@ namespace tgui
         bool m_focusable = true;
 
         // Keep track of the elapsed time.
-        sf::Time m_animationTimeElapsed;
+        Duration m_animationTimeElapsed;
 
         // This is set to true for widgets that have something to be dragged around (e.g. sliders and scrollbars)
         bool m_draggableWidget = false;

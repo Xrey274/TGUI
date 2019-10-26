@@ -236,6 +236,7 @@ namespace tgui
         else if (event.type == sf::Event::LostFocus)
         {
             m_windowFocused = false;
+            m_lastUpdateTime = decltype(m_lastUpdateTime){};
         }
         else if (event.type == sf::Event::GainedFocus)
         {
@@ -271,9 +272,14 @@ namespace tgui
 
         // Update the time
         if (m_windowFocused)
-            updateTime(m_clock.restart());
-        else
-            m_clock.restart();
+        {
+            const auto timePointNow = std::chrono::steady_clock::now();
+
+            if (m_lastUpdateTime > decltype(m_lastUpdateTime){})
+                updateTime(timePointNow - m_lastUpdateTime);
+
+            m_lastUpdateTime = timePointNow;
+        }
 
         // Change the view
         const sf::View oldView = m_target->getView();
@@ -443,7 +449,7 @@ namespace tgui
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    void Gui::updateTime(const sf::Time& elapsedTime)
+    void Gui::updateTime(Duration elapsedTime)
     {
         m_container->m_animationTimeElapsed = elapsedTime;
         m_container->update(elapsedTime);
@@ -472,11 +478,11 @@ namespace tgui
 
     void Gui::init()
     {
-    #ifdef TGUI_SYSTEM_WINDOWS
-        unsigned int doubleClickTime = GetDoubleClickTime();
-        if (doubleClickTime > 0)
-            setDoubleClickTime(doubleClickTime);
-    #endif
+#ifdef SFML_SYSTEM_WINDOWS
+        unsigned int doubleClickTimeMs = GetDoubleClickTime();
+        if (doubleClickTimeMs > 0)
+            setDoubleClickTime(std::chrono::milliseconds(doubleClickTimeMs));
+#endif
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

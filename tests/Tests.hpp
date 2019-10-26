@@ -66,7 +66,7 @@
                 compareImageFiles(filename, "expected/" filename);
 #endif
 
-static const sf::Time DOUBLE_CLICK_TIMEOUT = sf::milliseconds(500);
+static const std::chrono::milliseconds DOUBLE_CLICK_TIMEOUT = std::chrono::milliseconds(500);
 
 bool compareFiles(const std::string& leftFileName, const std::string& rightFileName);
 void compareImageFiles(const std::string& filename1, const std::string& filename2);

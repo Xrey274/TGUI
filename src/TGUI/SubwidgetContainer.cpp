@@ -155,7 +155,7 @@ namespace tgui
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    void SubwidgetContainer::update(sf::Time elapsedTime)
+    void SubwidgetContainer::update(Duration elapsedTime)
     {
         m_container->update(elapsedTime);
     }

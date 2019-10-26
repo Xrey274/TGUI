@@ -26,6 +26,7 @@
 #include <TGUI/Global.hpp>
 #include <TGUI/Clipboard.hpp>
 #include <TGUI/DefaultFont.hpp>
+#include <TGUI/Duration.hpp>
 #include <functional>
 #include <sstream>
 #include <locale>
@@ -39,7 +40,7 @@ namespace tgui
     namespace
     {
         unsigned int globalTextSize = 13;
-        unsigned int globalDoubleClickTime = 500;
+        Duration globalDoubleClickTime = std::chrono::milliseconds(500);
         std::string globalResourcePath = "";
         std::shared_ptr<sf::Font> globalFont = nullptr;
     }
@@ -87,14 +88,14 @@ namespace tgui
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    void setDoubleClickTime(unsigned int milliseconds)
+    void setDoubleClickTime(Duration duration)
     {
-        globalDoubleClickTime = milliseconds;
+        globalDoubleClickTime = duration;
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    unsigned int getDoubleClickTime()
+    Duration getDoubleClickTime()
     {
         return globalDoubleClickTime;
     }

@@ -29,6 +29,7 @@
 
 #include <TGUI/Container.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
+#include <chrono>
 #include <queue>
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -395,7 +396,7 @@ namespace tgui
         // Updates the internal clock to make animation possible. This function is called automatically by the draw function.
         // You will thus only need to call it yourself when you are drawing everything manually.
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        void updateTime(const sf::Time& elapsedTime);
+        void updateTime(Duration elapsedTime);
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -410,8 +411,7 @@ namespace tgui
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       protected:
 
-        // The internal clock which is used for animation of widgets
-        sf::Clock m_clock;
+        std::chrono::steady_clock::time_point m_lastUpdateTime;
 
         // The sfml render target to draw on
         sf::RenderTarget* m_target;
@@ -426,7 +426,7 @@ namespace tgui
         GuiContainer::Ptr m_container = std::make_shared<GuiContainer>();
 
         Widget::Ptr m_visibleToolTip = nullptr;
-        sf::Time m_tooltipTime;
+        Duration m_tooltipTime;
         bool m_tooltipPossible = false;
         Vector2f m_lastMousePos;
 

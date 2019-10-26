@@ -106,7 +106,7 @@ namespace tgui
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    void CustomWidgetForBindings::update(sf::Time elapsedTime)
+    void CustomWidgetForBindings::update(Duration elapsedTime)
     {
         Widget::update(elapsedTime);
         implUpdateFunction(elapsedTime);
