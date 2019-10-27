@@ -32,38 +32,51 @@
 #include <utility>
 #include <typeinfo>
 
+#if TGUI_COMPILED_WITH_CPP_VER >= 17
+    #include <any>
+#endif
+
 namespace tgui
 {
+#if TGUI_COMPILED_WITH_CPP_VER >= 17
+    using Any = std::any;
+
+    template<typename T>
+    T AnyCast(const Any& obj)
+    {
+        return std::any_cast<T>(obj);
+    }
+#else
     struct Any
     {
         template<class T>
         using StorageType = typename std::decay<T>::type;
 
-        TGUI_CONSTEXPR bool is_null() const
+        bool is_null() const
         {
             return ptr == nullptr;
         }
 
-        TGUI_CONSTEXPR bool not_null() const
+        bool not_null() const
         {
             return ptr != nullptr;
         }
 
         template<typename U>
-        TGUI_CONSTEXPR Any(U&& value)
+        Any(U&& value)
             : ptr{new Derived<StorageType<U>>(std::forward<U>(value))}
         {
         }
 
         template<class U>
-        TGUI_CONSTEXPR bool is() const
+        bool is() const
         {
             typedef StorageType<U> T;
             return dynamic_cast<Derived<T>*>(ptr);
         }
 
         template<class U>
-        TGUI_CONSTEXPR StorageType<U>& as() const
+        StorageType<U>& as() const
         {
             typedef StorageType<U> T;
             auto derived = dynamic_cast<Derived<T>*>(ptr);
@@ -74,12 +87,12 @@ namespace tgui
         }
 
         template<class U>
-        TGUI_CONSTEXPR operator U()
+        operator U()
         {
             return as<StorageType<U>>();
         }
 
-        TGUI_CONSTEXPR Any()
+        Any()
             : ptr(nullptr)
         {
         }
@@ -89,7 +102,7 @@ namespace tgui
         {
         }
 
-        TGUI_CONSTEXPR Any(Any&& that) noexcept
+        Any(Any&& that) noexcept
             : ptr(that.ptr)
         {
             that.ptr = nullptr;
@@ -159,6 +172,13 @@ namespace tgui
 
         Base* ptr;
     };
+
+    template<typename T>
+    T AnyCast(const Any& obj)
+    {
+        return obj.as<T>();
+    }
+#endif
 }
 
 #endif // TGUI_ANY_HPP

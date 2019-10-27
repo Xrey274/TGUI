@@ -34,6 +34,7 @@
 #include <TGUI/String.hpp>
 #include <TGUI/Vector2.hpp>
 #include <TGUI/Duration.hpp>
+#include <TGUI/Any.hpp>
 #include <TGUI/Loading/Theme.hpp>
 #include <TGUI/Loading/DataIO.hpp>
 #include <TGUI/Loading/Serializer.hpp>
@@ -47,12 +48,6 @@
 #include <SFML/Graphics/RenderTarget.hpp>
 
 #include <unordered_set>
-
-#if TGUI_COMPILED_WITH_CPP_VER >= 17
-    #include <any>
-#else
-    #include <TGUI/Any.hpp>
-#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -421,11 +416,7 @@ namespace tgui
         /// widget->setUserData(5);
         /// @endcode
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#if TGUI_COMPILED_WITH_CPP_VER >= 17
-        void setUserData(std::any userData)
-#else
-        void setUserData(tgui::Any userData)
-#endif
+        void setUserData(Any userData)
         {
             m_userData = std::move(userData);
         }
@@ -438,11 +429,7 @@ namespace tgui
         template <typename T>
         T getUserData() const
         {
-#if TGUI_COMPILED_WITH_CPP_VER >= 17
-            return std::any_cast<T>(m_userData);
-#else
-            return m_userData.as<T>();
-#endif
+            return AnyCast<T>(m_userData);
         }
 
 
@@ -871,11 +858,7 @@ namespace tgui
         float m_opacityCached = 1;
         bool m_transparentTextureCached = false;
 
-#if TGUI_COMPILED_WITH_CPP_VER >= 17
-        std::any m_userData;
-#else
-        tgui::Any m_userData;
-#endif
+        Any m_userData;
 
         std::function<void(const std::string& property)> m_rendererChangedCallback = [this](const std::string& property){ rendererChangedCallback(property); };
 

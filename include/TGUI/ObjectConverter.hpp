@@ -205,7 +205,7 @@ namespace tgui
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         ObjectConverter(TextStyle::Style style) :
             m_type {Type::TextStyle},
-            m_value{TextStyle{style}}
+            m_value{TextStyle(style)}
         {
         }
 

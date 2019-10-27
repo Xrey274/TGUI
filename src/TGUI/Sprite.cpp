@@ -26,13 +26,10 @@
 #include <TGUI/Sprite.hpp>
 #include <TGUI/Color.hpp>
 #include <TGUI/Clipping.hpp>
+#include <TGUI/Optional.hpp>
 
 #include <cassert>
 #include <cmath>
-
-#if TGUI_COMPILED_WITH_CPP_VER >= 17
-    #include <optional>
-#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -417,15 +414,9 @@ namespace tgui
         states.transform *= getTransform();
 
         // Apply clipping when needed
-#if TGUI_COMPILED_WITH_CPP_VER >= 17
-        std::optional<Clipping> clipping;
+        Optional<Clipping> clipping;
         if (m_visibleRect != FloatRect{})
             clipping.emplace(target, states, Vector2f{m_visibleRect.left, m_visibleRect.top}, Vector2f{m_visibleRect.width, m_visibleRect.height});
-#else
-        std::unique_ptr<Clipping> clipping;
-        if (m_visibleRect != FloatRect{0, 0, 0, 0})
-            clipping = std::make_unique<Clipping>(target, states, Vector2f{m_visibleRect.left, m_visibleRect.top}, Vector2f{m_visibleRect.width, m_visibleRect.height});
-#endif
 
         if (m_texture.getData()->svgImage)
             states.texture = m_svgTexture.get();

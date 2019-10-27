@@ -100,7 +100,7 @@
 #if defined(__cpp_constexpr) && (__cpp_constexpr >= 201304L)
     #define TGUI_CONSTEXPR constexpr
 #else
-    #define TGUI_CONSTEXPR
+    #define TGUI_CONSTEXPR inline
 #endif
 
 #if __cplusplus >= 201703L

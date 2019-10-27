@@ -230,7 +230,7 @@ namespace tgui
     float Scrollbar::getDefaultWidth()
     {
         if (m_spriteTrack.isSet())
-            return m_spriteTrack.getTexture().getImageSize().x;
+            return static_cast<float>(m_spriteTrack.getTexture().getImageSize().x);
         else
             return 16;
     }

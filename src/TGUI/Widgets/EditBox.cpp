@@ -28,20 +28,16 @@
 #include <TGUI/Clipboard.hpp>
 #include <TGUI/Clipping.hpp>
 
-/// TODO: Where m_selStart and m_selEnd are compared, use std::min and std::max and merge the if and else bodies
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 namespace tgui
 {
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#if TGUI_COMPILED_WITH_CPP_VER < 17
-    const std::string EditBox::Validator::All   = ".*";
-    const std::string EditBox::Validator::Int   = "[+-]?[0-9]*";
-    const std::string EditBox::Validator::UInt  = "[0-9]*";
-    const std::string EditBox::Validator::Float = "[+-]?[0-9]*\\.?[0-9]*";
-#endif
+    const char* EditBox::Validator::All   = ".*";
+    const char* EditBox::Validator::Int   = "[+-]?[0-9]*";
+    const char* EditBox::Validator::UInt  = "[0-9]*";
+    const char* EditBox::Validator::Float = "[+-]?[0-9]*\\.?[0-9]*";
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

@@ -535,11 +535,11 @@ namespace tgui
         if (node->propertyValuePairs["endrotation"])
             setEndRotation(strToFloat(node->propertyValuePairs["endrotation"]->value));
         if (node->propertyValuePairs["minimum"])
-            setMinimum(strToInt(node->propertyValuePairs["minimum"]->value));
+            setMinimum(strToFloat(node->propertyValuePairs["minimum"]->value));
         if (node->propertyValuePairs["maximum"])
-            setMaximum(strToInt(node->propertyValuePairs["maximum"]->value));
+            setMaximum(strToFloat(node->propertyValuePairs["maximum"]->value));
         if (node->propertyValuePairs["value"])
-            setValue(strToInt(node->propertyValuePairs["value"]->value));
+            setValue(strToFloat(node->propertyValuePairs["value"]->value));
         if (node->propertyValuePairs["clockwiseturning"])
             setClockwiseTurning(Deserializer::deserialize(ObjectConverter::Type::Bool, node->propertyValuePairs["clockwiseturning"]->value).getBool());
     }

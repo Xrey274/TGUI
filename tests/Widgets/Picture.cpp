@@ -61,7 +61,7 @@ TEST_CASE("[Picture]")
             REQUIRE(picture->getRenderer()->getTexture().getId() == "");
         }
 
-        REQUIRE(picture->getSize() == tgui::Vector2f(texture.getSize().x, texture.getSize().y));
+        REQUIRE(picture->getSize() == tgui::Vector2f(static_cast<float>(texture.getSize().x), static_cast<float>(texture.getSize().y)));
     }
 
     SECTION("Position and Size")
