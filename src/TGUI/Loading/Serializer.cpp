@@ -175,17 +175,21 @@ namespace tgui
 
             std::string result = "\"" + texture.getId() + "\"";
 
-            if ((texture.getData()->rect != UIntRect{}) && texture.getData()->image
-             && (texture.getData()->rect != UIntRect{0, 0, texture.getData()->image->getSize().x, texture.getData()->image->getSize().y}))
+            if (texture.getData()->texture)
             {
-                result += " Part(" + to_string(texture.getData()->rect.left) + ", " + to_string(texture.getData()->rect.top)
-                            + ", " + to_string(texture.getData()->rect.width) + ", " + to_string(texture.getData()->rect.height) + ")";
-            }
+                const UIntRect& partRect = texture.getPartRect();
+                if ((partRect != UIntRect{}) && (partRect != UIntRect{{0, 0}, Vector2u{texture.getData()->texture->getSize()}}))
+                {
+                    result += " Part(" + to_string(partRect.left) + ", " + to_string(partRect.top)
+                                + ", " + to_string(partRect.width) + ", " + to_string(partRect.height) + ")";
+                }
 
-            if (texture.getMiddleRect() != UIntRect{0, 0, texture.getData()->texture.getSize().x, texture.getData()->texture.getSize().y})
-            {
-                result += " Middle(" + to_string(texture.getMiddleRect().left) + ", " + to_string(texture.getMiddleRect().top)
-                              + ", " + to_string(texture.getMiddleRect().width) + ", " + to_string(texture.getMiddleRect().height) + ")";
+                const UIntRect& middleRect = texture.getMiddleRect();
+                if (middleRect != UIntRect{{0, 0}, partRect.getSize()})
+                {
+                    result += " Middle(" + to_string(middleRect.left) + ", " + to_string(middleRect.top)
+                                  + ", " + to_string(middleRect.width) + ", " + to_string(middleRect.height) + ")";
+                }
             }
 
             if (texture.isSmooth())

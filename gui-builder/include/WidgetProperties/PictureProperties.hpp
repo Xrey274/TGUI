@@ -40,13 +40,13 @@ struct PictureProperties : WidgetProperties
         {
             const tgui::Texture& oldTexture = picture->getSharedRenderer()->getTexture();
             const sf::String oldFilename = oldTexture.getId();
-            const tgui::UIntRect oldPartRect = oldTexture.getData() ? oldTexture.getData()->rect : tgui::UIntRect{};
+            const tgui::UIntRect oldPartRect = oldTexture.getPartRect();
 
             picture->getRenderer()->setProperty(property, value);
 
             const tgui::Texture& newTexture = picture->getSharedRenderer()->getTexture();
             const sf::String newFilename = newTexture.getId();
-            const tgui::UIntRect newPartRect = newTexture.getData() ? newTexture.getData()->rect : tgui::UIntRect{};
+            const tgui::UIntRect newPartRect = newTexture.getPartRect();
             const tgui::Vector2u imageSize = newTexture.getImageSize();
             if (((newFilename != oldFilename) || (newPartRect != oldPartRect)) && (imageSize.x != 0) && (imageSize.y != 0))
                 picture->setSize(tgui::Vector2f{imageSize});

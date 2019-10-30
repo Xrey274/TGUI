@@ -2,7 +2,7 @@
 #      general configuration      #
 #---------------------------------#
  
-version: 0.8-build-{build}
+version: 0.9-build-{build}
 
 
 #---------------------------------#
@@ -140,10 +140,10 @@ build_script:
       move doc\html ..\tgui\doc\ > nul &&
       move gui-builder\Release\gui-builder.exe ..\tgui\gui-builder\ > nul &&
       cd .. &&
-      echo d | xcopy /s tgui TGUI-0.8-dev > nul &&
-      7z a -tzip TGUI-0.8-dev-vc16-32bit-for-SFML-%SFML_VERSION%.zip TGUI-0.8-dev > nul &&
-      appveyor PushArtifact TGUI-0.8-dev-vc16-32bit-for-SFML-%SFML_VERSION%.zip &&
-      rmdir /S /Q TGUI-0.8-dev > nul &&
+      echo d | xcopy /s tgui TGUI-0.9-dev > nul &&
+      7z a -tzip TGUI-0.9-dev-vc16-32bit-for-SFML-%SFML_VERSION%.zip TGUI-0.9-dev > nul &&
+      appveyor PushArtifact TGUI-0.9-dev-vc16-32bit-for-SFML-%SFML_VERSION%.zip &&
+      rmdir /S /Q TGUI-0.9-dev > nul &&
       rmdir /S /Q tgui\doc\html > nul &&
       rmdir /S /Q tgui\lib > nul &&
       mkdir build-Win64 &&
@@ -166,9 +166,9 @@ build_script:
       move doc\html ..\tgui\doc\ > nul &&
       move gui-builder\Release\gui-builder.exe ..\tgui\gui-builder\ > nul &&
       cd .. &&
-      echo d | xcopy /s tgui TGUI-0.8-dev > nul &&
-      7z a -tzip TGUI-0.8-dev-vc16-64bit-for-SFML-%SFML_VERSION%.zip TGUI-0.8-dev > nul &&
-      appveyor PushArtifact TGUI-0.8-dev-vc16-64bit-for-SFML-%SFML_VERSION%.zip
+      echo d | xcopy /s tgui TGUI-0.9-dev > nul &&
+      7z a -tzip TGUI-0.9-dev-vc16-64bit-for-SFML-%SFML_VERSION%.zip TGUI-0.9-dev > nul &&
+      appveyor PushArtifact TGUI-0.9-dev-vc16-64bit-for-SFML-%SFML_VERSION%.zip
     )
 
 
@@ -184,7 +184,7 @@ deploy:
   subject: texus
   repo: generic
   package: TGUI
-  version: 0.8-dev-latest
+  version: 0.9-dev-latest
   publish: true
   override: true
   explode: false

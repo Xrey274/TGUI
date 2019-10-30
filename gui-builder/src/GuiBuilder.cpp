@@ -1780,11 +1780,7 @@ void GuiBuilder::addPropertyValueTexture(const std::string& property, const sf::
 
             if (resetPartRect)
             {
-                if (texture->getData() && (texture->getData()->rect == tgui::UIntRect{}))
-                    partRect = {0, 0, imageSize.x, imageSize.y};
-                else
-                    partRect = texture->getData() ? texture->getData()->rect : tgui::UIntRect{};
-
+                partRect = texture->getPartRect();
                 editBoxPartRect->onTextChange.setEnabled(false);
                 editBoxPartRect->setText("(" + tgui::to_string(partRect.left) + ", " + tgui::to_string(partRect.top)
                     + ", " + tgui::to_string(partRect.width) + ", " + tgui::to_string(partRect.height) + ")");
@@ -1856,7 +1852,7 @@ void GuiBuilder::addPropertyValueTexture(const std::string& property, const sf::
         }
 
         sf::String originalFilename = originalTexture.getId();
-        tgui::UIntRect originalPartRect = originalTexture.getData() ? originalTexture.getData()->rect : tgui::UIntRect{};
+        tgui::UIntRect originalPartRect = originalTexture.getPartRect();
         tgui::UIntRect originalMiddleRect = originalTexture.getMiddleRect();
         updateForm(originalFilename, originalPartRect, originalMiddleRect, true, true, true);
 

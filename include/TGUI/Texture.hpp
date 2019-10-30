@@ -44,8 +44,8 @@ namespace tgui
     public:
 
         using CallbackFunc = std::function<void(std::shared_ptr<TextureData>)>;
-        using ImageLoaderFunc = std::function<std::unique_ptr<sf::Image>(const sf::String&)>;
-        using TextureLoaderFunc = std::function<std::shared_ptr<TextureData>(Texture&, const sf::String&, const UIntRect&)>;
+        using ImageLoaderFunc = std::function<std::shared_ptr<sf::Image>(const sf::String&)>;
+        using TextureLoaderFunc = std::function<std::shared_ptr<TextureData>(Texture&, const sf::String&, const UIntRect&, bool smooth)>;
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -202,36 +202,26 @@ namespace tgui
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        /// @brief Returns the size that the loaded image
+        /// @brief Returns the size that the loaded image, or the size of the part if only a part of the image is loaded
         ///
         /// @return Size of the image like it was when loaded (no scaling applied)
-        ///
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         Vector2u getImageSize() const;
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        /// @brief Enables or disable the smooth filter
+        /// @brief Returns which part of the image was loaded
         ///
-        /// When the filter is activated, the texture appears smoother so that pixels are less noticeable.
-        /// However if you want the texture to look exactly the same as its source file, you should leave it disabled.
-        /// The smooth filter is disabled by default.
-        ///
-        /// @param smooth True to enable smoothing, false to disable it
-        ///
-        /// @see isSmooth
+        /// @return Part of the image that was loaded
         ///
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        void setSmooth(bool smooth);
+        UIntRect getPartRect() const;
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /// @brief Tells whether the smooth filter is enabled or not
         ///
         /// @return True if smoothing is enabled, false if it is disabled
-        ///
-        /// @see setSmooth
-        ///
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         bool isSmooth() const;
 
@@ -386,10 +376,11 @@ namespace tgui
         /// @brief Changes the texture data
         ///
         /// @param data       New texture data
+        /// @param partRect   Load only part of the image
         /// @param middleRect Choose the middle part of the image part to determine scaling (e.g. 9-slice scaling)
         ///
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        void setTextureData(std::shared_ptr<TextureData> data, const UIntRect& middleRect = {});
+        void setTextureData(std::shared_ptr<TextureData> data, const UIntRect& partRect, const UIntRect& middleRect);
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -398,6 +389,7 @@ namespace tgui
         std::shared_ptr<TextureData> m_data = nullptr;
         Color m_color = Color::White;
         sf::Shader* m_shader = nullptr;
+        UIntRect m_partRect;
         UIntRect m_middleRect;
         sf::String  m_id;
 

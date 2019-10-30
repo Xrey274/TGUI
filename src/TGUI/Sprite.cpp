@@ -125,8 +125,10 @@ namespace tgui
 
     bool Sprite::isTransparentPixel(Vector2f pos) const
     {
-        if (!isSet() || !m_texture.getData()->image || (m_size.x == 0) || (m_size.y == 0))
+        if (!isSet() || (m_size.x == 0) || (m_size.y == 0))
             return true;
+        if (!m_texture.getData()->image || !m_texture.getData()->texture)
+            return false;
 
         if (getRotation() != 0)
         {
@@ -155,74 +157,74 @@ namespace tgui
         // Find out on which pixel the mouse is standing
         Vector2f pixel;
         FloatRect middleRect = FloatRect{m_texture.getMiddleRect()};
-        const sf::Texture& texture = m_texture.getData()->texture;
+        sf::Vector2u imageSize = m_texture.getImageSize();
         switch (m_scalingType)
         {
             case ScalingType::Normal:
             {
-                pixel.x = pos.x / m_size.x * texture.getSize().x;
-                pixel.y = pos.y / m_size.y * texture.getSize().y;
+                pixel.x = pos.x / m_size.x * imageSize.x;
+                pixel.y = pos.y / m_size.y * imageSize.y;
                 break;
             }
             case ScalingType::Horizontal:
             {
-                if (pos.x >= m_size.x - (texture.getSize().x - middleRect.left - middleRect.width) * (m_size.y / texture.getSize().y))
+                if (pos.x >= m_size.x - (imageSize.x - middleRect.left - middleRect.width) * (m_size.y / imageSize.y))
                 {
-                    float xDiff = pos.x - (m_size.x - (texture.getSize().x - middleRect.left - middleRect.width) * (m_size.y / texture.getSize().y));
-                    pixel.x = middleRect.left + middleRect.width + (xDiff / m_size.y * texture.getSize().y);
+                    float xDiff = pos.x - (m_size.x - (imageSize.x - middleRect.left - middleRect.width) * (m_size.y / imageSize.y));
+                    pixel.x = middleRect.left + middleRect.width + (xDiff / m_size.y * imageSize.y);
                 }
-                else if (pos.x >= middleRect.left * (m_size.y / texture.getSize().y))
+                else if (pos.x >= middleRect.left * (m_size.y / imageSize.y))
                 {
-                    float xDiff = pos.x - (middleRect.left * (m_size.y / texture.getSize().y));
-                    pixel.x = middleRect.left + (xDiff / (m_size.x - ((texture.getSize().x - middleRect.width) * (m_size.y / texture.getSize().y))) * middleRect.width);
+                    float xDiff = pos.x - (middleRect.left * (m_size.y / imageSize.y));
+                    pixel.x = middleRect.left + (xDiff / (m_size.x - ((imageSize.x - middleRect.width) * (m_size.y / imageSize.y))) * middleRect.width);
                 }
                 else // Mouse on the left part
                 {
-                    pixel.x = pos.x / m_size.y * texture.getSize().y;
+                    pixel.x = pos.x / m_size.y * imageSize.y;
                 }
 
-                pixel.y = pos.y / m_size.y * texture.getSize().y;
+                pixel.y = pos.y / m_size.y * imageSize.y;
                 break;
             }
             case ScalingType::Vertical:
             {
-                if (pos.y >= m_size.y - (texture.getSize().y - middleRect.top - middleRect.height) * (m_size.x / texture.getSize().x))
+                if (pos.y >= m_size.y - (imageSize.y - middleRect.top - middleRect.height) * (m_size.x / imageSize.x))
                 {
-                    float yDiff = pos.y - (m_size.y - (texture.getSize().y - middleRect.top - middleRect.height) * (m_size.x / texture.getSize().x));
-                    pixel.y = middleRect.top + middleRect.height + (yDiff / m_size.x * texture.getSize().x);
+                    float yDiff = pos.y - (m_size.y - (imageSize.y - middleRect.top - middleRect.height) * (m_size.x / imageSize.x));
+                    pixel.y = middleRect.top + middleRect.height + (yDiff / m_size.x * imageSize.x);
                 }
-                else if (pos.y >= middleRect.top * (m_size.x / texture.getSize().x))
+                else if (pos.y >= middleRect.top * (m_size.x / imageSize.x))
                 {
-                    float yDiff = pos.y - (middleRect.top * (m_size.x / texture.getSize().x));
-                    pixel.y = middleRect.top + (yDiff / (m_size.y - ((texture.getSize().y - middleRect.height) * (m_size.x / texture.getSize().x))) * middleRect.height);
+                    float yDiff = pos.y - (middleRect.top * (m_size.x / imageSize.x));
+                    pixel.y = middleRect.top + (yDiff / (m_size.y - ((imageSize.y - middleRect.height) * (m_size.x / imageSize.x))) * middleRect.height);
                 }
                 else // Mouse on the top part
                 {
-                    pixel.y = pos.y / m_size.x * texture.getSize().x;
+                    pixel.y = pos.y / m_size.x * imageSize.x;
                 }
 
-                pixel.x = pos.x / m_size.x * texture.getSize().x;
+                pixel.x = pos.x / m_size.x * imageSize.x;
                 break;
             }
             case ScalingType::NineSlice:
             {
                 if (pos.x < middleRect.left)
                     pixel.x = pos.x;
-                else if (pos.x >= m_size.x - (texture.getSize().x - middleRect.width - middleRect.left))
-                    pixel.x = pos.x - m_size.x + texture.getSize().x;
+                else if (pos.x >= m_size.x - (imageSize.x - middleRect.width - middleRect.left))
+                    pixel.x = pos.x - m_size.x + imageSize.x;
                 else
                 {
-                    float xDiff = (pos.x - middleRect.left) / (m_size.x - (texture.getSize().x - middleRect.width)) * middleRect.width;
+                    float xDiff = (pos.x - middleRect.left) / (m_size.x - (imageSize.x - middleRect.width)) * middleRect.width;
                     pixel.x = middleRect.left + xDiff;
                 }
 
                 if (pos.y < middleRect.top)
                     pixel.y = pos.y;
-                else if (pos.y >= m_size.y - (texture.getSize().y - middleRect.height - middleRect.top))
-                    pixel.y = pos.y - m_size.y + texture.getSize().y;
+                else if (pos.y >= m_size.y - (imageSize.y - middleRect.height - middleRect.top))
+                    pixel.y = pos.y - m_size.y + imageSize.y;
                 else
                 {
-                    float yDiff = (pos.y - middleRect.top) / (m_size.y - (texture.getSize().y - middleRect.height)) * middleRect.height;
+                    float yDiff = (pos.y - middleRect.top) / (m_size.y - (imageSize.y - middleRect.height)) * middleRect.height;
                     pixel.y = middleRect.top + yDiff;
                 }
 
@@ -247,6 +249,7 @@ namespace tgui
         // Figure out how the image is scaled best
         Vector2f textureSize;
         FloatRect middleRect;
+        Vector2u texCoordOffset;
         if (m_texture.getData()->svgImage)
         {
             if (!m_svgTexture)
@@ -263,7 +266,8 @@ namespace tgui
         }
         else
         {
-            textureSize = Vector2f{m_texture.getImageSize()};
+            texCoordOffset = m_texture.getPartRect().getPosition();
+            textureSize = Vector2f{m_texture.getPartRect().getSize()};
             middleRect = FloatRect{m_texture.getMiddleRect()};
             if (middleRect == FloatRect(0, 0, textureSize.x, textureSize.y))
             {
@@ -393,6 +397,15 @@ namespace tgui
             m_vertices[21] = {{m_size.x, m_size.y}, vertexColor, {textureSize.x, textureSize.y}};
             break;
         };
+
+        if (texCoordOffset != Vector2u{})
+        {
+            for (auto& vertex : m_vertices)
+            {
+                vertex.texCoords.x += static_cast<float>(m_texture.getPartRect().left);
+                vertex.texCoords.y += static_cast<float>(m_texture.getPartRect().top);
+            }
+        }
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -421,7 +434,7 @@ namespace tgui
         if (m_texture.getData()->svgImage)
             states.texture = m_svgTexture.get();
         else
-            states.texture = &m_texture.getData()->texture;
+            states.texture = &m_texture.getData()->texture.value();
 
         states.shader = m_shader;
         target.draw(m_vertices.data(), m_vertices.size(), sf::PrimitiveType::TrianglesStrip, states);

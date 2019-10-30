@@ -22,9 +22,7 @@
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#include "Tests.hpp"
-#include <TGUI/Widgets/Canvas.hpp>
-
+#include <SFML/Graphics/View.hpp>
 namespace
 {
     bool operator==(const sf::View& left, const sf::View& right)
@@ -35,6 +33,9 @@ namespace
             && left.getViewport() == right.getViewport();
     }
 }
+
+#include "Tests.hpp"
+#include <TGUI/Widgets/Canvas.hpp>
 
 TEST_CASE("[Canvas]")
 {

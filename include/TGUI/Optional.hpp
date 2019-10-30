@@ -43,15 +43,95 @@ namespace tgui
     class Optional
     {
     public:
+        Optional() noexcept = default;
+
+        Optional(std::nullptr_t) noexcept :
+            m_ptr(nullptr)
+        {
+        }
+
+        Optional(const T& value) noexcept :
+            m_ptr(std::make_unique<T>(value))
+        {
+        }
+
+        Optional(T&& value) noexcept :
+            m_ptr(std::make_unique<T>(std::move(value)))
+        {
+        }
+
+        Optional(const Optional& other) :
+            m_ptr(other.m_ptr ? std::make_unique<T>(*other.m_ptr) : nullptr)
+        {
+        }
+
+        Optional(Optional&& other) noexcept = default;
+
         template<typename... Args>
         void emplace(Args&&... args)
         {
             m_ptr = std::make_unique<T>(args...);
         }
 
+        T& operator*()
+        {
+            return *m_ptr;
+        }
+
+        T* operator->() noexcept
+        {
+            return m_ptr.get();
+        }
+
+        Optional& operator=(std::nullptr_t) noexcept
+        {
+            m_ptr = nullptr;
+            return *this;
+        }
+
+        Optional& operator=(const T& value) noexcept
+        {
+            m_ptr = std::make_unique<T>(value);
+            return *this;
+        }
+
+        Optional& operator=(T&& value) noexcept
+        {
+            m_ptr = std::make_unique<T>(std::move(value));
+            return *this;
+        }
+
+        Optional& operator=(const Optional& other) noexcept
+        {
+            m_ptr = other.m_ptr ? std::make_unique<T>(*other.m_ptr) : nullptr;
+            return *this;
+        }
+
+        Optional& operator=(Optional&& value) noexcept = default;
+
+        bool operator==(std::nullptr_t) const noexcept
+        {
+            return m_ptr == nullptr;
+        }
+
+        bool operator!=(std::nullptr_t) const noexcept
+        {
+            return m_ptr != nullptr;
+        }
+
         explicit operator bool() const noexcept
         {
-            return m_ptr;
+            return m_ptr != nullptr;
+        }
+
+        const T& value() const
+        {
+            return *m_ptr;
+        }
+
+        T& value()
+        {
+            return *m_ptr;
         }
 
     private:
