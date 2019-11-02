@@ -99,33 +99,34 @@ namespace tgui
     ///
     /// A constructor and conversion operator are provided for sf::String to easily convert between sf::String and tgui::String.
     ///
-    /// The interface is similar to std::basic_string, but functions accept char, wchar_t, char8_t, char16_t and char32_t.
+    /// The interface is similar to std::string, but there are constructors and conversion operators to construct from and
+    /// convert to std::string, std::wstring, std::u16string, std::u32string and std::u8string (if supported).
     /// Some extra helper functions are also provided to e.g. convert the string to an integer or float or to lowercase.
     ///
-    /// Note that when converting to std::string, an UTF-8 encoded string will be returned, even by the asAnsiString function.
-    /// This is done to be able to use UTF-8 without c++20 support (the asUtf8 function always returns an std::u8string).
-    /// Similarly, when passing an std::string or const char* to this class, the encoding is assumed to be UTF-8.
+    /// All "const char*" and std::string arguments and return values are assumed to be UTF-8 encoded.
+    /// Because data is stored as UTF-8, no conversions take place when assigning from std::string and getting the string back,
+    /// so any encoding could be used as long as you don't expect the value to be shown or converted to a different string type.
     ///
-    /// Data is stored in UTF-32, so any parameter or operator using a different encoding will have to convert the string
-    /// internally and may be slightly slower than the variants that use UTF-32.
+    /// Note that data is stored as bytes, so e.g. str[2] will return the 3th byte, not necessarily the 3th UTF character.
+    /// If you do need to access the codepoint, you need to first convert to UTF-32: str.asUtf32()[2]
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     class TGUI_API String
     {
     private:
-        std::u32string m_string;
+        std::string m_string;
 
     public:
 
-        static const decltype(std::u32string::npos) npos;
+        static const decltype(std::string::npos) npos;
 
-        using iterator = std::u32string::iterator;
-        using const_iterator = std::u32string::const_iterator;
-        using reverse_iterator = std::u32string::reverse_iterator;
-        using const_reverse_iterator = std::u32string::const_reverse_iterator;
+        using iterator = std::string::iterator;
+        using const_iterator = std::string::const_iterator;
+        using reverse_iterator = std::string::reverse_iterator;
+        using const_reverse_iterator = std::string::const_reverse_iterator;
 
-        using value_type = char32_t;
-        using reference = char32_t&;
-        using const_reference = const char32_t&;
+        using value_type = char;
+        using reference = char&;
+        using const_reference = const char&;
 
 
     public:
@@ -195,40 +196,30 @@ namespace tgui
         String(const std::u16string& str);
         String(const std::u32string& str);
 
-        String(std::u32string&& str)
-            : m_string{std::move(str)}
+        String(std::string&& str) :
+            m_string(std::move(str))
         {
         }
 
-        String(char ansiChar, const std::locale& locale = std::locale());
+        String(char ansiChar);
         String(wchar_t wideChar);
-        String(char16_t utfChar);
-        String(char32_t utfChar);
+        String(char16_t wideChar);
+        String(char32_t wideChar);
 
-        String(const char* str);
+        String(const char* str) :
+            m_string(str)
+        {
+        }
+
         String(const wchar_t* str);
         String(const char16_t* str);
         String(const char32_t* str);
 
         String(std::size_t count, char ch);
-        String(std::size_t count, wchar_t ch);
-        String(std::size_t count, char16_t ch);
-        String(std::size_t count, char32_t ch);
 
         String(const std::string& str, std::size_t pos);
-        String(const std::wstring& str, std::size_t pos);
-        String(const std::u16string& str, std::size_t pos);
-        String(const std::u32string& str, std::size_t pos);
-
         String(const std::string& str, std::size_t pos, std::size_t count);
-        String(const std::wstring& str, std::size_t pos, std::size_t count);
-        String(const std::u16string& str, std::size_t pos, std::size_t count);
-        String(const std::u32string& str, std::size_t pos, std::size_t count);
-
         String(const char* str, std::size_t count);
-        String(const wchar_t* str, std::size_t count);
-        String(const char16_t* str, std::size_t count);
-        String(const char32_t* str, std::size_t count);
 
         String(std::initializer_list<char> chars);
         String(std::initializer_list<wchar_t> chars);
@@ -240,71 +231,50 @@ namespace tgui
         String(std::u16string::const_iterator first, std::u16string::const_iterator last);
         String(std::u32string::const_iterator first, std::u32string::const_iterator last);
 
-        explicit String(const sf::String& str)
-            : m_string{reinterpret_cast<const char32_t*>(str.toUtf32().c_str())}
-        {
-        }
+        String(const sf::String& str);
+        explicit operator sf::String() const;
 
-        explicit operator sf::String() const
-        {
-            return sf::String::fromUtf32(m_string.begin(), m_string.end());
-        }
-
-        operator std::string() const;
-        operator std::wstring() const;
-        operator std::u16string() const;
-        operator const std::u32string&() const
+        explicit operator std::string() const
         {
             return m_string;
         }
 
-        std::string asAnsiString() const;
+        explicit operator std::wstring() const;
+        explicit operator std::u16string() const;
+        explicit operator std::u32string() const;
+
+        std::string asAnsiString() const
+        {
+            return m_string;
+        }
+
         std::wstring asWideString() const;
         std::u16string asUtf16() const;
-        const std::u32string& asUtf32() const;
+        std::u32string asUtf32() const;
+
+#if defined(__cpp_lib_char8_t) && (__cpp_lib_char8_t >= 201811L)
+        std::u8string asUtf8() const
+        {
+            return std::u8string(m_string.begin(), m_string.end());
+        }
+#else
+        std::string asUtf8() const
+        {
+            return m_string;
+        }
+#endif
 
         String& assign(std::size_t count, char ch);
-        String& assign(std::size_t count, wchar_t ch);
-        String& assign(std::size_t count, char16_t ch);
-        String& assign(std::size_t count, char32_t ch);
-
         String& assign(const std::string& str);
-        String& assign(const std::wstring& str);
-        String& assign(const std::u16string& str);
-        String& assign(const std::u32string& str);
         String& assign(const String& str);
-
         String& assign(const std::string& str, std::size_t pos, std::size_t count = npos);
-        String& assign(const std::wstring& str, std::size_t pos, std::size_t count = npos);
-        String& assign(const std::u16string& str, std::size_t pos, std::size_t count = npos);
-        String& assign(const std::u32string& str, std::size_t pos, std::size_t count = npos);
         String& assign(const String& str, std::size_t pos, std::size_t count = npos);
-
         String& assign(std::string&& str);
-        String& assign(std::wstring&& str);
-        String& assign(std::u16string&& str);
-        String& assign(std::u32string&& str);
         String& assign(String&& str);
-
         String& assign(const char* str, std::size_t count);
-        String& assign(const wchar_t* str, std::size_t count);
-        String& assign(const char16_t* str, std::size_t count);
-        String& assign(const char32_t* str, std::size_t count);
-
         String& assign(const char* str);
-        String& assign(const wchar_t* str);
-        String& assign(const char16_t* str);
-        String& assign(const char32_t* str);
-
         String& assign(std::initializer_list<char> chars);
-        String& assign(std::initializer_list<wchar_t> chars);
-        String& assign(std::initializer_list<char16_t> chars);
-        String& assign(std::initializer_list<char32_t> chars);
-
         String& assign(std::string::const_iterator first, std::string::const_iterator last);
-        String& assign(std::wstring::const_iterator first, std::wstring::const_iterator last);
-        String& assign(std::u16string::const_iterator first, std::u16string::const_iterator last);
-        String& assign(std::u32string::const_iterator first, std::u32string::const_iterator last);
 
         reference       at(std::size_t pos);
         const_reference at(std::size_t pos) const;
@@ -318,14 +288,14 @@ namespace tgui
         reference       back();
         const_reference back() const;
 
-        const char32_t* data() const noexcept;
+        const char* data() const noexcept;
 #if __cplusplus >= 201703L
-        char32_t* data() noexcept
+        char* data() noexcept
         {
             return m_string.data();
         }
 #endif
-        const char32_t* c_str() const noexcept;
+        const char* c_str() const noexcept;
 
         iterator begin() noexcept;
         const_iterator begin() const noexcept;
@@ -355,331 +325,105 @@ namespace tgui
         void clear() noexcept;
 
         String& insert(std::size_t index, std::size_t count, char ch);
-        String& insert(std::size_t index, std::size_t count, wchar_t ch);
-        String& insert(std::size_t index, std::size_t count, char16_t ch);
-        String& insert(std::size_t index, std::size_t count, char32_t ch);
-
         String& insert(std::size_t index, const std::string& str);
-        String& insert(std::size_t index, const std::wstring& str);
-        String& insert(std::size_t index, const std::u16string& str);
-        String& insert(std::size_t index, const std::u32string& str);
         String& insert(std::size_t index, const String& str);
-
         String& insert(std::size_t index, const std::string& str, std::size_t pos, std::size_t count = npos);
-        String& insert(std::size_t index, const std::wstring& str, std::size_t pos, std::size_t count = npos);
-        String& insert(std::size_t index, const std::u16string& str, std::size_t pos, std::size_t count = npos);
-        String& insert(std::size_t index, const std::u32string& str, std::size_t pos, std::size_t count = npos);
         String& insert(std::size_t index, const String& str, std::size_t pos, std::size_t count = npos);
-
         String& insert(std::size_t index, const char* str, std::size_t count);
-        String& insert(std::size_t index, const wchar_t* str, std::size_t count);
-        String& insert(std::size_t index, const char16_t* str, std::size_t count);
-        String& insert(std::size_t index, const char32_t* str, std::size_t count);
-
         String& insert(std::size_t index, const char* str);
-        String& insert(std::size_t index, const wchar_t* str);
-        String& insert(std::size_t index, const char16_t* str);
-        String& insert(std::size_t index, const char32_t* str);
-
         iterator insert(const_iterator pos, char ch);
-        iterator insert(const_iterator pos, wchar_t ch);
-        iterator insert(const_iterator pos, char16_t ch);
-        iterator insert(const_iterator pos, char32_t ch);
-
         iterator insert(const_iterator pos, std::size_t count, char ch);
-        iterator insert(const_iterator pos, std::size_t count, wchar_t ch);
-        iterator insert(const_iterator pos, std::size_t count, char16_t ch);
-        iterator insert(const_iterator pos, std::size_t count, char32_t ch);
-
         iterator insert(const_iterator pos, std::initializer_list<char> chars);
-        iterator insert(const_iterator pos, std::initializer_list<wchar_t> chars);
-        iterator insert(const_iterator pos, std::initializer_list<char16_t> chars);
-        iterator insert(const_iterator pos, std::initializer_list<char32_t> chars);
-
         iterator insert(const_iterator pos, std::string::const_iterator first, std::string::const_iterator last);
-        iterator insert(const_iterator pos, std::wstring::const_iterator first, std::wstring::const_iterator last);
-        iterator insert(const_iterator pos, std::u16string::const_iterator first, std::u16string::const_iterator last);
-        iterator insert(const_iterator pos, std::u32string::const_iterator first, std::u32string::const_iterator last);
 
         String& erase(std::size_t index = 0, std::size_t count = npos);
-
         iterator erase(const_iterator position);
         iterator erase(const_iterator first, const_iterator last);
 
         void push_back(char ch);
-        void push_back(wchar_t ch);
-        void push_back(char16_t ch);
-        void push_back(char32_t ch);
-
         void pop_back();
 
         String& append(std::size_t count, char ch);
-        String& append(std::size_t count, wchar_t ch);
-        String& append(std::size_t count, char16_t ch);
-        String& append(std::size_t count, char32_t ch);
-
         String& append(const std::string& str);
-        String& append(const std::wstring& str);
-        String& append(const std::u16string& str);
-        String& append(const std::u32string& str);
         String& append(const String& str);
-
         String& append(const std::string& str, std::size_t pos, std::size_t count = npos);
-        String& append(const std::wstring& str, std::size_t pos, std::size_t count = npos);
-        String& append(const std::u16string& str, std::size_t pos, std::size_t count = npos);
-        String& append(const std::u32string& str, std::size_t pos, std::size_t count = npos);
         String& append(const String& str, std::size_t pos, std::size_t count = npos);
-
         String& append(const char* str, std::size_t count);
-        String& append(const wchar_t* str, std::size_t count);
-        String& append(const char16_t* str, std::size_t count);
-        String& append(const char32_t* str, std::size_t count);
-
         String& append(const char* str);
-        String& append(const wchar_t* str);
-        String& append(const char16_t* str);
-        String& append(const char32_t* str);
-
         String& append(std::string::const_iterator first, std::string::const_iterator last);
-        String& append(std::wstring::const_iterator first, std::wstring::const_iterator last);
-        String& append(std::u16string::const_iterator first, std::u16string::const_iterator last);
-        String& append(std::u32string::const_iterator first, std::u32string::const_iterator last);
-
         String& append(std::initializer_list<char> chars);
-        String& append(std::initializer_list<wchar_t> chars);
-        String& append(std::initializer_list<char16_t> chars);
-        String& append(std::initializer_list<char32_t> chars);
 
         String& operator+=(const String& str);
 
         int compare(const std::string& str) const noexcept;
-        int compare(const std::wstring& str) const noexcept;
-        int compare(const std::u16string& str) const noexcept;
-        int compare(const std::u32string& str) const noexcept;
         int compare(const String& str) const noexcept;
-
         int compare(std::size_t pos1, std::size_t count1, const std::string& str) const;
-        int compare(std::size_t pos1, std::size_t count1, const std::wstring& str) const;
-        int compare(std::size_t pos1, std::size_t count1, const std::u16string& str) const;
-        int compare(std::size_t pos1, std::size_t count1, const std::u32string& str) const;
         int compare(std::size_t pos1, std::size_t count1, const String& str) const;
-
         int compare(std::size_t pos1, std::size_t count1, const std::string& str, std::size_t pos2, std::size_t count2 = npos) const;
-        int compare(std::size_t pos1, std::size_t count1, const std::wstring& str, std::size_t pos2, std::size_t count2 = npos) const;
-        int compare(std::size_t pos1, std::size_t count1, const std::u16string& str, std::size_t pos2, std::size_t count2 = npos) const;
-        int compare(std::size_t pos1, std::size_t count1, const std::u32string& str, std::size_t pos2, std::size_t count2 = npos) const;
         int compare(std::size_t pos1, std::size_t count1, const String& str, std::size_t pos2, std::size_t count2 = npos) const;
-
         int compare(const char* s) const;
-        int compare(const wchar_t* s) const;
-        int compare(const char16_t* s) const;
-        int compare(const char32_t* s) const;
-
         int compare(std::size_t pos1, std::size_t count1, const char* s) const;
-        int compare(std::size_t pos1, std::size_t count1, const wchar_t* s) const;
-        int compare(std::size_t pos1, std::size_t count1, const char16_t* s) const;
-        int compare(std::size_t pos1, std::size_t count1, const char32_t* s) const;
-
         int compare(std::size_t pos1, std::size_t count1, const char* s, std::size_t count2) const;
-        int compare(std::size_t pos1, std::size_t count1, const wchar_t* s, std::size_t count2) const;
-        int compare(std::size_t pos1, std::size_t count1, const char16_t* s, std::size_t count2) const;
-        int compare(std::size_t pos1, std::size_t count1, const char32_t* s, std::size_t count2) const;
 
         String& replace(std::size_t pos, std::size_t count, const std::string& str);
-        String& replace(std::size_t pos, std::size_t count, const std::wstring& str);
-        String& replace(std::size_t pos, std::size_t count, const std::u16string& str);
-        String& replace(std::size_t pos, std::size_t count, const std::u32string& str);
         String& replace(std::size_t pos, std::size_t count, const String& str);
-
         String& replace(const_iterator first, const_iterator last, const std::string& str);
-        String& replace(const_iterator first, const_iterator last, const std::wstring& str);
-        String& replace(const_iterator first, const_iterator last, const std::u16string& str);
-        String& replace(const_iterator first, const_iterator last, const std::u32string& str);
         String& replace(const_iterator first, const_iterator last, const String& str);
-
         String& replace(std::size_t pos, std::size_t count, const std::string& str, std::size_t pos2, std::size_t count2 = npos);
-        String& replace(std::size_t pos, std::size_t count, const std::wstring& str, std::size_t pos2, std::size_t count2 = npos);
-        String& replace(std::size_t pos, std::size_t count, const std::u16string& str, std::size_t pos2, std::size_t count2 = npos);
-        String& replace(std::size_t pos, std::size_t count, const std::u32string& str, std::size_t pos2, std::size_t count2 = npos);
         String& replace(std::size_t pos, std::size_t count, const String& str, std::size_t pos2, std::size_t count2 = npos);
-
         String& replace(const_iterator first, const_iterator last, std::string::const_iterator first2, std::string::const_iterator last2);
-        String& replace(const_iterator first, const_iterator last, std::wstring::const_iterator first2, std::wstring::const_iterator last2);
-        String& replace(const_iterator first, const_iterator last, std::u16string::const_iterator first2, std::u16string::const_iterator last2);
-        String& replace(const_iterator first, const_iterator last, std::u32string::const_iterator first2, std::u32string::const_iterator last2);
-
         String& replace(std::size_t pos, std::size_t count, const char* cstr, std::size_t count2);
-        String& replace(std::size_t pos, std::size_t count, const wchar_t* cstr, std::size_t count2);
-        String& replace(std::size_t pos, std::size_t count, const char16_t* cstr, std::size_t count2);
-        String& replace(std::size_t pos, std::size_t count, const char32_t* cstr, std::size_t count2);
-
         String& replace(const_iterator first, const_iterator last, const char* cstr, std::size_t count2);
-        String& replace(const_iterator first, const_iterator last, const wchar_t* cstr, std::size_t count2);
-        String& replace(const_iterator first, const_iterator last, const char16_t* cstr, std::size_t count2);
-        String& replace(const_iterator first, const_iterator last, const char32_t* cstr, std::size_t count2);
-
         String& replace(std::size_t pos, std::size_t count, const char* cstr);
-        String& replace(std::size_t pos, std::size_t count, const wchar_t* cstr);
-        String& replace(std::size_t pos, std::size_t count, const char16_t* cstr);
-        String& replace(std::size_t pos, std::size_t count, const char32_t* cstr);
-
         String& replace(const_iterator first, const_iterator last, const char* cstr);
-        String& replace(const_iterator first, const_iterator last, const wchar_t* cstr);
-        String& replace(const_iterator first, const_iterator last, const char16_t* cstr);
-        String& replace(const_iterator first, const_iterator last, const char32_t* cstr);
-
         String& replace(std::size_t pos, std::size_t count, std::size_t count2, char ch);
-        String& replace(std::size_t pos, std::size_t count, std::size_t count2, wchar_t ch);
-        String& replace(std::size_t pos, std::size_t count, std::size_t count2, char16_t ch);
-        String& replace(std::size_t pos, std::size_t count, std::size_t count2, char32_t ch);
-
         String& replace(const_iterator first, const_iterator last, std::size_t count2, char ch);
-        String& replace(const_iterator first, const_iterator last, std::size_t count2, wchar_t ch);
-        String& replace(const_iterator first, const_iterator last, std::size_t count2, char16_t ch);
-        String& replace(const_iterator first, const_iterator last, std::size_t count2, char32_t ch);
-
         String& replace(const_iterator first, const_iterator last, std::initializer_list<char> chars);
-        String& replace(const_iterator first, const_iterator last, std::initializer_list<wchar_t> chars);
-        String& replace(const_iterator first, const_iterator last, std::initializer_list<char16_t> chars);
-        String& replace(const_iterator first, const_iterator last, std::initializer_list<char32_t> chars);
 
         String substr(std::size_t pos = 0, std::size_t count = npos) const;
 
-        std::size_t copy(char32_t* dest, std::size_t count, std::size_t pos = 0) const;
+        std::size_t copy(char* dest, std::size_t count, std::size_t pos = 0) const;
 
         void resize(std::size_t count);
         void resize(std::size_t count, char ch);
-        void resize(std::size_t count, wchar_t ch);
-        void resize(std::size_t count, char16_t ch);
-        void resize(std::size_t count, char32_t ch);
 
         void swap(String& other);
 
         std::size_t find(const std::string& str, std::size_t pos = 0) const noexcept;
-        std::size_t find(const std::wstring& str, std::size_t pos = 0) const noexcept;
-        std::size_t find(const std::u16string& str, std::size_t pos = 0) const noexcept;
-        std::size_t find(const std::u32string& str, std::size_t pos = 0) const noexcept;
         std::size_t find(const String& str, std::size_t pos = 0) const noexcept;
-
         std::size_t find(const char* s, std::size_t pos, std::size_t count) const;
-        std::size_t find(const wchar_t* s, std::size_t pos, std::size_t count) const;
-        std::size_t find(const char16_t* s, std::size_t pos, std::size_t count) const;
-        std::size_t find(const char32_t* s, std::size_t pos, std::size_t count) const;
-
         std::size_t find(const char* s, std::size_t pos = 0) const;
-        std::size_t find(const wchar_t* s, std::size_t pos = 0) const;
-        std::size_t find(const char16_t* s, std::size_t pos = 0) const;
-        std::size_t find(const char32_t* s, std::size_t pos = 0) const;
-
         std::size_t find(char ch, std::size_t pos = 0) const noexcept;
-        std::size_t find(wchar_t ch, std::size_t pos = 0) const noexcept;
-        std::size_t find(char16_t ch, std::size_t pos = 0) const noexcept;
-        std::size_t find(char32_t ch, std::size_t pos = 0) const noexcept;
 
         std::size_t find_first_of(const std::string& str, std::size_t pos = 0) const noexcept;
-        std::size_t find_first_of(const std::wstring& str, std::size_t pos = 0) const noexcept;
-        std::size_t find_first_of(const std::u16string& str, std::size_t pos = 0) const noexcept;
-        std::size_t find_first_of(const std::u32string& str, std::size_t pos = 0) const noexcept;
         std::size_t find_first_of(const String& str, std::size_t pos = 0) const noexcept;
-
         std::size_t find_first_of(const char* s, std::size_t pos, std::size_t count) const;
-        std::size_t find_first_of(const wchar_t* s, std::size_t pos, std::size_t count) const;
-        std::size_t find_first_of(const char16_t* s, std::size_t pos, std::size_t count) const;
-        std::size_t find_first_of(const char32_t* s, std::size_t pos, std::size_t count) const;
-
         std::size_t find_first_of(const char* s, std::size_t pos = 0) const;
-        std::size_t find_first_of(const wchar_t* s, std::size_t pos = 0) const;
-        std::size_t find_first_of(const char16_t* s, std::size_t pos = 0) const;
-        std::size_t find_first_of(const char32_t* s, std::size_t pos = 0) const;
-
         std::size_t find_first_of(char ch, std::size_t pos = 0) const noexcept;
-        std::size_t find_first_of(wchar_t ch, std::size_t pos = 0) const noexcept;
-        std::size_t find_first_of(char16_t ch, std::size_t pos = 0) const noexcept;
-        std::size_t find_first_of(char32_t ch, std::size_t pos = 0) const noexcept;
 
         std::size_t find_first_not_of(const std::string& str, std::size_t pos = 0) const noexcept;
-        std::size_t find_first_not_of(const std::wstring& str, std::size_t pos = 0) const noexcept;
-        std::size_t find_first_not_of(const std::u16string& str, std::size_t pos = 0) const noexcept;
-        std::size_t find_first_not_of(const std::u32string& str, std::size_t pos = 0) const noexcept;
         std::size_t find_first_not_of(const String& str, std::size_t pos = 0) const noexcept;
-
         std::size_t find_first_not_of(const char* s, std::size_t pos, std::size_t count) const;
-        std::size_t find_first_not_of(const wchar_t* s, std::size_t pos, std::size_t count) const;
-        std::size_t find_first_not_of(const char16_t* s, std::size_t pos, std::size_t count) const;
-        std::size_t find_first_not_of(const char32_t* s, std::size_t pos, std::size_t count) const;
-
         std::size_t find_first_not_of(const char* s, std::size_t pos = 0) const;
-        std::size_t find_first_not_of(const wchar_t* s, std::size_t pos = 0) const;
-        std::size_t find_first_not_of(const char16_t* s, std::size_t pos = 0) const;
-        std::size_t find_first_not_of(const char32_t* s, std::size_t pos = 0) const;
-
         std::size_t find_first_not_of(char ch, std::size_t pos = 0) const noexcept;
-        std::size_t find_first_not_of(wchar_t ch, std::size_t pos = 0) const noexcept;
-        std::size_t find_first_not_of(char16_t ch, std::size_t pos = 0) const noexcept;
-        std::size_t find_first_not_of(char32_t ch, std::size_t pos = 0) const noexcept;
 
         std::size_t rfind(const std::string& str, std::size_t pos = npos) const noexcept;
-        std::size_t rfind(const std::wstring& str, std::size_t pos = npos) const noexcept;
-        std::size_t rfind(const std::u16string& str, std::size_t pos = npos) const noexcept;
-        std::size_t rfind(const std::u32string& str, std::size_t pos = npos) const noexcept;
         std::size_t rfind(const String& str, std::size_t pos = npos) const noexcept;
-
         std::size_t rfind(const char* s, std::size_t pos, std::size_t count) const;
-        std::size_t rfind(const wchar_t* s, std::size_t pos, std::size_t count) const;
-        std::size_t rfind(const char16_t* s, std::size_t pos, std::size_t count) const;
-        std::size_t rfind(const char32_t* s, std::size_t pos, std::size_t count) const;
-
         std::size_t rfind(const char* s, std::size_t pos = npos) const;
-        std::size_t rfind(const wchar_t* s, std::size_t pos = npos) const;
-        std::size_t rfind(const char16_t* s, std::size_t pos = npos) const;
-        std::size_t rfind(const char32_t* s, std::size_t pos = npos) const;
-
         std::size_t rfind(char ch, std::size_t pos = npos) const noexcept;
-        std::size_t rfind(wchar_t ch, std::size_t pos = npos) const noexcept;
-        std::size_t rfind(char16_t ch, std::size_t pos = npos) const noexcept;
-        std::size_t rfind(char32_t ch, std::size_t pos = npos) const noexcept;
 
         std::size_t find_last_of(const std::string& str, std::size_t pos = npos) const noexcept;
-        std::size_t find_last_of(const std::wstring& str, std::size_t pos = npos) const noexcept;
-        std::size_t find_last_of(const std::u16string& str, std::size_t pos = npos) const noexcept;
-        std::size_t find_last_of(const std::u32string& str, std::size_t pos = npos) const noexcept;
         std::size_t find_last_of(const String& str, std::size_t pos = npos) const noexcept;
-
         std::size_t find_last_of(const char* s, std::size_t pos, std::size_t count) const;
-        std::size_t find_last_of(const wchar_t* s, std::size_t pos, std::size_t count) const;
-        std::size_t find_last_of(const char16_t* s, std::size_t pos, std::size_t count) const;
-        std::size_t find_last_of(const char32_t* s, std::size_t pos, std::size_t count) const;
-
         std::size_t find_last_of(const char* s, std::size_t pos = npos) const;
-        std::size_t find_last_of(const wchar_t* s, std::size_t pos = npos) const;
-        std::size_t find_last_of(const char16_t* s, std::size_t pos = npos) const;
-        std::size_t find_last_of(const char32_t* s, std::size_t pos = npos) const;
-
         std::size_t find_last_of(char ch, std::size_t pos = npos) const noexcept;
-        std::size_t find_last_of(wchar_t ch, std::size_t pos = npos) const noexcept;
-        std::size_t find_last_of(char16_t ch, std::size_t pos = npos) const noexcept;
-        std::size_t find_last_of(char32_t ch, std::size_t pos = npos) const noexcept;
 
         std::size_t find_last_not_of(const std::string& str, std::size_t pos = npos) const noexcept;
-        std::size_t find_last_not_of(const std::wstring& str, std::size_t pos = npos) const noexcept;
-        std::size_t find_last_not_of(const std::u16string& str, std::size_t pos = npos) const noexcept;
-        std::size_t find_last_not_of(const std::u32string& str, std::size_t pos = npos) const noexcept;
         std::size_t find_last_not_of(const String& str, std::size_t pos = npos) const noexcept;
-
         std::size_t find_last_not_of(const char* s, std::size_t pos, std::size_t count) const;
-        std::size_t find_last_not_of(const wchar_t* s, std::size_t pos, std::size_t count) const;
-        std::size_t find_last_not_of(const char16_t* s, std::size_t pos, std::size_t count) const;
-        std::size_t find_last_not_of(const char32_t* s, std::size_t pos, std::size_t count) const;
-
         std::size_t find_last_not_of(const char* s, std::size_t pos = npos) const;
-        std::size_t find_last_not_of(const wchar_t* s, std::size_t pos = npos) const;
-        std::size_t find_last_not_of(const char16_t* s, std::size_t pos = npos) const;
-        std::size_t find_last_not_of(const char32_t* s, std::size_t pos = npos) const;
-
         std::size_t find_last_not_of(char ch, std::size_t pos = npos) const noexcept;
-        std::size_t find_last_not_of(wchar_t ch, std::size_t pos = npos) const noexcept;
-        std::size_t find_last_not_of(char16_t ch, std::size_t pos = npos) const noexcept;
-        std::size_t find_last_not_of(char32_t ch, std::size_t pos = npos) const noexcept;
 
         friend bool operator==(const String& left, const String& right);
         friend bool operator!=(const String& left, const String& right);
@@ -704,8 +448,6 @@ namespace tgui
         String(std::u8string::const_iterator first, std::u8string::const_iterator last);
 
         operator std::u8string() const;
-
-        std::u8string asUtf8() const;
 
         String& assign(std::size_t count, char8_t ch);
         String& assign(const std::u8string& str);
@@ -840,21 +582,18 @@ namespace tgui
 
     TGUI_API std::basic_ostream<char>& operator<<(std::basic_ostream<char>& os, const String& str);
     TGUI_API std::basic_ostream<wchar_t>& operator<<(std::basic_ostream<wchar_t>& os, const String& str);
-    //TGUI_API std::basic_ostream<char16_t>& operator<<(std::basic_ostream<char16_t>& os, const String& str);
-    //TGUI_API std::basic_ostream<char32_t>& operator<<(std::basic_ostream<char32_t>& os, const String& str);
 
 
     // UTF-8 function are defined in the header so that they can be enabled/disabled based on
     // the compiler settings without having to recompile TGUI with a different c++ standard.
 #if defined(__cpp_lib_char8_t) && (__cpp_lib_char8_t >= 201811L)
-    inline String::String(const std::u8string& str)
+    inline String::String(const std::u8string& str) :
+        m_string(str.begin(), str.end())
     {
-        m_string.reserve(str.length()+1);
-        sf::Utf8::toUtf32(str.begin(), str.end(), std::back_inserter(m_string));
     }
 
     inline String::String(char8_t utfChar)
-        : m_string(1, static_cast<char32_t>(utfChar))
+        : m_string(1, static_cast<char>(utfChar))
     {
     }
 
@@ -864,7 +603,7 @@ namespace tgui
     }
 
     inline String::String(std::size_t count, char8_t ch)
-        : m_string(count, static_cast<char32_t>(ch))
+        : m_string(count, static_cast<char>(ch))
     {
     }
 
@@ -898,17 +637,9 @@ namespace tgui
         return asUtf8();
     }
 
-    inline std::u8string String::asUtf8() const
-    {
-        std::u8string output;
-        output.reserve(m_string.length() + 1);
-        sf::Utf32::toUtf8(m_string.begin(), m_string.end(), std::back_inserter(output));
-        return output;
-    }
-
     inline String& String::assign(std::size_t count, char8_t ch)
     {
-        m_string.assign(count, static_cast<char32_t>(ch));
+        m_string.assign(count, static_cast<char>(ch));
         return *this;
     }
 
@@ -949,7 +680,7 @@ namespace tgui
 
     inline String& String::insert(std::size_t index, std::size_t count, char8_t ch)
     {
-        m_string.insert(index, count, static_cast<char32_t>(ch));
+        m_string.insert(index, count, static_cast<char>(ch));
         return *this;
     }
 
@@ -979,12 +710,12 @@ namespace tgui
 
     inline String::iterator String::insert(String::const_iterator pos, char8_t ch)
     {
-        return m_string.insert(pos, static_cast<char32_t>(ch));
+        return m_string.insert(pos, static_cast<char>(ch));
     }
 
     inline String::iterator String::insert(String::const_iterator pos, std::size_t count, char8_t ch)
     {
-        return m_string.insert(pos, count, static_cast<char32_t>(ch));
+        return m_string.insert(pos, count, static_cast<char>(ch));
     }
 
     inline String::iterator String::insert(String::const_iterator pos, std::initializer_list<char8_t> chars)
@@ -1036,32 +767,32 @@ namespace tgui
 
     inline int String::compare(const std::u8string& str) const noexcept
     {
-        return m_string.compare(String{str});
+        return m_string.compare(String{str}.m_string);
     }
 
     inline int String::compare(std::size_t pos1, std::size_t count1, const std::u8string& str) const
     {
-        return m_string.compare(pos1, count1, String{str});
+        return m_string.compare(pos1, count1, String{str}.m_string);
     }
 
     inline int String::compare(std::size_t pos1, std::size_t count1, const std::u8string& str, std::size_t pos2, std::size_t count2) const
     {
-        return m_string.compare(pos1, count1, String{str, pos2, count2});
+        return m_string.compare(pos1, count1, String{str, pos2, count2}.m_string);
     }
 
     inline int String::compare(const char8_t* s) const
     {
-        return m_string.compare(String{s});
+        return m_string.compare(String{s}.m_string);
     }
 
     inline int String::compare(std::size_t pos1, std::size_t count1, const char8_t* s) const
     {
-        return m_string.compare(pos1, count1, String{s});
+        return m_string.compare(pos1, count1, String{s}.m_string);
     }
 
     inline int String::compare(std::size_t pos1, std::size_t count1, const char8_t* s, std::size_t count2) const
     {
-        return m_string.compare(pos1, count1, String{s, count2});
+        return m_string.compare(pos1, count1, String{s, count2}.m_string);
     }
 
     inline String& String::replace(std::size_t pos, std::size_t count, const std::u8string& str)
@@ -1132,7 +863,7 @@ namespace tgui
 
     inline void String::resize(std::size_t count, char8_t ch)
     {
-        m_string.resize(count, static_cast<char32_t>(ch));
+        m_string.resize(count, static_cast<char>(ch));
     }
 
     inline std::size_t String::find(const std::u8string& str, std::size_t pos) const noexcept
@@ -1152,7 +883,7 @@ namespace tgui
 
     inline std::size_t String::find(char8_t ch, std::size_t pos) const noexcept
     {
-        return m_string.find(static_cast<char32_t>(ch), pos);
+        return m_string.find(static_cast<char>(ch), pos);
     }
 
     inline std::size_t String::find_first_of(const std::u8string& str, std::size_t pos) const noexcept
@@ -1172,7 +903,7 @@ namespace tgui
 
     inline std::size_t String::find_first_of(char8_t ch, std::size_t pos) const noexcept
     {
-        return m_string.find_first_of(static_cast<char32_t>(ch), pos);
+        return m_string.find_first_of(static_cast<char>(ch), pos);
     }
 
     inline std::size_t String::find_first_not_of(const std::u8string& str, std::size_t pos) const noexcept
@@ -1192,7 +923,7 @@ namespace tgui
 
     inline std::size_t String::find_first_not_of(char8_t ch, std::size_t pos) const noexcept
     {
-        return m_string.find_first_not_of(static_cast<char32_t>(ch), pos);
+        return m_string.find_first_not_of(static_cast<char>(ch), pos);
     }
 
     inline std::size_t String::rfind(const std::u8string& str, std::size_t pos) const noexcept
@@ -1212,7 +943,7 @@ namespace tgui
 
     inline std::size_t String::rfind(char8_t ch, std::size_t pos) const noexcept
     {
-        return m_string.rfind(static_cast<char32_t>(ch), pos);
+        return m_string.rfind(static_cast<char>(ch), pos);
     }
 
     inline std::size_t String::find_last_of(const std::u8string& str, std::size_t pos) const noexcept
@@ -1232,7 +963,7 @@ namespace tgui
 
     inline std::size_t String::find_last_of(char8_t ch, std::size_t pos) const noexcept
     {
-        return m_string.find_last_of(static_cast<char32_t>(ch), pos);
+        return m_string.find_last_of(static_cast<char>(ch), pos);
     }
 
     inline std::size_t String::find_last_not_of(const std::u8string& str, std::size_t pos) const noexcept
