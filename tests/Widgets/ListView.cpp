@@ -35,18 +35,18 @@ TEST_CASE("[ListView]")
     {
         REQUIRE_NOTHROW(listView->connect("ItemSelected", [](){}));
         REQUIRE_NOTHROW(listView->connect("ItemSelected", [](int){}));
-        REQUIRE_NOTHROW(listView->connect("ItemSelected", [](tgui::Widget::Ptr, std::string){}));
-        REQUIRE_NOTHROW(listView->connect("ItemSelected", [](tgui::Widget::Ptr, std::string, int){}));
+        REQUIRE_NOTHROW(listView->connect("ItemSelected", [](tgui::Widget::Ptr, tgui::String){}));
+        REQUIRE_NOTHROW(listView->connect("ItemSelected", [](tgui::Widget::Ptr, tgui::String, int){}));
 
         REQUIRE_NOTHROW(listView->connect("DoubleClicked", [](){}));
         REQUIRE_NOTHROW(listView->connect("DoubleClicked", [](int){}));
-        REQUIRE_NOTHROW(listView->connect("DoubleClicked", [](tgui::Widget::Ptr, std::string){}));
-        REQUIRE_NOTHROW(listView->connect("DoubleClicked", [](tgui::Widget::Ptr, std::string, int){}));
+        REQUIRE_NOTHROW(listView->connect("DoubleClicked", [](tgui::Widget::Ptr, tgui::String){}));
+        REQUIRE_NOTHROW(listView->connect("DoubleClicked", [](tgui::Widget::Ptr, tgui::String, int){}));
 
         REQUIRE_NOTHROW(listView->connect("HeaderClicked", [](){}));
         REQUIRE_NOTHROW(listView->connect("HeaderClicked", [](int){}));
-        REQUIRE_NOTHROW(listView->connect("HeaderClicked", [](tgui::Widget::Ptr, std::string){}));
-        REQUIRE_NOTHROW(listView->connect("HeaderClicked", [](tgui::Widget::Ptr, std::string, int){}));
+        REQUIRE_NOTHROW(listView->connect("HeaderClicked", [](tgui::Widget::Ptr, tgui::String){}));
+        REQUIRE_NOTHROW(listView->connect("HeaderClicked", [](tgui::Widget::Ptr, tgui::String, int){}));
     }
 
     SECTION("WidgetType")
@@ -150,34 +150,34 @@ TEST_CASE("[ListView]")
         REQUIRE(listView->getItem(0) == "1,1");
         REQUIRE(listView->getItem(1) == "2,1");
         REQUIRE(listView->getItem(2) == "3,1");
-        REQUIRE(listView->getItems() == std::vector<sf::String>{"1,1", "2,1", "3,1"});
+        REQUIRE(listView->getItems() == std::vector<tgui::String>{"1,1", "2,1", "3,1"});
 
-        REQUIRE(listView->getItemRow(0) == std::vector<sf::String>{"1,1", ""});
-        REQUIRE(listView->getItemRow(1) == std::vector<sf::String>{"2,1", "2,2"});
-        REQUIRE(listView->getItemRow(2) == std::vector<sf::String>{"3,1", "3,2"});
-        REQUIRE(listView->getItemRows() == std::vector<std::vector<sf::String>>{{"1,1", ""}, {"2,1", "2,2"}, {"3,1", "3,2"}});
+        REQUIRE(listView->getItemRow(0) == std::vector<tgui::String>{"1,1", ""});
+        REQUIRE(listView->getItemRow(1) == std::vector<tgui::String>{"2,1", "2,2"});
+        REQUIRE(listView->getItemRow(2) == std::vector<tgui::String>{"3,1", "3,2"});
+        REQUIRE(listView->getItemRows() == std::vector<std::vector<tgui::String>>{{"1,1", ""}, {"2,1", "2,2"}, {"3,1", "3,2"}});
 
         listView->removeItem(1);
         REQUIRE(listView->getItemCount() == 2);
-        REQUIRE(listView->getItems() == std::vector<sf::String>{"1,1", "3,1"});
+        REQUIRE(listView->getItems() == std::vector<tgui::String>{"1,1", "3,1"});
 
         listView->removeAllItems();
         REQUIRE(listView->getItemCount() == 0);
 
-        std::vector<std::vector<sf::String>> items = {{"1,1"}, {"2,1", "2,2", "2,3"}, {"3,1", "3,2"}};
+        std::vector<std::vector<tgui::String>> items = {{"1,1"}, {"2,1", "2,2", "2,3"}, {"3,1", "3,2"}};
         listView->addMultipleItems(items);
         REQUIRE(listView->getItemCount() == 3);
-        REQUIRE(listView->getItemRows() == std::vector<std::vector<sf::String>>{{"1,1", ""}, {"2,1", "2,2"}, {"3,1", "3,2"}});
+        REQUIRE(listView->getItemRows() == std::vector<std::vector<tgui::String>>{{"1,1", ""}, {"2,1", "2,2"}, {"3,1", "3,2"}});
 
         REQUIRE(listView->changeItem(1, {"b,1"}));
-        REQUIRE(listView->getItemRows() == std::vector<std::vector<sf::String>>{{"1,1", ""}, {"b,1", ""}, {"3,1", "3,2"}});
+        REQUIRE(listView->getItemRows() == std::vector<std::vector<tgui::String>>{{"1,1", ""}, {"b,1", ""}, {"3,1", "3,2"}});
         REQUIRE(listView->changeItem(2, {"c,1", "c,2", "c,3"}));
-        REQUIRE(listView->getItemRows() == std::vector<std::vector<sf::String>>{{"1,1", ""}, {"b,1", ""}, {"c,1", "c,2"}});
+        REQUIRE(listView->getItemRows() == std::vector<std::vector<tgui::String>>{{"1,1", ""}, {"b,1", ""}, {"c,1", "c,2"}});
         REQUIRE(listView->changeSubItem(0, 1, {"a,2"}));
-        REQUIRE(listView->getItemRows() == std::vector<std::vector<sf::String>>{{"1,1", "a,2"}, {"b,1", ""}, {"c,1", "c,2"}});
+        REQUIRE(listView->getItemRows() == std::vector<std::vector<tgui::String>>{{"1,1", "a,2"}, {"b,1", ""}, {"c,1", "c,2"}});
         REQUIRE(!listView->changeItem(3, {"d,1"}));
         REQUIRE(!listView->changeSubItem(3, 1, {"d,2"}));
-        REQUIRE(listView->getItemRows() == std::vector<std::vector<sf::String>>{{"1,1", "a,2"}, {"b,1", ""}, {"c,1", "c,2"}});
+        REQUIRE(listView->getItemRows() == std::vector<std::vector<tgui::String>>{{"1,1", "a,2"}, {"b,1", ""}, {"c,1", "c,2"}});
     }
     
     SECTION("Sort")
@@ -186,27 +186,23 @@ TEST_CASE("[ListView]")
         listView->addColumn("Col 2");
         listView->addColumn("Col 3");
 
-        std::vector<std::vector<sf::String>> items = {{"300"}, {"200", "-5", "20"}, {"1000", "7"}};
+        std::vector<std::vector<tgui::String>> items = {{"300"}, {"200", "-5", "20"}, {"1000", "7"}};
         listView->addMultipleItems(items);
 
-        auto cmp1 = [](const sf::String& a, const sf::String& b) { return a < b; };
-        auto convert = [](const std::string& s)
-        {
-            return s.empty() ? 0 : std::stoi(s);
-        };
-        auto cmp2 = [&convert](const sf::String& a, const sf::String& b) { return convert(a) > convert(b); };
+        auto cmp1 = [](const tgui::String& a, const tgui::String& b) { return a < b; };
+        auto cmp2 = [](const tgui::String& a, const tgui::String& b) { return a.toInt() > b.toInt(); };
 
         listView->sort(0, cmp1);
-        REQUIRE(listView->getItemRows() == std::vector<std::vector<sf::String>>{{"1000", "7", ""}, {"200", "-5", "20"}, {"300", "", ""}});
+        REQUIRE(listView->getItemRows() == std::vector<std::vector<tgui::String>>{{"1000", "7", ""}, {"200", "-5", "20"}, {"300", "", ""}});
 
         listView->sort(5, cmp1);
-        REQUIRE(listView->getItemRows() == std::vector<std::vector<sf::String>>{{"1000", "7", ""}, {"200", "-5", "20"}, {"300", "", ""}});
+        REQUIRE(listView->getItemRows() == std::vector<std::vector<tgui::String>>{{"1000", "7", ""}, {"200", "-5", "20"}, {"300", "", ""}});
         
         listView->sort(1, cmp2);
-        REQUIRE(listView->getItemRows() == std::vector<std::vector<sf::String>>{{"1000", "7", ""}, {"300", "", ""}, {"200", "-5", "20"}});
+        REQUIRE(listView->getItemRows() == std::vector<std::vector<tgui::String>>{{"1000", "7", ""}, {"300", "", ""}, {"200", "-5", "20"}});
 
         listView->sort(2, cmp2);
-        REQUIRE(listView->getItemRows() == std::vector<std::vector<sf::String>>{{"200", "-5", "20"}, {"1000", "7", ""}, {"300", "", ""}});
+        REQUIRE(listView->getItemRows() == std::vector<std::vector<tgui::String>>{{"200", "-5", "20"}, {"1000", "7", ""}, {"300", "", ""}});
     }
 
     SECTION("Returned item rows depend on columns")
@@ -214,24 +210,24 @@ TEST_CASE("[ListView]")
         listView->addItem({"1,1", "1,2", "1,3"});
         listView->addItem({"2,1", "2,2"});
 
-        REQUIRE(listView->getItemRow(0) == std::vector<sf::String>{"1,1"});
-        REQUIRE(listView->getItemRows() == std::vector<std::vector<sf::String>>{{"1,1"}, {"2,1"}});
+        REQUIRE(listView->getItemRow(0) == std::vector<tgui::String>{"1,1"});
+        REQUIRE(listView->getItemRows() == std::vector<std::vector<tgui::String>>{{"1,1"}, {"2,1"}});
 
         listView->addColumn("Col 1");
-        REQUIRE(listView->getItemRow(0) == std::vector<sf::String>{"1,1"});
-        REQUIRE(listView->getItemRows() == std::vector<std::vector<sf::String>>{{"1,1"}, {"2,1"}});
+        REQUIRE(listView->getItemRow(0) == std::vector<tgui::String>{"1,1"});
+        REQUIRE(listView->getItemRows() == std::vector<std::vector<tgui::String>>{{"1,1"}, {"2,1"}});
 
         listView->addColumn("Col 2");
-        REQUIRE(listView->getItemRow(0) == std::vector<sf::String>{"1,1", "1,2"});
-        REQUIRE(listView->getItemRows() == std::vector<std::vector<sf::String>>{{"1,1", "1,2"}, {"2,1", "2,2"}});
+        REQUIRE(listView->getItemRow(0) == std::vector<tgui::String>{"1,1", "1,2"});
+        REQUIRE(listView->getItemRows() == std::vector<std::vector<tgui::String>>{{"1,1", "1,2"}, {"2,1", "2,2"}});
 
         listView->addColumn("Col 3");
-        REQUIRE(listView->getItemRow(0) == std::vector<sf::String>{"1,1", "1,2", "1,3"});
-        REQUIRE(listView->getItemRows() == std::vector<std::vector<sf::String>>{{"1,1", "1,2", "1,3"}, {"2,1", "2,2", ""}});
+        REQUIRE(listView->getItemRow(0) == std::vector<tgui::String>{"1,1", "1,2", "1,3"});
+        REQUIRE(listView->getItemRows() == std::vector<std::vector<tgui::String>>{{"1,1", "1,2", "1,3"}, {"2,1", "2,2", ""}});
 
         listView->addColumn("Col 4");
-        REQUIRE(listView->getItemRow(0) == std::vector<sf::String>{"1,1", "1,2", "1,3", ""});
-        REQUIRE(listView->getItemRows() == std::vector<std::vector<sf::String>>{{"1,1", "1,2", "1,3", ""}, {"2,1", "2,2", "", ""}});
+        REQUIRE(listView->getItemRow(0) == std::vector<tgui::String>{"1,1", "1,2", "1,3", ""});
+        REQUIRE(listView->getItemRows() == std::vector<std::vector<tgui::String>>{{"1,1", "1,2", "1,3", ""}, {"2,1", "2,2", "", ""}});
     }
 
     SECTION("Returned item cells")
@@ -241,18 +237,18 @@ TEST_CASE("[ListView]")
 
         REQUIRE(listView->getItemCell(0, 0) == "1,1");
         REQUIRE(listView->getItemCell(0, 1) == "");
-        REQUIRE(listView->getItemRows() == std::vector<std::vector<sf::String>>{ {"1,1"}, { "2,1" }});
+        REQUIRE(listView->getItemRows() == std::vector<std::vector<tgui::String>>{ {"1,1"}, { "2,1" }});
 
         listView->addColumn("Col 1");
         REQUIRE(listView->getItemCell(1, 0) == "2,1");
         REQUIRE(listView->getItemCell(0, 1) == "");
         REQUIRE(listView->getItemCell(2, 1) == "");
-        REQUIRE(listView->getItemRows() == std::vector<std::vector<sf::String>>{ {"1,1"}, { "2,1" }});
+        REQUIRE(listView->getItemRows() == std::vector<std::vector<tgui::String>>{ {"1,1"}, { "2,1" }});
 
         listView->addColumn("Col 2");
         REQUIRE(listView->getItemCell(1, 1) == "2,2");
         REQUIRE(listView->getItemCell(0, 2) == "");
-        REQUIRE(listView->getItemRows() == std::vector<std::vector<sf::String>>{ {"1,1", "1,2"}, { "2,1", "2,2" }});
+        REQUIRE(listView->getItemRows() == std::vector<std::vector<tgui::String>>{ {"1,1", "1,2"}, { "2,1", "2,2" }});
     }
 
     SECTION("Selecting items")

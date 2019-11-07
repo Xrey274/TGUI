@@ -35,18 +35,18 @@ TEST_CASE("[RadioButton]")
     {
         REQUIRE_NOTHROW(radioButton->connect("Checked", [](){}));
         REQUIRE_NOTHROW(radioButton->connect("Checked", [](bool){}));
-        REQUIRE_NOTHROW(radioButton->connect("Checked", [](tgui::Widget::Ptr, std::string){}));
-        REQUIRE_NOTHROW(radioButton->connect("Checked", [](tgui::Widget::Ptr, std::string, bool){}));
+        REQUIRE_NOTHROW(radioButton->connect("Checked", [](tgui::Widget::Ptr, tgui::String){}));
+        REQUIRE_NOTHROW(radioButton->connect("Checked", [](tgui::Widget::Ptr, tgui::String, bool){}));
 
         REQUIRE_NOTHROW(radioButton->connect("Unchecked", [](){}));
         REQUIRE_NOTHROW(radioButton->connect("Unchecked", [](bool){}));
-        REQUIRE_NOTHROW(radioButton->connect("Unchecked", [](tgui::Widget::Ptr, std::string){}));
-        REQUIRE_NOTHROW(radioButton->connect("Unchecked", [](tgui::Widget::Ptr, std::string, bool){}));
+        REQUIRE_NOTHROW(radioButton->connect("Unchecked", [](tgui::Widget::Ptr, tgui::String){}));
+        REQUIRE_NOTHROW(radioButton->connect("Unchecked", [](tgui::Widget::Ptr, tgui::String, bool){}));
 
         REQUIRE_NOTHROW(radioButton->connect("Changed", [](){}));
         REQUIRE_NOTHROW(radioButton->connect("Changed", [](bool){}));
-        REQUIRE_NOTHROW(radioButton->connect("Changed", [](tgui::Widget::Ptr, std::string){}));
-        REQUIRE_NOTHROW(radioButton->connect("Changed", [](tgui::Widget::Ptr, std::string, bool){}));
+        REQUIRE_NOTHROW(radioButton->connect("Changed", [](tgui::Widget::Ptr, tgui::String){}));
+        REQUIRE_NOTHROW(radioButton->connect("Changed", [](tgui::Widget::Ptr, tgui::String, bool){}));
     }
 
     SECTION("WidgetType")

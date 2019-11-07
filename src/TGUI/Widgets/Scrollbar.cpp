@@ -772,9 +772,9 @@ namespace tgui
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    Signal& Scrollbar::getSignal(std::string signalName)
+    Signal& Scrollbar::getSignal(String signalName)
     {
-        if (signalName == toLower(onValueChange.getName()))
+        if (signalName == onValueChange.getName().toLower())
             return onValueChange;
         else
             return Widget::getSignal(std::move(signalName));
@@ -782,7 +782,7 @@ namespace tgui
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    void Scrollbar::rendererChanged(const std::string& property)
+    void Scrollbar::rendererChanged(const String& property)
     {
         if (property == "texturetrack")
         {
@@ -886,10 +886,10 @@ namespace tgui
         auto node = Widget::save(renderers);
 
         node->propertyValuePairs["AutoHide"] = std::make_unique<DataIO::ValueNode>(Serializer::serialize(m_autoHide));
-        node->propertyValuePairs["ViewportSize"] = std::make_unique<DataIO::ValueNode>(to_string(m_viewportSize));
-        node->propertyValuePairs["Maximum"] = std::make_unique<DataIO::ValueNode>(to_string(m_maximum));
-        node->propertyValuePairs["Value"] = std::make_unique<DataIO::ValueNode>(to_string(m_value));
-        node->propertyValuePairs["ScrollAmount"] = std::make_unique<DataIO::ValueNode>(to_string(m_scrollAmount));
+        node->propertyValuePairs["ViewportSize"] = std::make_unique<DataIO::ValueNode>(String::fromNumber(m_viewportSize));
+        node->propertyValuePairs["Maximum"] = std::make_unique<DataIO::ValueNode>(String::fromNumber(m_maximum));
+        node->propertyValuePairs["Value"] = std::make_unique<DataIO::ValueNode>(String::fromNumber(m_value));
+        node->propertyValuePairs["ScrollAmount"] = std::make_unique<DataIO::ValueNode>(String::fromNumber(m_scrollAmount));
 
         return node;
     }
@@ -901,13 +901,13 @@ namespace tgui
         Widget::load(node, renderers);
 
         if (node->propertyValuePairs["viewportsize"])
-            setViewportSize(strToInt(node->propertyValuePairs["viewportsize"]->value));
+            setViewportSize(node->propertyValuePairs["viewportsize"]->value.toInt());
         if (node->propertyValuePairs["maximum"])
-            setMaximum(strToInt(node->propertyValuePairs["maximum"]->value));
+            setMaximum(node->propertyValuePairs["maximum"]->value.toInt());
         if (node->propertyValuePairs["value"])
-            setValue(strToInt(node->propertyValuePairs["value"]->value));
+            setValue(node->propertyValuePairs["value"]->value.toInt());
         if (node->propertyValuePairs["scrollamount"])
-            setScrollAmount(strToInt(node->propertyValuePairs["scrollamount"]->value));
+            setScrollAmount(node->propertyValuePairs["scrollamount"]->value.toInt());
         if (node->propertyValuePairs["autohide"])
             setAutoHide(Deserializer::deserialize(ObjectConverter::Type::Bool, node->propertyValuePairs["autohide"]->value).getBool());
     }

@@ -34,18 +34,18 @@ TEST_CASE("[CheckBox]")
     {
         REQUIRE_NOTHROW(checkBox->connect("Checked", [](){}));
         REQUIRE_NOTHROW(checkBox->connect("Checked", [](bool){}));
-        REQUIRE_NOTHROW(checkBox->connect("Checked", [](tgui::Widget::Ptr, std::string){}));
-        REQUIRE_NOTHROW(checkBox->connect("Checked", [](tgui::Widget::Ptr, std::string, bool){}));
+        REQUIRE_NOTHROW(checkBox->connect("Checked", [](tgui::Widget::Ptr, tgui::String){}));
+        REQUIRE_NOTHROW(checkBox->connect("Checked", [](tgui::Widget::Ptr, tgui::String, bool){}));
 
         REQUIRE_NOTHROW(checkBox->connect("Unchecked", [](){}));
         REQUIRE_NOTHROW(checkBox->connect("Unchecked", [](bool){}));
-        REQUIRE_NOTHROW(checkBox->connect("Unchecked", [](tgui::Widget::Ptr, std::string){}));
-        REQUIRE_NOTHROW(checkBox->connect("Unchecked", [](tgui::Widget::Ptr, std::string, bool){}));
+        REQUIRE_NOTHROW(checkBox->connect("Unchecked", [](tgui::Widget::Ptr, tgui::String){}));
+        REQUIRE_NOTHROW(checkBox->connect("Unchecked", [](tgui::Widget::Ptr, tgui::String, bool){}));
 
         REQUIRE_NOTHROW(checkBox->connect("Changed", [](){}));
         REQUIRE_NOTHROW(checkBox->connect("Changed", [](bool){}));
-        REQUIRE_NOTHROW(checkBox->connect("Changed", [](tgui::Widget::Ptr, std::string){}));
-        REQUIRE_NOTHROW(checkBox->connect("Changed", [](tgui::Widget::Ptr, std::string, bool){}));
+        REQUIRE_NOTHROW(checkBox->connect("Changed", [](tgui::Widget::Ptr, tgui::String){}));
+        REQUIRE_NOTHROW(checkBox->connect("Changed", [](tgui::Widget::Ptr, tgui::String, bool){}));
     }
 
     SECTION("WidgetType")

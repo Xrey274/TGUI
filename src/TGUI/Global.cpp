@@ -41,7 +41,7 @@ namespace tgui
     {
         unsigned int globalTextSize = 13;
         Duration globalDoubleClickTime = std::chrono::milliseconds(500);
-        std::string globalResourcePath = "";
+        String globalResourcePath = "";
         std::shared_ptr<sf::Font> globalFont = nullptr;
     }
 
@@ -102,7 +102,7 @@ namespace tgui
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    void setResourcePath(const std::string& path)
+    void setResourcePath(const String& path)
     {
         globalResourcePath = path;
 
@@ -115,7 +115,7 @@ namespace tgui
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    const std::string& getResourcePath()
+    const String& getResourcePath()
     {
         return globalResourcePath;
     }

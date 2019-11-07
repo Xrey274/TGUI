@@ -37,11 +37,11 @@ TEST_CASE("[ProgressBar]")
     {
         REQUIRE_NOTHROW(progressBar->connect("ValueChanged", [](){}));
         REQUIRE_NOTHROW(progressBar->connect("ValueChanged", [](unsigned int){}));
-        REQUIRE_NOTHROW(progressBar->connect("ValueChanged", [](tgui::Widget::Ptr, std::string){}));
-        REQUIRE_NOTHROW(progressBar->connect("ValueChanged", [](tgui::Widget::Ptr, std::string, unsigned int){}));
+        REQUIRE_NOTHROW(progressBar->connect("ValueChanged", [](tgui::Widget::Ptr, tgui::String){}));
+        REQUIRE_NOTHROW(progressBar->connect("ValueChanged", [](tgui::Widget::Ptr, tgui::String, unsigned int){}));
 
         REQUIRE_NOTHROW(progressBar->connect("Full", [](){}));
-        REQUIRE_NOTHROW(progressBar->connect("Full", [](tgui::Widget::Ptr, std::string){}));
+        REQUIRE_NOTHROW(progressBar->connect("Full", [](tgui::Widget::Ptr, tgui::String){}));
     }
 
     SECTION("WidgetType")

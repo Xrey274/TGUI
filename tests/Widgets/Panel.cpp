@@ -36,33 +36,33 @@ TEST_CASE("[Panel]")
     {
         REQUIRE_NOTHROW(panel->connect("MousePressed", [](){}));
         REQUIRE_NOTHROW(panel->connect("MousePressed", [](tgui::Vector2f){}));
-        REQUIRE_NOTHROW(panel->connect("MousePressed", [](tgui::Widget::Ptr, std::string){}));
-        REQUIRE_NOTHROW(panel->connect("MousePressed", [](tgui::Widget::Ptr, std::string, tgui::Vector2f){}));
+        REQUIRE_NOTHROW(panel->connect("MousePressed", [](tgui::Widget::Ptr, tgui::String){}));
+        REQUIRE_NOTHROW(panel->connect("MousePressed", [](tgui::Widget::Ptr, tgui::String, tgui::Vector2f){}));
 
         REQUIRE_NOTHROW(panel->connect("MouseReleased", [](){}));
         REQUIRE_NOTHROW(panel->connect("MouseReleased", [](tgui::Vector2f){}));
-        REQUIRE_NOTHROW(panel->connect("MouseReleased", [](tgui::Widget::Ptr, std::string){}));
-        REQUIRE_NOTHROW(panel->connect("MouseReleased", [](tgui::Widget::Ptr, std::string, tgui::Vector2f){}));
+        REQUIRE_NOTHROW(panel->connect("MouseReleased", [](tgui::Widget::Ptr, tgui::String){}));
+        REQUIRE_NOTHROW(panel->connect("MouseReleased", [](tgui::Widget::Ptr, tgui::String, tgui::Vector2f){}));
 
         REQUIRE_NOTHROW(panel->connect("Clicked", [](){}));
         REQUIRE_NOTHROW(panel->connect("Clicked", [](tgui::Vector2f){}));
-        REQUIRE_NOTHROW(panel->connect("Clicked", [](tgui::Widget::Ptr, std::string){}));
-        REQUIRE_NOTHROW(panel->connect("Clicked", [](tgui::Widget::Ptr, std::string, tgui::Vector2f){}));
+        REQUIRE_NOTHROW(panel->connect("Clicked", [](tgui::Widget::Ptr, tgui::String){}));
+        REQUIRE_NOTHROW(panel->connect("Clicked", [](tgui::Widget::Ptr, tgui::String, tgui::Vector2f){}));
 
         REQUIRE_NOTHROW(panel->connect("RightMousePressed", [](){}));
         REQUIRE_NOTHROW(panel->connect("RightMousePressed", [](tgui::Vector2f){}));
-        REQUIRE_NOTHROW(panel->connect("RightMousePressed", [](tgui::Widget::Ptr, std::string){}));
-        REQUIRE_NOTHROW(panel->connect("RightMousePressed", [](tgui::Widget::Ptr, std::string, tgui::Vector2f){}));
+        REQUIRE_NOTHROW(panel->connect("RightMousePressed", [](tgui::Widget::Ptr, tgui::String){}));
+        REQUIRE_NOTHROW(panel->connect("RightMousePressed", [](tgui::Widget::Ptr, tgui::String, tgui::Vector2f){}));
 
         REQUIRE_NOTHROW(panel->connect("RightMouseReleased", [](){}));
         REQUIRE_NOTHROW(panel->connect("RightMouseReleased", [](tgui::Vector2f){}));
-        REQUIRE_NOTHROW(panel->connect("RightMouseReleased", [](tgui::Widget::Ptr, std::string){}));
-        REQUIRE_NOTHROW(panel->connect("RightMouseReleased", [](tgui::Widget::Ptr, std::string, tgui::Vector2f){}));
+        REQUIRE_NOTHROW(panel->connect("RightMouseReleased", [](tgui::Widget::Ptr, tgui::String){}));
+        REQUIRE_NOTHROW(panel->connect("RightMouseReleased", [](tgui::Widget::Ptr, tgui::String, tgui::Vector2f){}));
 
         REQUIRE_NOTHROW(panel->connect("RightClicked", [](){}));
         REQUIRE_NOTHROW(panel->connect("RightClicked", [](tgui::Vector2f){}));
-        REQUIRE_NOTHROW(panel->connect("RightClicked", [](tgui::Widget::Ptr, std::string){}));
-        REQUIRE_NOTHROW(panel->connect("RightClicked", [](tgui::Widget::Ptr, std::string, tgui::Vector2f){}));
+        REQUIRE_NOTHROW(panel->connect("RightClicked", [](tgui::Widget::Ptr, tgui::String){}));
+        REQUIRE_NOTHROW(panel->connect("RightClicked", [](tgui::Widget::Ptr, tgui::String, tgui::Vector2f){}));
     }
 
     SECTION("WidgetType")

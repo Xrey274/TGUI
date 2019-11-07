@@ -37,8 +37,8 @@ TEST_CASE("[Knob]")
     {
         REQUIRE_NOTHROW(knob->connect("ValueChanged", [](){}));
         REQUIRE_NOTHROW(knob->connect("ValueChanged", [](float){}));
-        REQUIRE_NOTHROW(knob->connect("ValueChanged", [](tgui::Widget::Ptr, std::string){}));
-        REQUIRE_NOTHROW(knob->connect("ValueChanged", [](tgui::Widget::Ptr, std::string, float){}));
+        REQUIRE_NOTHROW(knob->connect("ValueChanged", [](tgui::Widget::Ptr, tgui::String){}));
+        REQUIRE_NOTHROW(knob->connect("ValueChanged", [](tgui::Widget::Ptr, tgui::String, float){}));
     }
 
     SECTION("WidgetType")

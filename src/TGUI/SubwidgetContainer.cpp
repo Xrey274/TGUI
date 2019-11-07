@@ -94,7 +94,7 @@ namespace tgui
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    void SubwidgetContainer::textEntered(std::uint32_t key)
+    void SubwidgetContainer::textEntered(char32_t key)
     {
         m_container->textEntered(key);
         Widget::textEntered(key);

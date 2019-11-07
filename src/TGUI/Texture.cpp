@@ -35,17 +35,10 @@
 namespace tgui
 {
     Texture::TextureLoaderFunc Texture::m_textureLoader = &TextureManager::getTexture;
-    Texture::ImageLoaderFunc Texture::m_imageLoader = [](const sf::String& filename) -> std::shared_ptr<sf::Image>
+    Texture::ImageLoaderFunc Texture::m_imageLoader = [](const String& filename) -> std::shared_ptr<sf::Image>
         {
-#ifdef TGUI_SYSTEM_WINDOWS
-            const std::string filenameAnsiString(filename.toAnsiString());
-#else
-            const std::basic_string<sf::Uint8>& filenameUtf8 = filename.toUtf8();
-            const std::string filenameAnsiString(filenameUtf8.begin(), filenameUtf8.end());
-#endif
-
             auto image = std::make_shared<sf::Image>();
-            if (image->loadFromFile(filenameAnsiString))
+            if (image->loadFromFile(filename.toAnsiString()))
                 return image;
             else
                 return nullptr;
@@ -53,7 +46,7 @@ namespace tgui
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    Texture::Texture(const sf::String& id, const UIntRect& partRect, const UIntRect& middlePart, bool smooth)
+    Texture::Texture(const String& id, const UIntRect& partRect, const UIntRect& middlePart, bool smooth)
     {
         load(id, partRect, middlePart, smooth);
     }
@@ -152,9 +145,9 @@ namespace tgui
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    void Texture::load(const sf::String& id, const UIntRect& partRect, const UIntRect& middleRect, bool smooth)
+    void Texture::load(const String& id, const UIntRect& partRect, const UIntRect& middleRect, bool smooth)
     {
-        if (id.isEmpty())
+        if (id.empty())
         {
             *this = Texture{};
             return;
@@ -170,7 +163,7 @@ namespace tgui
 
         std::shared_ptr<TextureData> data;
 #ifdef TGUI_SYSTEM_WINDOWS
-        if ((id[0] != '/') && (id[0] != '\\') && ((id.getSize() <= 1) || (id[1] != ':')))
+        if ((id[0] != '/') && (id[0] != '\\') && ((id.length() <= 1) || (id[1] != ':')))
 #else
         if (id[0] != '/')
 #endif
@@ -212,7 +205,7 @@ namespace tgui
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    const sf::String& Texture::getId() const
+    const String& Texture::getId() const
     {
         return m_id;
     }
@@ -324,7 +317,7 @@ namespace tgui
     bool Texture::operator==(const Texture& right) const
     {
         return (m_id == right.m_id)
-            && (!m_id.isEmpty() || (m_data == right.m_data))
+            && (!m_id.empty() || (m_data == right.m_data))
             && (m_middleRect == right.m_middleRect)
             && (m_shader == right.m_shader)
             && (m_color == right.m_color);

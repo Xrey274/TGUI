@@ -58,7 +58,7 @@ namespace tgui
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        std::unique_ptr<DataIO::Node> saveRenderer(RendererData* renderer, const std::string& name)
+        std::unique_ptr<DataIO::Node> saveRenderer(RendererData* renderer, const String& name)
         {
             auto node = std::make_unique<DataIO::Node>();
             node->name = name;
@@ -66,7 +66,7 @@ namespace tgui
             {
                 if (pair.second.getType() == ObjectConverter::Type::RendererData)
                 {
-                    std::stringstream ss{ObjectConverter{pair.second}.getString()};
+                    std::stringstream ss{ObjectConverter{pair.second}.getString().toAnsiString()};
                     auto rendererRootNode = DataIO::parse(ss);
 
                     // If there are braces around the renderer string, then the child node is the one we need
@@ -78,10 +78,10 @@ namespace tgui
                 }
                 else
                 {
-                    sf::String value = ObjectConverter{pair.second}.getString();
+                    String value = ObjectConverter{pair.second}.getString();
 
                     // Skip empty values
-                    if (value.isEmpty())
+                    if (value.empty())
                         continue;
 
                     // Skip "font = null"
@@ -214,7 +214,7 @@ namespace tgui
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    void Container::add(const Widget::Ptr& widgetPtr, const sf::String& widgetName)
+    void Container::add(const Widget::Ptr& widgetPtr, const String& widgetName)
     {
         assert(widgetPtr != nullptr);
 
@@ -231,7 +231,7 @@ namespace tgui
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    Widget::Ptr Container::get(const sf::String& widgetName) const
+    Widget::Ptr Container::get(const String& widgetName) const
     {
         for (std::size_t i = 0; i < m_widgetNames.size(); ++i)
         {
@@ -301,7 +301,7 @@ namespace tgui
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    bool Container::setWidgetName(const Widget::Ptr& widget, const std::string& name)
+    bool Container::setWidgetName(const Widget::Ptr& widget, const String& name)
     {
         for (std::size_t i = 0; i < m_widgets.size(); ++i)
         {
@@ -317,7 +317,7 @@ namespace tgui
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    std::string Container::getWidgetName(const Widget::ConstPtr& widget) const
+    String Container::getWidgetName(const Widget::ConstPtr& widget) const
     {
         for (std::size_t i = 0; i < m_widgets.size(); ++i)
         {
@@ -349,9 +349,9 @@ namespace tgui
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    void Container::loadWidgetsFromFile(const std::string& filename)
+    void Container::loadWidgetsFromFile(const String& filename)
     {
-        std::ifstream in{filename};
+        std::ifstream in{filename.toAnsiString()};
         if (!in.is_open())
             throw Exception{"Failed to open '" + filename + "' to load the widgets from it."};
 
@@ -362,12 +362,12 @@ namespace tgui
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    void Container::saveWidgetsToFile(const std::string& filename)
+    void Container::saveWidgetsToFile(const String& filename)
     {
         std::stringstream stream;
         saveWidgetsToStream(stream);
 
-        std::ofstream out{filename};
+        std::ofstream out{filename.toAnsiString()};
         if (!out.is_open())
             throw Exception{"Failed to open '" + filename + "' for saving the widgets to it."};
 
@@ -385,24 +385,24 @@ namespace tgui
         if (rootNode->propertyValuePairs.size() != 0)
             Widget::load(rootNode, {});
 
-        std::map<std::string, std::shared_ptr<RendererData>> availableRenderers;
+        std::map<String, std::shared_ptr<RendererData>> availableRenderers;
         for (const auto& node : rootNode->children)
         {
             auto nameSeparator = node->name.find('.');
             auto widgetType = node->name.substr(0, nameSeparator);
 
-            std::string objectName;
-            if (nameSeparator != std::string::npos)
+            String objectName;
+            if (nameSeparator != String::npos)
                 objectName = Deserializer::deserialize(ObjectConverter::Type::String, node->name.substr(nameSeparator + 1)).getString();
 
-            if (toLower(widgetType) == "renderer")
+            if (widgetType.toLower() == "renderer")
             {
                 if (!objectName.empty())
-                    availableRenderers[toLower(objectName)] = RendererData::createFromDataIONode(node.get());
+                    availableRenderers[objectName.toLower()] = RendererData::createFromDataIONode(node.get());
             }
             else // Section describes a widget
             {
-                const auto& constructor = WidgetFactory::getConstructFunction(toLower(widgetType));
+                const auto& constructor = WidgetFactory::getConstructFunction(widgetType.toLower());
                 if (constructor)
                 {
                     Widget::Ptr widget = constructor();
@@ -444,7 +444,7 @@ namespace tgui
 
             // When the widget is shared, only provide the id instead of the node itself
             ++id;
-            const std::string idStr = to_string(id);
+            const String idStr = String::fromNumber(id);
             node->children.push_back(saveRenderer(renderer.first, "Renderer." + idStr));
             for (const auto& child : renderer.second)
                 renderersMap[child] = std::make_pair(nullptr, idStr); // Did not compile with VS2015 Update 2 when using braces
@@ -489,7 +489,7 @@ namespace tgui
 
             // Copy the widget
             const Widget::Ptr obj = m_widgets[i];
-            const std::string name = m_widgetNames[i];
+            const String name = m_widgetNames[i];
             m_widgets.insert(m_widgets.begin(), obj);
             m_widgetNames.insert(m_widgetNames.begin(), name);
 
@@ -697,7 +697,7 @@ namespace tgui
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    void Container::textEntered(std::uint32_t key)
+    void Container::textEntered(char32_t key)
     {
         sf::Event event;
         event.type = sf::Event::TextEntered;
@@ -785,7 +785,7 @@ namespace tgui
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    void Container::rendererChanged(const std::string& property)
+    void Container::rendererChanged(const String& property)
     {
         Widget::rendererChanged(property);
 
@@ -827,11 +827,11 @@ namespace tgui
             const auto nameSeparator = childNode->name.find('.');
             const auto widgetType = childNode->name.substr(0, nameSeparator);
 
-            const auto& constructor = WidgetFactory::getConstructFunction(toLower(widgetType));
+            const auto& constructor = WidgetFactory::getConstructFunction(widgetType.toLower());
             if (constructor)
             {
-                std::string className;
-                if (nameSeparator != std::string::npos)
+                String className;
+                if (nameSeparator != String::npos)
                     className = Deserializer::deserialize(ObjectConverter::Type::String, childNode->name.substr(nameSeparator + 1)).getString();
 
                 Widget::Ptr childWidget = constructor();

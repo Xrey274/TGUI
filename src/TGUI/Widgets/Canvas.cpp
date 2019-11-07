@@ -186,7 +186,7 @@ namespace tgui
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    void Canvas::rendererChanged(const std::string& property)
+    void Canvas::rendererChanged(const String& property)
     {
         Widget::rendererChanged(property);
 

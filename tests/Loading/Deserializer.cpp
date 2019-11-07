@@ -194,7 +194,7 @@ TEST_CASE("[Deserializer]")
 
     SECTION("deserialize renderer")
     {
-        std::string data = "{\n"
+        tgui::String data = "{\n"
                            "  Nested = {\n"
                            "    Num = 5;\n"
                            "  };\n"
@@ -214,7 +214,7 @@ TEST_CASE("[Deserializer]")
         REQUIRE(tgui::Deserializer::deserialize(Type::Color, "rgb(10, 20, 30)").getColor() == tgui::Color(10, 20, 30));
         auto oldFunc = tgui::Deserializer::getFunction(tgui::ObjectConverter::Type::Color);
         
-        tgui::Deserializer::setFunction(Type::Color, [](const std::string&){ return tgui::ObjectConverter{tgui::Color::Green}; });
+        tgui::Deserializer::setFunction(Type::Color, [](const tgui::String&){ return tgui::ObjectConverter{tgui::Color::Green}; });
         REQUIRE(tgui::Deserializer::deserialize(Type::Color, "rgb(10, 20, 30)").getColor() == tgui::Color::Green);
         REQUIRE(tgui::Deserializer::deserialize(Type::Outline, "(50, 60, 70, 80)").getOutline() == tgui::Outline(50, 60, 70, 80));
         

@@ -37,18 +37,11 @@ namespace tgui
 {
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    SvgImage::SvgImage(const sf::String& filename)
+    SvgImage::SvgImage(const String& filename)
     {
-#ifdef TGUI_SYSTEM_WINDOWS
-        const std::string filenameAnsiString(filename.toAnsiString());
-#else
-        const std::basic_string<sf::Uint8>& filenameUtf8 = filename.toUtf8();
-        const std::string filenameAnsiString(filenameUtf8.begin(), filenameUtf8.end());
-#endif
-
-        m_svg = nsvgParseFromFile(filenameAnsiString.c_str(), "px", 96);
+        m_svg = nsvgParseFromFile(filename.c_str(), "px", 96);
         if (!m_svg)
-            TGUI_PRINT_WARNING("Failed to load svg: " << filenameAnsiString);
+            TGUI_PRINT_WARNING("Failed to load svg: " << filename);
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -347,7 +347,7 @@ TEST_CASE("[Layouts]")
             REQUIRE(button2->getPosition() == tgui::Vector2f(40, 60));
             REQUIRE(button2->getPositionLayout().toString() == "(b1.pos, b1.pos)");
 
-            button2->setPosition("b1.left", std::string{"b1.top"});
+            button2->setPosition("b1.left", tgui::String{"b1.top"});
             REQUIRE(button2->getPosition() == tgui::Vector2f(40, 60));
             REQUIRE(button2->getPositionLayout().toString() == "(b1.left, b1.top)");
 

@@ -33,11 +33,9 @@ TEST_CASE("[Button]")
     SECTION("Signals")
     {
         REQUIRE_NOTHROW(button->connect("Pressed", [](){}));
-        REQUIRE_NOTHROW(button->connect("Pressed", [](sf::String){}));
-        REQUIRE_NOTHROW(button->connect("Pressed", [](std::string){}));
-        REQUIRE_NOTHROW(button->connect("Pressed", [](tgui::Widget::Ptr, std::string){}));
-        REQUIRE_NOTHROW(button->connect("Pressed", [](tgui::Widget::Ptr, std::string, sf::String){}));
-        REQUIRE_NOTHROW(button->connect("Pressed", [](tgui::Widget::Ptr, std::string, std::string){}));
+        REQUIRE_NOTHROW(button->connect("Pressed", [](tgui::String){}));
+        REQUIRE_NOTHROW(button->connect("Pressed", [](tgui::Widget::Ptr, tgui::String){}));
+        REQUIRE_NOTHROW(button->connect("Pressed", [](tgui::Widget::Ptr, tgui::String, tgui::String){}));
     }
 
     SECTION("WidgetType")

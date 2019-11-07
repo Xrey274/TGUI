@@ -90,16 +90,16 @@ TEST_CASE("[Serializer]")
 
     SECTION("serialize string")
     {
-        REQUIRE(tgui::Serializer::serialize(sf::String{""}) == "\"\"");
-        REQUIRE(tgui::Serializer::serialize(sf::String{"word"}) == "word");
-        REQUIRE(tgui::Serializer::serialize(sf::String{"No/Quotes_Required@089%"}) == "No/Quotes_Required@089%");
-        REQUIRE(tgui::Serializer::serialize(sf::String{"String with spaces"}) == "\"String with spaces\"");
-        REQUIRE(tgui::Serializer::serialize(sf::String{"\\"}) == "\"\\\\\"");
-        REQUIRE(tgui::Serializer::serialize(sf::String{"\n"}) == "\"\\n\"");
-        REQUIRE(tgui::Serializer::serialize(sf::String{"\t"}) == "\"\\t\"");
-        REQUIRE(tgui::Serializer::serialize(sf::String{"\v"}) == "\"\\v\"");
-        REQUIRE(tgui::Serializer::serialize(sf::String{"\""}) == "\"\\\"\"");
-        REQUIRE(tgui::Serializer::serialize(sf::String{"a\t\"string\"?\nYES!"}) == "\"a\\t\\\"string\\\"?\\nYES!\"");
+        REQUIRE(tgui::Serializer::serialize(tgui::String{""}) == "\"\"");
+        REQUIRE(tgui::Serializer::serialize(tgui::String{"word"}) == "word");
+        REQUIRE(tgui::Serializer::serialize(tgui::String{"No/Quotes_Required@089%"}) == "No/Quotes_Required@089%");
+        REQUIRE(tgui::Serializer::serialize(tgui::String{"String with spaces"}) == "\"String with spaces\"");
+        REQUIRE(tgui::Serializer::serialize(tgui::String{"\\"}) == "\"\\\\\"");
+        REQUIRE(tgui::Serializer::serialize(tgui::String{"\n"}) == "\"\\n\"");
+        REQUIRE(tgui::Serializer::serialize(tgui::String{"\t"}) == "\"\\t\"");
+        REQUIRE(tgui::Serializer::serialize(tgui::String{"\v"}) == "\"\\v\"");
+        REQUIRE(tgui::Serializer::serialize(tgui::String{"\""}) == "\"\\\"\"");
+        REQUIRE(tgui::Serializer::serialize(tgui::String{"a\t\"string\"?\nYES!"}) == "\"a\\t\\\"string\\\"?\\nYES!\"");
     }
 
     SECTION("serialize number")
@@ -130,7 +130,7 @@ TEST_CASE("[Serializer]")
         rendererData->propertyValuePairs["TextStyleProperty"] = {tgui::TextStyle::StrikeThrough};
         rendererData->propertyValuePairs["Nested"] = {childRendererData};
 
-        std::string result = "SomeColor = red;\n"
+        tgui::String result = "SomeColor = red;\n"
                              "TextStyleProperty = StrikeThrough;\n"
                              "\n"
                              "Nested {\n"

@@ -36,7 +36,7 @@ TEST_CASE("[Color]")
     REQUIRE(tgui::Color(16, 32, 64, 128) == color);
     REQUIRE(tgui::Color("rgba(16, 32, 64, 128)") == color);
     REQUIRE(tgui::Color("#10204080") == color);
-    REQUIRE(tgui::Color(std::string("#10204080")) == color);
-    REQUIRE(tgui::Color(std::string("Red")) == tgui::Color::Red);
-    REQUIRE(tgui::Color(sf::String("blue")) == tgui::Color::Blue);
+    REQUIRE(tgui::Color(tgui::String("#10204080")) == color);
+    REQUIRE(tgui::Color(tgui::String("Red")) == tgui::Color::Red);
+    REQUIRE(tgui::Color(tgui::String("blue")) == tgui::Color::Blue);
 }

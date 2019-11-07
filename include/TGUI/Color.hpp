@@ -26,9 +26,8 @@
 #ifndef TGUI_COLOR_HPP
 #define TGUI_COLOR_HPP
 
-#include <TGUI/Config.hpp>
+#include <TGUI/String.hpp>
 #include <SFML/Graphics/Color.hpp>
-#include <SFML/System/String.hpp>
 #include <cstdint>
 #include <string>
 #include <map>
@@ -115,17 +114,7 @@ namespace tgui
         ///
         /// The Deserializer class is used to convert the string into a color.
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        Color(const sf::String& string);
-
-
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        /// @brief Creates the object from a string
-        ///
-        /// @param string  String to be deserialized as color
-        ///
-        /// The Deserializer class is used to convert the string into a color.
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        Color(const std::string& string);
+        Color(const String& string);
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -263,7 +252,7 @@ namespace tgui
         static const Color Cyan;        ///< Cyan predefined color
         static const Color Transparent; ///< Transparent (black) predefined color
 
-        static const std::map<std::string, Color> colorMap;
+        static const std::map<String, Color> colorMap;
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

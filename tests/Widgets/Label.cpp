@@ -35,11 +35,9 @@ TEST_CASE("[Label]")
     SECTION("Signals")
     {
         REQUIRE_NOTHROW(label->connect("DoubleClicked", [](){}));
-        REQUIRE_NOTHROW(label->connect("DoubleClicked", [](sf::String){}));
-        REQUIRE_NOTHROW(label->connect("DoubleClicked", [](std::string){}));
-        REQUIRE_NOTHROW(label->connect("DoubleClicked", [](tgui::Widget::Ptr, std::string){}));
-        REQUIRE_NOTHROW(label->connect("DoubleClicked", [](tgui::Widget::Ptr, std::string, sf::String){}));
-        REQUIRE_NOTHROW(label->connect("DoubleClicked", [](tgui::Widget::Ptr, std::string, std::string){}));
+        REQUIRE_NOTHROW(label->connect("DoubleClicked", [](tgui::String){}));
+        REQUIRE_NOTHROW(label->connect("DoubleClicked", [](tgui::Widget::Ptr, tgui::String){}));
+        REQUIRE_NOTHROW(label->connect("DoubleClicked", [](tgui::Widget::Ptr, tgui::String, tgui::String){}));
     }
 
     SECTION("WidgetType")

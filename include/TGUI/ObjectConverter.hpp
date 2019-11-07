@@ -78,7 +78,7 @@ namespace tgui
         /// @param string  String to store
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         ObjectConverter(const char* string) :
-            ObjectConverter{sf::String{string}}
+            ObjectConverter{String{string}}
         {
         }
 
@@ -88,18 +88,7 @@ namespace tgui
         ///
         /// @param string  String to store
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        ObjectConverter(const std::string& string) :
-            ObjectConverter{sf::String{string}}
-        {
-        }
-
-
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        /// @brief Stores a string for later retrieval
-        ///
-        /// @param string  String to store
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        ObjectConverter(const sf::String& string) :
+        ObjectConverter(const String& string) :
             m_type      {Type::String},
             m_value     {string},
             m_serialized{true},
@@ -241,7 +230,7 @@ namespace tgui
         /// @return The saved string or a serialized string
         ///
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        const sf::String& getString();
+        const String& getString();
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -360,10 +349,10 @@ namespace tgui
     private:
         Type m_type = Type::None;
 
-        Variant<sf::String, Font, Color, Outline, bool, float, Texture, TextStyle, std::shared_ptr<RendererData>> m_value;
+        Variant<String, Font, Color, Outline, bool, float, Texture, TextStyle, std::shared_ptr<RendererData>> m_value;
 
         bool m_serialized = false;
-        sf::String m_string;
+        String m_string;
     };
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

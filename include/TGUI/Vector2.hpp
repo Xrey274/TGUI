@@ -83,14 +83,14 @@ namespace tgui
         /// @brief Constructor to create from a string
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         Vector2(const char* str) :
-            Vector2{std::string(str)}
+            Vector2{String(str)}
         {
         }
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /// @brief Constructor to create from a string
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        Vector2(std::string str)
+        Vector2(String str)
         {
             if (str.empty())
             {
@@ -110,14 +110,14 @@ namespace tgui
             }
 
             auto commaPos = str.find(',');
-            if (commaPos == std::string::npos)
+            if (commaPos == String::npos)
             {
                 TGUI_PRINT_WARNING("Failed to parse Vector2 '" + str + "'. Expected numbers separated with a comma.");
                 return;
             }
 
-            x = static_cast<T>(strToFloat(trim(str.substr(0, commaPos))));
-            y = static_cast<T>(strToFloat(trim(str.substr(commaPos + 1))));
+            x = static_cast<T>(str.substr(0, commaPos).trim().toFloat());
+            y = static_cast<T>(str.substr(commaPos + 1).trim().toFloat());
         }
 
 

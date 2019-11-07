@@ -40,7 +40,7 @@ namespace tgui
     const Color Color::Cyan       {  0, 255, 255};
     const Color Color::Transparent{  0,   0,   0,   0};
 
-    const std::map<std::string, Color> Color::colorMap =
+    const std::map<String, Color> Color::colorMap =
     {
         {"black", Color::Black},
         {"white", Color::White},
@@ -55,22 +55,15 @@ namespace tgui
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    Color::Color(const sf::String& string) :
+    Color::Color(const String& string) :
         Color{Deserializer::deserialize(ObjectConverter::Type::Color, string).getColor()}
     {
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    Color::Color(const std::string& string) :
-        Color{sf::String{string}}
-    {
-    }
-
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     Color::Color(const char* string) :
-        Color{sf::String{string}}
+        Color{String{string}}
     {
     }
 

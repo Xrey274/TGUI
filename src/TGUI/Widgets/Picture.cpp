@@ -165,9 +165,9 @@ namespace tgui
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    Signal& Picture::getSignal(std::string signalName)
+    Signal& Picture::getSignal(String signalName)
     {
-        if (signalName == toLower(onDoubleClick.getName()))
+        if (signalName == onDoubleClick.getName().toLower())
             return onDoubleClick;
         else
             return ClickableWidget::getSignal(std::move(signalName));
@@ -175,7 +175,7 @@ namespace tgui
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    void Picture::rendererChanged(const std::string& property)
+    void Picture::rendererChanged(const String& property)
     {
         if (property == "texture")
         {

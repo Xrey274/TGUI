@@ -38,8 +38,8 @@ TEST_CASE("[SpinButton]")
     {
         REQUIRE_NOTHROW(spinButton->connect("ValueChanged", [](){}));
         REQUIRE_NOTHROW(spinButton->connect("ValueChanged", [](float){}));
-        REQUIRE_NOTHROW(spinButton->connect("ValueChanged", [](tgui::Widget::Ptr, std::string){}));
-        REQUIRE_NOTHROW(spinButton->connect("ValueChanged", [](tgui::Widget::Ptr, std::string, float){}));
+        REQUIRE_NOTHROW(spinButton->connect("ValueChanged", [](tgui::Widget::Ptr, tgui::String){}));
+        REQUIRE_NOTHROW(spinButton->connect("ValueChanged", [](tgui::Widget::Ptr, tgui::String, float){}));
     }
 
     SECTION("WidgetType")

@@ -34,7 +34,7 @@ const static float MOVE_STEP = 10;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Form::Form(GuiBuilder* guiBuilder, const std::string& filename, tgui::ChildWindow::Ptr formWindow, tgui::Vector2f formSize) :
+Form::Form(GuiBuilder* guiBuilder, const tgui::String& filename, tgui::ChildWindow::Ptr formWindow, tgui::Vector2f formSize) :
     m_guiBuilder      {guiBuilder},
     m_formWindow      {formWindow},
     m_scrollablePanel {formWindow->get<tgui::ScrollablePanel>("ScrollablePanel")},
@@ -68,18 +68,18 @@ Form::Form(GuiBuilder* guiBuilder, const std::string& filename, tgui::ChildWindo
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-std::string Form::addWidget(tgui::Widget::Ptr widget, tgui::Container* parent, bool selectNewWidget)
+tgui::String Form::addWidget(tgui::Widget::Ptr widget, tgui::Container* parent, bool selectNewWidget)
 {
-    const std::string id = tgui::to_string(widget.get());
+    const tgui::String id = tgui::String::fromNumber(widget.get());
     m_widgets[id] = std::make_shared<WidgetInfo>(widget);
 
-    const std::string widgetType = widget->getWidgetType();
+    const tgui::String widgetType = widget->getWidgetType();
     bool foundAvailableName = false;
     unsigned int count = 0;
-    std::string name;
+    tgui::String name;
     while (!foundAvailableName)
     {
-        name = widgetType + tgui::to_string(++count);
+        name = widgetType + tgui::String::fromNumber(++count);
 
         foundAvailableName = true;
         for (const auto& pair : m_widgets)
@@ -109,7 +109,7 @@ std::string Form::addWidget(tgui::Widget::Ptr widget, tgui::Container* parent, b
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void Form::removeWidget(const std::string& id)
+void Form::removeWidget(const tgui::String& id)
 {
     const auto widget = m_widgets[id];
     assert(widget != nullptr);
@@ -117,7 +117,7 @@ void Form::removeWidget(const std::string& id)
     // Remove the child widgets
     if (widget->ptr->isContainer())
     {
-        std::vector<std::string> childIds;
+        std::vector<tgui::String> childIds;
         std::stack<tgui::Container::Ptr> parentsToSearch;
         parentsToSearch.push(widget->ptr->cast<tgui::Container>());
         while (!parentsToSearch.empty())
@@ -126,7 +126,7 @@ void Form::removeWidget(const std::string& id)
             parentsToSearch.pop();
             for (const auto& childWidget : parent->getWidgets())
             {
-                childIds.push_back(tgui::to_string(childWidget.get()));
+                childIds.push_back(tgui::String::fromNumber(childWidget.get()));
                 if (childWidget->isContainer())
                     parentsToSearch.push(childWidget->cast<tgui::Container>());
             }
@@ -144,7 +144,7 @@ void Form::removeWidget(const std::string& id)
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-std::shared_ptr<WidgetInfo> Form::getWidget(const std::string& id) const
+std::shared_ptr<WidgetInfo> Form::getWidget(const tgui::String& id) const
 {
     assert(m_widgets.find(id) != m_widgets.end());
     return m_widgets.at(id);
@@ -152,7 +152,7 @@ std::shared_ptr<WidgetInfo> Form::getWidget(const std::string& id) const
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-std::shared_ptr<WidgetInfo> Form::getWidgetByName(const std::string& name) const
+std::shared_ptr<WidgetInfo> Form::getWidgetByName(const tgui::String& name) const
 {
     if (name == m_filename)
         return std::shared_ptr<WidgetInfo>();
@@ -205,7 +205,7 @@ std::shared_ptr<WidgetInfo> Form::getSelectedWidget() const
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-bool Form::setSelectedWidgetName(const std::string& name)
+bool Form::setSelectedWidgetName(const tgui::String& name)
 {
     assert(m_selectedWidget != nullptr);
 
@@ -268,14 +268,14 @@ void Form::updateSelectionSquarePositions()
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void Form::selectWidgetById(const std::string& id)
+void Form::selectWidgetById(const tgui::String& id)
 {
     selectWidget(m_widgets[id]);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void Form::selectWidgetByName(const std::string& name)
+void Form::selectWidgetByName(const tgui::String& name)
 {
     selectWidget(getWidgetByName(name));
 }
@@ -294,7 +294,7 @@ void Form::selectParent()
         return;
     }
 
-    selectWidget(m_widgets[tgui::to_string(m_selectedWidget->ptr->getParent())]);
+    selectWidget(m_widgets[tgui::String::fromNumber(m_selectedWidget->ptr->getParent())]);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -430,13 +430,13 @@ void Form::arrowKeyPressed(const sf::Event::KeyEvent& keyEvent)
         }
 
         if (closestWidget)
-            selectWidget(m_widgets[tgui::to_string(closestWidget.get())]);
+            selectWidget(m_widgets[tgui::String::fromNumber(closestWidget.get())]);
     }
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void Form::setFilename(const sf::String& filename)
+void Form::setFilename(const tgui::String& filename)
 {
     m_filename = filename;
     setChanged(m_changed);
@@ -444,7 +444,7 @@ void Form::setFilename(const sf::String& filename)
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-sf::String Form::getFilename() const
+tgui::String Form::getFilename() const
 {
     return m_filename;
 }
@@ -511,7 +511,7 @@ bool Form::load()
     catch (const tgui::Exception& e)
     {
         // Failed to open file
-        std::cout << "Failed to load '" << getFilename().toAnsiString() << "', reason: " << e.what() << std::endl;
+        std::cout << "Failed to load '" << getFilename() << "', reason: " << e.what() << std::endl;
         return false;
     }
 
@@ -578,7 +578,7 @@ void Form::importLoadedWidgets(tgui::Container::Ptr parent)
     const auto& widgetNames = parent->getWidgetNames();
     for (std::size_t i = 0; i < widgets.size(); ++i)
     {
-        const std::string id = tgui::to_string(widgets[i].get());
+        const tgui::String id = tgui::String::fromNumber(widgets[i].get());
         m_widgets[id] = std::make_shared<WidgetInfo>(widgets[i]);
         m_widgets[id]->name = widgetNames[i];
         m_widgets[id]->theme = "Custom";
@@ -634,7 +634,7 @@ void Form::onFormMousePress(tgui::Vector2f pos)
     auto widget = getWidgetBelowMouse(m_widgetsContainer, pos);
     if (widget)
     {
-        selectWidget(m_widgets[tgui::to_string(widget.get())]);
+        selectWidget(m_widgets[tgui::String::fromNumber(widget.get())]);
         m_draggingWidget = true;
         m_draggingPos = pos;
     }

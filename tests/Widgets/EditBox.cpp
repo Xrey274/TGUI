@@ -33,18 +33,14 @@ TEST_CASE("[EditBox]")
     SECTION("Signals")
     {
         REQUIRE_NOTHROW(editBox->connect("TextChanged", [](){}));
-        REQUIRE_NOTHROW(editBox->connect("TextChanged", [](sf::String){}));
-        REQUIRE_NOTHROW(editBox->connect("TextChanged", [](std::string){}));
-        REQUIRE_NOTHROW(editBox->connect("TextChanged", [](tgui::Widget::Ptr, std::string){}));
-        REQUIRE_NOTHROW(editBox->connect("TextChanged", [](tgui::Widget::Ptr, std::string, sf::String){}));
-        REQUIRE_NOTHROW(editBox->connect("TextChanged", [](tgui::Widget::Ptr, std::string, std::string){}));
+        REQUIRE_NOTHROW(editBox->connect("TextChanged", [](tgui::String){}));
+        REQUIRE_NOTHROW(editBox->connect("TextChanged", [](tgui::Widget::Ptr, tgui::String){}));
+        REQUIRE_NOTHROW(editBox->connect("TextChanged", [](tgui::Widget::Ptr, tgui::String, tgui::String){}));
 
         REQUIRE_NOTHROW(editBox->connect("ReturnKeyPressed", [](){}));
-        REQUIRE_NOTHROW(editBox->connect("ReturnKeyPressed", [](sf::String){}));
-        REQUIRE_NOTHROW(editBox->connect("ReturnKeyPressed", [](std::string){}));
-        REQUIRE_NOTHROW(editBox->connect("ReturnKeyPressed", [](tgui::Widget::Ptr, std::string){}));
-        REQUIRE_NOTHROW(editBox->connect("ReturnKeyPressed", [](tgui::Widget::Ptr, std::string, sf::String){}));
-        REQUIRE_NOTHROW(editBox->connect("ReturnKeyPressed", [](tgui::Widget::Ptr, std::string, std::string){}));
+        REQUIRE_NOTHROW(editBox->connect("ReturnKeyPressed", [](tgui::String){}));
+        REQUIRE_NOTHROW(editBox->connect("ReturnKeyPressed", [](tgui::Widget::Ptr, tgui::String){}));
+        REQUIRE_NOTHROW(editBox->connect("ReturnKeyPressed", [](tgui::Widget::Ptr, tgui::String, tgui::String){}));
     }
 
     SECTION("WidgetType")
@@ -163,7 +159,7 @@ TEST_CASE("[EditBox]")
 
     SECTION("Suffix")
     {
-        REQUIRE(editBox->getSuffix().isEmpty());
+        REQUIRE(editBox->getSuffix().empty());
 
         editBox->setSuffix("Tn");
         REQUIRE(editBox->getSuffix() == "Tn");
@@ -401,8 +397,8 @@ TEST_CASE("[EditBox]")
         SECTION("ReturnKeyPressed signal")
         {
             unsigned int count = 0;
-            std::string expectedText = "";
-            editBox->connect("ReturnKeyPressed", [&](sf::String text){ REQUIRE(text == expectedText); count++; });
+            tgui::String expectedText = "";
+            editBox->connect("ReturnKeyPressed", [&](tgui::String text){ REQUIRE(text == expectedText); count++; });
 
             keyEvent.code = sf::Keyboard::Return;
             editBox->keyPressed(keyEvent);

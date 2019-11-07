@@ -211,7 +211,7 @@ namespace tgui
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /// @internal
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        void textEntered(std::uint32_t key) override;
+        void textEntered(char32_t key) override;
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /// @internal
@@ -262,7 +262,7 @@ namespace tgui
         ///
         /// @param property  Lowercase name of the property that was changed
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        void rendererChanged(const std::string& property) override;
+        void rendererChanged(const String& property) override;
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -296,13 +296,13 @@ namespace tgui
         std::function<void(Vector2f)>                   implRightMouseReleased;
         std::function<void(Vector2f)>                   implMouseMoved;
         std::function<void(const sf::Event::KeyEvent&)> implKeyPressed;
-        std::function<void(std::uint32_t)>              implTextEntered;
+        std::function<void(char32_t)>                   implTextEntered;
         std::function<bool(float, Vector2f)>            implMouseWheelScrolled;
         std::function<void()>                           implMouseNoLongerOnWidget;
         std::function<void()>                           implMouseNoLongerDown; // TODO: Rename
         std::function<void()>                           implMouseEnteredWidget;
         std::function<void()>                           implMouseLeftWidget;
-        std::function<bool(const std::string&)>         implRendererChanged;
+        std::function<bool(const String&)>              implRendererChanged;
         std::function<void(sf::RenderTarget&, sf::RenderStates)> implDrawFunction;
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

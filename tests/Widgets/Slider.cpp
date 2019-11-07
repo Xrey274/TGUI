@@ -37,8 +37,8 @@ TEST_CASE("[Slider]")
     {
         REQUIRE_NOTHROW(slider->connect("ValueChanged", [](){}));
         REQUIRE_NOTHROW(slider->connect("ValueChanged", [](float){}));
-        REQUIRE_NOTHROW(slider->connect("ValueChanged", [](tgui::Widget::Ptr, std::string){}));
-        REQUIRE_NOTHROW(slider->connect("ValueChanged", [](tgui::Widget::Ptr, std::string, float){}));
+        REQUIRE_NOTHROW(slider->connect("ValueChanged", [](tgui::Widget::Ptr, tgui::String){}));
+        REQUIRE_NOTHROW(slider->connect("ValueChanged", [](tgui::Widget::Ptr, tgui::String, float){}));
     }
 
     SECTION("WidgetType")

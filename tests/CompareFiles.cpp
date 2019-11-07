@@ -30,15 +30,15 @@
 // The worst encountered difference was 1.43% on Label_Simple.png, so errors less than 1.5% of the entire
 // image are allowed. Since 100% would mean going from a completely black to completely white image, the
 // percentage is high enough to make minor errors go unnoticed, but it is better than not checking at all.
-void compareImageFiles(const std::string& filename1, const std::string& filename2)
+void compareImageFiles(const tgui::String& filename1, const tgui::String& filename2)
 {
     sf::Image image1;
-    if (!image1.loadFromFile(filename1))
-        REQUIRE(image1.loadFromFile(filename1));
+    if (!image1.loadFromFile(filename1.toAnsiString()))
+        REQUIRE(image1.loadFromFile(filename1.toAnsiString()));
 
     sf::Image image2;
-    if (!image2.loadFromFile(filename2))
-        REQUIRE(image2.loadFromFile(filename2));
+    if (!image2.loadFromFile(filename2.toAnsiString()))
+        REQUIRE(image2.loadFromFile(filename2.toAnsiString()));
 
     if (image1.getSize() != image2.getSize())
         REQUIRE(image1.getSize() == image2.getSize());
@@ -61,7 +61,7 @@ void compareImageFiles(const std::string& filename1, const std::string& filename
     REQUIRE(diffPercentage < 0.33);
 }
 
-bool compareFiles(const std::string& leftFileName, const std::string& rightFileName)
+bool compareFiles(const tgui::String& leftFileName, const tgui::String& rightFileName)
 {
     std::ifstream leftFile;
     std::ifstream rightFile;

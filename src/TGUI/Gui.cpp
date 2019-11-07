@@ -323,21 +323,21 @@ namespace tgui
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    const std::vector<sf::String>& Gui::getWidgetNames() const
+    const std::vector<String>& Gui::getWidgetNames() const
     {
         return m_container->getWidgetNames();
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    void Gui::add(const Widget::Ptr& widgetPtr, const sf::String& widgetName)
+    void Gui::add(const Widget::Ptr& widgetPtr, const String& widgetName)
     {
         m_container->add(widgetPtr, widgetName);
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    Widget::Ptr Gui::get(const sf::String& widgetName) const
+    Widget::Ptr Gui::get(const String& widgetName) const
     {
         return m_container->get(widgetName);
     }
@@ -358,14 +358,14 @@ namespace tgui
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    bool Gui::setWidgetName(const Widget::Ptr& widget, const std::string& name)
+    bool Gui::setWidgetName(const Widget::Ptr& widget, const String& name)
     {
         return m_container->setWidgetName(widget, name);
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    std::string Gui::getWidgetName(const Widget::Ptr& widget) const
+    String Gui::getWidgetName(const Widget::Ptr& widget) const
     {
         return m_container->getWidgetName(widget);
     }
@@ -414,14 +414,14 @@ namespace tgui
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    void Gui::loadWidgetsFromFile(const std::string& filename)
+    void Gui::loadWidgetsFromFile(const String& filename)
     {
         m_container->loadWidgetsFromFile(filename);
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    void Gui::saveWidgetsToFile(const std::string& filename)
+    void Gui::saveWidgetsToFile(const String& filename)
     {
         m_container->saveWidgetsToFile(filename);
     }

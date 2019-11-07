@@ -30,9 +30,9 @@
 
 #include <TGUI/TextureData.hpp>
 #include <TGUI/Vector2.hpp>
+#include <TGUI/String.hpp>
 #include <TGUI/Color.hpp>
 #include <TGUI/Rect.hpp>
-#include <SFML/System/String.hpp>
 #include <functional>
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -44,8 +44,8 @@ namespace tgui
     public:
 
         using CallbackFunc = std::function<void(std::shared_ptr<TextureData>)>;
-        using ImageLoaderFunc = std::function<std::shared_ptr<sf::Image>(const sf::String&)>;
-        using TextureLoaderFunc = std::function<std::shared_ptr<TextureData>(Texture&, const sf::String&, const UIntRect&, bool smooth)>;
+        using ImageLoaderFunc = std::function<std::shared_ptr<sf::Image>(const String&)>;
+        using TextureLoaderFunc = std::function<std::shared_ptr<TextureData>(Texture&, const String&, const UIntRect&, bool smooth)>;
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -68,7 +68,7 @@ namespace tgui
                 const UIntRect& partRect = UIntRect(0, 0, 0, 0),
                 const UIntRect& middlePart = UIntRect(0, 0, 0, 0),
                 bool smooth = false)
-            : Texture(sf::String{id}, partRect, middlePart, smooth)
+            : Texture(String{id}, partRect, middlePart, smooth)
         {
         }
 
@@ -84,27 +84,7 @@ namespace tgui
         /// This constructor just calls the corresponding load function.
         ///
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        Texture(const std::string& id,
-                const UIntRect& partRect = UIntRect(0, 0, 0, 0),
-                const UIntRect& middlePart = UIntRect(0, 0, 0, 0),
-                bool smooth = false)
-            : Texture(sf::String{id}, partRect, middlePart, smooth)
-        {
-        }
-
-
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        /// @brief Constructor that created the texture
-        ///
-        /// @param id         Id for the the image to load (for the default loader, the id is the filename)
-        /// @param partRect   Load only part of the image. Pass an empty rectangle if you want to load the full image
-        /// @param middlePart Choose the middle part of the image for 9-slice scaling (relative to the part defined by partRect)
-        /// @param smooth     Enable smoothing on the texture
-        ///
-        /// This constructor just calls the corresponding load function.
-        ///
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        Texture(const sf::String& id,
+        Texture(const String& id,
                 const UIntRect& partRect = UIntRect(0, 0, 0, 0),
                 const UIntRect& middlePart = UIntRect(0, 0, 0, 0),
                 bool smooth = false);
@@ -162,7 +142,7 @@ namespace tgui
         /// @param smooth     Enable smoothing on the texture
         ///
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        void load(const sf::String& id,
+        void load(const String& id,
                   const UIntRect& partRect = {},
                   const UIntRect& middleRect = {},
                   bool smooth = false);
@@ -189,7 +169,7 @@ namespace tgui
         /// @return Id of the texture
         ///
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        const sf::String& getId() const;
+        const String& getId() const;
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -391,7 +371,7 @@ namespace tgui
         sf::Shader* m_shader = nullptr;
         UIntRect m_partRect;
         UIntRect m_middleRect;
-        sf::String  m_id;
+        String  m_id;
 
         CallbackFunc m_copyCallback;
         CallbackFunc m_destructCallback;

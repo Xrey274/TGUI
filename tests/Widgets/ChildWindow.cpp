@@ -35,27 +35,27 @@ TEST_CASE("[ChildWindow]")
     SECTION("Signals")
     {
         REQUIRE_NOTHROW(childWindow->connect("MousePressed", [](){}));
-        REQUIRE_NOTHROW(childWindow->connect("MousePressed", [](tgui::Widget::Ptr, std::string){}));
+        REQUIRE_NOTHROW(childWindow->connect("MousePressed", [](tgui::Widget::Ptr, tgui::String){}));
 
         REQUIRE_NOTHROW(childWindow->connect("Closed", [](){}));
         REQUIRE_NOTHROW(childWindow->connect("Closed", [](tgui::ChildWindow::Ptr){}));
-        REQUIRE_NOTHROW(childWindow->connect("Closed", [](tgui::Widget::Ptr, std::string){}));
-        REQUIRE_NOTHROW(childWindow->connect("Closed", [](tgui::Widget::Ptr, std::string, tgui::ChildWindow::Ptr){}));
+        REQUIRE_NOTHROW(childWindow->connect("Closed", [](tgui::Widget::Ptr, tgui::String){}));
+        REQUIRE_NOTHROW(childWindow->connect("Closed", [](tgui::Widget::Ptr, tgui::String, tgui::ChildWindow::Ptr){}));
 
         REQUIRE_NOTHROW(childWindow->connect("Maximized", [](){}));
         REQUIRE_NOTHROW(childWindow->connect("Maximized", [](tgui::ChildWindow::Ptr){}));
-        REQUIRE_NOTHROW(childWindow->connect("Maximized", [](tgui::Widget::Ptr, std::string){}));
-        REQUIRE_NOTHROW(childWindow->connect("Maximized", [](tgui::Widget::Ptr, std::string, tgui::ChildWindow::Ptr){}));
+        REQUIRE_NOTHROW(childWindow->connect("Maximized", [](tgui::Widget::Ptr, tgui::String){}));
+        REQUIRE_NOTHROW(childWindow->connect("Maximized", [](tgui::Widget::Ptr, tgui::String, tgui::ChildWindow::Ptr){}));
 
         REQUIRE_NOTHROW(childWindow->connect("Minimized", [](){}));
         REQUIRE_NOTHROW(childWindow->connect("Minimized", [](tgui::ChildWindow::Ptr){}));
-        REQUIRE_NOTHROW(childWindow->connect("Minimized", [](tgui::Widget::Ptr, std::string){}));
-        REQUIRE_NOTHROW(childWindow->connect("Minimized", [](tgui::Widget::Ptr, std::string, tgui::ChildWindow::Ptr){}));
+        REQUIRE_NOTHROW(childWindow->connect("Minimized", [](tgui::Widget::Ptr, tgui::String){}));
+        REQUIRE_NOTHROW(childWindow->connect("Minimized", [](tgui::Widget::Ptr, tgui::String, tgui::ChildWindow::Ptr){}));
 
         REQUIRE_NOTHROW(childWindow->connect("EscapeKeyPressed", [](){}));
         REQUIRE_NOTHROW(childWindow->connect("EscapeKeyPressed", [](tgui::ChildWindow::Ptr){}));
-        REQUIRE_NOTHROW(childWindow->connect("EscapeKeyPressed", [](tgui::Widget::Ptr, std::string){}));
-        REQUIRE_NOTHROW(childWindow->connect("EscapeKeyPressed", [](tgui::Widget::Ptr, std::string, tgui::ChildWindow::Ptr){}));
+        REQUIRE_NOTHROW(childWindow->connect("EscapeKeyPressed", [](tgui::Widget::Ptr, tgui::String){}));
+        REQUIRE_NOTHROW(childWindow->connect("EscapeKeyPressed", [](tgui::Widget::Ptr, tgui::String, tgui::ChildWindow::Ptr){}));
     }
 
     SECTION("WidgetType")

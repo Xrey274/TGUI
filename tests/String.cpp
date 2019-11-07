@@ -93,13 +93,13 @@ TEST_CASE("[String]")
         REQUIRE(std::u16string(tgui::String(U"\U00010348")) == u"\U00010348");
         REQUIRE(std::u32string(tgui::String(U"\U00010348")) == U"\U00010348");
 
-        REQUIRE(tgui::String("xyz").asAnsiString() == "xyz");
-        REQUIRE(tgui::String(U"\u20AC").asWideString() == L"\u20AC");
-        REQUIRE(tgui::String(U"\U00010348").asUtf16() == u"\U00010348");
-        REQUIRE(tgui::String(U"\U00010348").asUtf32() == U"\U00010348");
+        REQUIRE(tgui::String("xyz").toAnsiString() == "xyz");
+        REQUIRE(tgui::String(U"\u20AC").toWideString() == L"\u20AC");
+        REQUIRE(tgui::String(U"\U00010348").toUtf16() == u"\U00010348");
+        REQUIRE(tgui::String(U"\U00010348").toUtf32() == U"\U00010348");
 
         // Will work for older and newer compilers as it will either use std::string or std::u8string
-        REQUIRE(tgui::String(u8"\U00010348").asUtf8() == u8"\U00010348");
+        REQUIRE(tgui::String(u8"\U00010348").toUtf8() == u8"\U00010348");
 
 #if defined(__cpp_lib_char8_t) && (__cpp_lib_char8_t >= 201811L)
         REQUIRE(std::u8string(tgui::String(U"\U00010348")) == u8"\U00010348");
@@ -140,7 +140,7 @@ TEST_CASE("[String]")
             REQUIRE(str1.at(0) == 'a');
             REQUIRE(str2.at(0) == '\xce');
             REQUIRE(str2.at(1) == '\xb1');
-            REQUIRE(str2.asUtf32().at(0) == U'\x03b1');
+            REQUIRE(str2.toUtf32().at(0) == U'\x03b1');
 
             str1.at(0) = U'd';
             REQUIRE(str1.at(0) == U'd');
@@ -151,7 +151,7 @@ TEST_CASE("[String]")
             REQUIRE(str1[1] == 'b');
             REQUIRE(str2[2] == '\xce');
             REQUIRE(str2[3] == '\xb2');
-            REQUIRE(str2.asUtf32()[1] == U'\x03b2');
+            REQUIRE(str2.toUtf32()[1] == U'\x03b2');
 
             str1[1] = 'e';
             REQUIRE(str1[1] == 'e');
@@ -161,7 +161,7 @@ TEST_CASE("[String]")
         {
             REQUIRE(str1.front() == 'a');
             REQUIRE(str2.front() == '\xce');
-            REQUIRE(str2.asUtf32().front() == U'\x03b1');
+            REQUIRE(str2.toUtf32().front() == U'\x03b1');
 
             str1.front() = 'd';
             REQUIRE(str1.front() == 'd');
@@ -171,7 +171,7 @@ TEST_CASE("[String]")
         {
             REQUIRE(str1.back() == 'c');
             REQUIRE(str2.back() == '\xb3');
-            REQUIRE(str2.asUtf32().back() == U'\x03b3');
+            REQUIRE(str2.toUtf32().back() == U'\x03b3');
 
             str1.back() = 'f';
             REQUIRE(str1.back() == 'f');
@@ -182,7 +182,7 @@ TEST_CASE("[String]")
             REQUIRE(str1.data()[1] == 'b');
             REQUIRE(str2.data()[2] == '\xce');
             REQUIRE(str2.data()[3] == '\xb2');
-            REQUIRE(str2.asUtf32().data()[1] == U'\x03b2');
+            REQUIRE(str2.toUtf32().data()[1] == U'\x03b2');
 
 #if __cplusplus >= 201703L
             str1.data()[1] = 'e';
@@ -195,7 +195,7 @@ TEST_CASE("[String]")
             REQUIRE(str1.c_str()[1] == 'b');
             REQUIRE(str2.c_str()[2] == '\xce');
             REQUIRE(str2.c_str()[3] == '\xb2');
-            REQUIRE(str2.asUtf32().c_str()[1] == U'\x03b2');
+            REQUIRE(str2.toUtf32().c_str()[1] == U'\x03b2');
         }
 
         SECTION("begin / end")
@@ -203,7 +203,7 @@ TEST_CASE("[String]")
             REQUIRE(*str1.begin() == 'a');
             REQUIRE(*(str2.begin() + 4) == '\xce');
             REQUIRE(*(str2.begin() + 5) == '\xb3');
-            REQUIRE(*(str2.asUtf32().begin() + 2) == U'\x03b3');
+            REQUIRE(*(str2.toUtf32().begin() + 2) == U'\x03b3');
 
             *(str1.begin() + 1) = 'e';
             REQUIRE(*(str1.begin() + 1) == 'e');
@@ -217,7 +217,7 @@ TEST_CASE("[String]")
             REQUIRE(*str1.cbegin() == 'a');
             REQUIRE(*(str2.cbegin() + 4) == '\xce');
             REQUIRE(*(str2.cbegin() + 5) == '\xb3');
-            REQUIRE(*(str2.asUtf32().cbegin() + 2) == U'\x03b3');
+            REQUIRE(*(str2.toUtf32().cbegin() + 2) == U'\x03b3');
 
             REQUIRE(str1.cbegin() + 3 == str1.cend());
             REQUIRE(str2.cbegin() + 6 == str2.cend());
@@ -228,7 +228,7 @@ TEST_CASE("[String]")
             REQUIRE(*str1.rbegin() == 'c');
             REQUIRE(*(str2.rbegin() + 4) == '\xb1');
             REQUIRE(*(str2.rbegin() + 5) == '\xce');
-            REQUIRE(*(str2.asUtf32().rbegin() + 2) == U'\x03b1');
+            REQUIRE(*(str2.toUtf32().rbegin() + 2) == U'\x03b1');
 
             *(str1.rbegin() + 1) = 'e';
             REQUIRE(*(str1.rbegin() + 1) == 'e');
@@ -242,7 +242,7 @@ TEST_CASE("[String]")
             REQUIRE(*str1.crbegin() == 'c');
             REQUIRE(*(str2.crbegin() + 4) == '\xb1');
             REQUIRE(*(str2.crbegin() + 5) == '\xce');
-            REQUIRE(*(str2.asUtf32().crbegin() + 2) == U'\x03b1');
+            REQUIRE(*(str2.toUtf32().crbegin() + 2) == U'\x03b1');
 
             REQUIRE(str1.crbegin() + 3 == str1.crend());
             REQUIRE(str2.crbegin() + 6 == str2.crend());
@@ -252,7 +252,7 @@ TEST_CASE("[String]")
         {
             REQUIRE(str1.substr(1, 1) == "b");
             REQUIRE(str2.substr(2, 2) == "\xce\xb2");
-            REQUIRE(str2.substr(2, 2).asUtf32() == U"\u03b2");
+            REQUIRE(str2.substr(2, 2).toUtf32() == U"\u03b2");
         }
     }
 
@@ -1036,8 +1036,7 @@ TEST_CASE("[String]")
         REQUIRE(str.toUpper() == "ABCDEFGHIJ");
     }
 
-    // TODO: Should all helper functions should become part of String class?
-/*
+
     SECTION("Helper functions")
     {
         SECTION("isWhitespace")
@@ -1054,34 +1053,5 @@ TEST_CASE("[String]")
             REQUIRE(tgui::isWhitespace(U'\n'));
             REQUIRE(!tgui::isWhitespace(U'x'));
         }
-
-        SECTION("strToInt")
-        {
-            REQUIRE(tgui::strToInt("123") == 123);
-            REQUIRE(tgui::strToInt("text", -5) == -5);
-        }
-
-        SECTION("strToFloat")
-        {
-            REQUIRE(tgui::strToFloat("0.5") == 0.5f);
-            REQUIRE(tgui::strToFloat("text", -3.5f) == -3.5f);
-        }
-
-        SECTION("toLower")
-        {
-            REQUIRE(tgui::toLower("aBCdEfgHIJ") == "abcdefghij");
-        }
-
-        SECTION("toUpper")
-        {
-            REQUIRE(tgui::toUpper("aBCdEfgHIJ") == "ABCDEFGHIJ");
-        }
-
-        SECTION("trim")
-        {
-            REQUIRE(tgui::trim("\t xyz\r\n") == "xyz");
-            REQUIRE(tgui::trim("a") == "a");
-            REQUIRE(tgui::trim("") == "");
-        }
-    }*/
+    }
 }

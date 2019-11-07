@@ -125,7 +125,7 @@ namespace tgui
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    MessageBox::Ptr MessageBox::create(sf::String title, sf::String text, std::vector<sf::String> buttons)
+    MessageBox::Ptr MessageBox::create(String title, String text, std::vector<String> buttons)
     {
         auto messageBox = std::make_shared<MessageBox>();
         messageBox->setTitle(title);
@@ -176,7 +176,7 @@ namespace tgui
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    void MessageBox::setText(const sf::String& text)
+    void MessageBox::setText(const String& text)
     {
         m_label->setText(text);
 
@@ -185,7 +185,7 @@ namespace tgui
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    const sf::String& MessageBox::getText() const
+    const String& MessageBox::getText() const
     {
         return m_label->getText();
     }
@@ -213,7 +213,7 @@ namespace tgui
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    void MessageBox::addButton(const sf::String& caption)
+    void MessageBox::addButton(const String& caption)
     {
         auto button = Button::create(caption);
         button->setRenderer(getSharedRenderer()->getButton());
@@ -228,9 +228,9 @@ namespace tgui
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    std::vector<sf::String> MessageBox::getButtons() const
+    std::vector<String> MessageBox::getButtons() const
     {
-        std::vector<sf::String> buttonTexts;
+        std::vector<String> buttonTexts;
         for (auto& button : m_buttons)
             buttonTexts.emplace_back(button->getText());
 
@@ -252,7 +252,8 @@ namespace tgui
 
             for (const auto& button : m_buttons)
             {
-                const float width = sf::Text(button->getText(), *m_fontCached.getFont(), m_textSize).getLocalBounds().width;
+                /// TODO: Don't use sf::Text for this?
+                const float width = sf::Text(sf::String(button->getText()), *m_fontCached.getFont(), m_textSize).getLocalBounds().width;
                 if (buttonWidth < width * 10.0f / 9.0f)
                     buttonWidth = width * 10.0f / 9.0f;
             }
@@ -293,9 +294,9 @@ namespace tgui
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    Signal& MessageBox::getSignal(std::string signalName)
+    Signal& MessageBox::getSignal(String signalName)
     {
-        if (signalName == toLower(onButtonPress.getName()))
+        if (signalName == onButtonPress.getName().toLower())
             return onButtonPress;
         else
             return ChildWindow::getSignal(std::move(signalName));
@@ -303,7 +304,7 @@ namespace tgui
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    void MessageBox::rendererChanged(const std::string& property)
+    void MessageBox::rendererChanged(const String& property)
     {
         if (property == "textcolor")
         {
@@ -335,7 +336,7 @@ namespace tgui
     std::unique_ptr<DataIO::Node> MessageBox::save(SavingRenderersMap& renderers) const
     {
         auto node = ChildWindow::save(renderers);
-        node->propertyValuePairs["TextSize"] = std::make_unique<DataIO::ValueNode>(to_string(m_textSize));
+        node->propertyValuePairs["TextSize"] = std::make_unique<DataIO::ValueNode>(String::fromNumber(m_textSize));
         // Label and buttons are saved indirectly by saving the child window
         return node;
     }
@@ -350,7 +351,7 @@ namespace tgui
         ChildWindow::load(node, renderers);
 
         if (node->propertyValuePairs["textsize"])
-            setTextSize(strToInt(node->propertyValuePairs["textsize"]->value));
+            setTextSize(node->propertyValuePairs["textsize"]->value.toInt());
 
         identifyLabelAndButtons();
     }
@@ -363,7 +364,7 @@ namespace tgui
 
         for (unsigned int i = 0; i < m_widgets.size(); ++i)
         {
-            if ((m_widgetNames[i].getSize() >= 32) && (m_widgetNames[i].substring(0, 32) == "#TGUI_INTERNAL$MessageBoxButton:"))
+            if ((m_widgetNames[i].length() >= 32) && (m_widgetNames[i].substr(0, 32) == "#TGUI_INTERNAL$MessageBoxButton:"))
             {
                 auto button = std::dynamic_pointer_cast<Button>(m_widgets[i]);
 

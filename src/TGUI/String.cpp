@@ -45,139 +45,81 @@ namespace tgui
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    bool isWhitespace(sf::Uint32 character)
+    bool isWhitespace(char32_t character)
     {
-        if (character == U' ' || character == U'\t' || character == U'\r' || character == U'\n')
-            return true;
-        else
+        if (character >= 128)
             return false;
-    }
-
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    int strToInt(const std::string& str, int defaultValue)
-    {
-#if defined(__cpp_lib_to_chars) && (__cpp_lib_to_chars >= 201611L)
-        int value;
-        const char* cstr = str.c_str();
-        if (std::from_chars(&cstr[0], &cstr[str.length()], value).ec == std::errc{})
-            return value;
         else
-            return defaultValue;
-#else
-        try
-        {
-            return std::stoi(str);
-        }
-        catch (const std::exception&)
-        {
-            return defaultValue;
-        }
-#endif
-    }
-
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    unsigned int strToUInt(const std::string& str, unsigned int defaultValue)
-    {
-#if defined(__cpp_lib_to_chars) && (__cpp_lib_to_chars >= 201611L)
-        unsigned int value;
-        const char* cstr = str.c_str();
-        if (std::from_chars(&cstr[0], &cstr[str.length()], value).ec == std::errc{})
-            return value;
-        else
-            return defaultValue;
-#else
-        try
-        {
-            return static_cast<unsigned int>(std::stoi(str));
-        }
-        catch (const std::exception&)
-        {
-            return defaultValue;
-        }
-#endif
-    }
-
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    float strToFloat(const std::string& str, float defaultValue)
-    {
-#if defined(__cpp_lib_to_chars) && (__cpp_lib_to_chars >= 201611L)
-        float value;
-        const char* cstr = str.c_str();
-        if (std::from_chars(&cstr[0], &cstr[str.length()], value).ec == std::errc{})
-            return value;
-        else
-            return defaultValue;
-#else
-        try
-        {
-            return std::stof(str);
-        }
-        catch (const std::exception&)
-        {
-            return defaultValue;
-        }
-#endif
-    }
-
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    std::string toLower(const std::string& oldString)
-    {
-        std::string newString;
-        newString.reserve(oldString.length() + 1);
-        for (const char& c : oldString)
-            newString.push_back(static_cast<char>(std::tolower(static_cast<unsigned char>(c))));
-
-        return newString;
-    }
-
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    std::string toUpper(const std::string& oldString)
-    {
-        std::string newString;
-        newString.reserve(oldString.length() + 1);
-        for (const char& c : oldString)
-            newString.push_back(static_cast<char>(std::toupper(static_cast<unsigned char>(c))));
-
-        return newString;
-    }
-
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    std::string trim(const std::string& str)
-    {
-        const auto firstIt = std::find_if(str.begin(), str.end(), [](unsigned char c) { return !std::isspace(c); });
-        if (firstIt == str.end())
-            return {};
-
-        const auto lastIt = std::find_if(str.rbegin(), str.rend(), [](unsigned char c) { return !std::isspace(c); }).base();
-        return std::string(firstIt, lastIt);
+            return isWhitespace(static_cast<char>(character));
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     int String::toInt(int defaultValue) const
     {
-        std::string ansiString;
-        ansiString.reserve(m_string.length() + 1);
-        sf::Utf32::toLatin1(m_string.begin(), m_string.end(), std::back_inserter(ansiString), 0);
+#if defined(__cpp_lib_to_chars) && (__cpp_lib_to_chars >= 201611L)
+        int value;
+        const char* cstr = m_string.c_str();
+        if (std::from_chars(&cstr[0], &cstr[m_string.length()], value).ec == std::errc{})
+            return value;
+        else
+            return defaultValue;
+#else
+        try
+        {
+            return std::stoi(m_string);
+        }
+        catch (const std::exception&)
+        {
+            return defaultValue;
+        }
+#endif
+    }
 
-        return strToInt(ansiString, defaultValue);
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    unsigned int String::toUInt(unsigned int defaultValue) const
+    {
+#if defined(__cpp_lib_to_chars) && (__cpp_lib_to_chars >= 201611L)
+        unsigned int value;
+        const char* cstr = m_string.c_str();
+        if (std::from_chars(&cstr[0], &cstr[m_string.length()], value).ec == std::errc{})
+            return value;
+        else
+            return defaultValue;
+#else
+        try
+        {
+            return static_cast<unsigned int>(std::stoi(m_string));
+        }
+        catch (const std::exception&)
+        {
+            return defaultValue;
+        }
+#endif
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     float String::toFloat(float defaultValue) const
     {
-        std::string ansiString;
-        ansiString.reserve(m_string.length() + 1);
-        sf::Utf32::toLatin1(m_string.begin(), m_string.end(), std::back_inserter(ansiString), 0);
-
-        return strToFloat(ansiString, defaultValue);
+#if defined(__cpp_lib_to_chars) && (__cpp_lib_to_chars >= 201611L)
+        float value;
+        const char* cstr = m_string.c_str();
+        if (std::from_chars(&cstr[0], &cstr[m_string.length()], value).ec == std::errc{})
+            return value;
+        else
+            return defaultValue;
+#else
+        try
+        {
+            return std::stof(m_string);
+        }
+        catch (const std::exception&)
+        {
+            return defaultValue;
+        }
+#endif
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -373,22 +315,22 @@ namespace tgui
 
     String::operator std::wstring() const
     {
-        return asWideString();
+        return toWideString();
     }
 
     String::operator std::u16string() const
     {
-        return asUtf16();
+        return toUtf16();
     }
 
     String::operator std::u32string() const
     {
-        return asUtf32();
+        return toUtf32();
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    std::wstring String::asWideString() const
+    std::wstring String::toWideString() const
     {
         std::wstring output;
         output.reserve(m_string.length() + 1); // Can be larger than required
@@ -396,7 +338,7 @@ namespace tgui
         return output;
     }
 
-    std::u16string String::asUtf16() const
+    std::u16string String::toUtf16() const
     {
         std::u16string output;
         output.reserve(m_string.length() + 1); // Can be larger than required
@@ -404,7 +346,7 @@ namespace tgui
         return output;
     }
 
-    std::u32string String::asUtf32() const
+    std::u32string String::toUtf32() const
     {
         std::u32string output;
         output.reserve(m_string.length() + 1); // Can be larger than required
@@ -701,7 +643,11 @@ namespace tgui
 
     String::iterator String::insert(const_iterator pos, std::initializer_list<char> chars)
     {
-        return m_string.insert(pos, chars);
+        // This function requires GCC 9.1, older libstdc++ versions had an insert function with iterator instead of const_iterator
+        //return m_string.insert(pos, chars);
+
+        const auto tmpStr = String{chars};
+        return m_string.insert(pos, tmpStr.begin(), tmpStr.end());
     }
 
     String::iterator String::insert(const_iterator pos, std::string::const_iterator first, std::string::const_iterator last)

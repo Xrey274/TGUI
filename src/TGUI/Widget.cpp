@@ -62,7 +62,7 @@ namespace tgui
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        static Layout2d parseLayout(std::string str)
+        static Layout2d parseLayout(String str)
         {
             if (str.empty())
                 throw Exception{"Failed to parse layout '" + str + "'. String was empty."};
@@ -78,7 +78,7 @@ namespace tgui
             unsigned int bracketCount = 0;
             auto commaOrBracketPos = str.find_first_of(",()");
             decltype(commaOrBracketPos) commaPos = 0;
-            while (commaOrBracketPos != std::string::npos)
+            while (commaOrBracketPos != String::npos)
             {
                 if (str[commaOrBracketPos] == '(')
                     bracketCount++;
@@ -99,11 +99,11 @@ namespace tgui
             }
 
             // Remove quotes around the values
-            std::string x = trim(str.substr(0, commaPos));
+            String x = str.substr(0, commaPos).trim();
             if ((x.size() >= 2) && ((x[0] == '"') && (x[x.length()-1] == '"')))
                 x = x.substr(1, x.length()-2);
 
-            std::string y = trim(str.substr(commaPos + 1));
+            String y = str.substr(commaPos + 1).trim();
             if ((y.size() >= 2) && ((y[0] == '"') && (y[y.length()-1] == '"')))
                 y = y.substr(1, y.length()-2);
 
@@ -689,7 +689,7 @@ namespace tgui
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    const std::string& Widget::getWidgetType() const
+    const String& Widget::getWidgetType() const
     {
         return m_type;
     }
@@ -870,7 +870,7 @@ namespace tgui
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    void Widget::textEntered(std::uint32_t)
+    void Widget::textEntered(char32_t)
     {
     }
 
@@ -942,21 +942,21 @@ namespace tgui
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    Signal& Widget::getSignal(std::string signalName)
+    Signal& Widget::getSignal(String signalName)
     {
-        if (signalName == toLower(onPositionChange.getName()))
+        if (signalName == onPositionChange.getName().toLower())
             return onPositionChange;
-        else if (signalName == toLower(onSizeChange.getName()))
+        else if (signalName == onSizeChange.getName().toLower())
             return onSizeChange;
-        else if (signalName == toLower(onFocus.getName()))
+        else if (signalName == onFocus.getName().toLower())
             return onFocus;
-        else if (signalName == toLower(onUnfocus.getName()))
+        else if (signalName == onUnfocus.getName().toLower())
             return onUnfocus;
-        else if (signalName == toLower(onMouseEnter.getName()))
+        else if (signalName == onMouseEnter.getName().toLower())
             return onMouseEnter;
-        else if (signalName == toLower(onMouseLeave.getName()))
+        else if (signalName == onMouseLeave.getName().toLower())
             return onMouseLeave;
-        else if (signalName == toLower(onAnimationFinished.getName()))
+        else if (signalName == onAnimationFinished.getName().toLower())
             return onAnimationFinished;
 
         throw Exception{"No signal exists with name '" + std::move(signalName) + "'."};
@@ -964,7 +964,7 @@ namespace tgui
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    void Widget::rendererChanged(const std::string& property)
+    void Widget::rendererChanged(const String& property)
     {
         if ((property == "opacity") || (property == "opacitydisabled"))
         {
@@ -994,12 +994,12 @@ namespace tgui
 
     std::unique_ptr<DataIO::Node> Widget::save(SavingRenderersMap& renderers) const
     {
-        sf::String widgetName;
+        String widgetName;
         if (getParent())
             widgetName = getParent()->getWidgetName(shared_from_this());
 
         auto node = std::make_unique<DataIO::Node>();
-        if (widgetName.isEmpty())
+        if (widgetName.empty())
             node->name = getWidgetType();
         else
             node->name = getWidgetType() + "." + Serializer::serialize(widgetName);
@@ -1021,8 +1021,9 @@ namespace tgui
             toolTipNode->name = "ToolTip";
             toolTipNode->children.emplace_back(std::move(toolTipWidgetNode));
 
-            toolTipNode->propertyValuePairs["InitialDelay"] = std::make_unique<DataIO::ValueNode>(to_string(ToolTip::getInitialDelay().asSeconds()));
-            toolTipNode->propertyValuePairs["DistanceToMouse"] = std::make_unique<DataIO::ValueNode>("(" + to_string(ToolTip::getDistanceToMouse().x) + "," + to_string(ToolTip::getDistanceToMouse().y) + ")");
+            toolTipNode->propertyValuePairs["InitialDelay"] = std::make_unique<DataIO::ValueNode>(String::fromNumber(ToolTip::getInitialDelay().asSeconds()));
+            toolTipNode->propertyValuePairs["DistanceToMouse"] = std::make_unique<DataIO::ValueNode>("("
+                + String::fromNumber(ToolTip::getDistanceToMouse().x) + "," + String::fromNumber(ToolTip::getDistanceToMouse().y) + ")");
 
             node->children.emplace_back(std::move(toolTipNode));
         }
@@ -1050,25 +1051,25 @@ namespace tgui
 
         if (node->propertyValuePairs["renderer"])
         {
-            const sf::String value = node->propertyValuePairs["renderer"]->value;
-            if (value.isEmpty() || (value[0] != '&'))
+            const String value = node->propertyValuePairs["renderer"]->value;
+            if (value.empty() || (value[0] != '&'))
                 throw Exception{"Expected reference to renderer, did not find '&' character"};
 
-            const auto it = renderers.find(toLower(value.substring(1)));
+            const auto it = renderers.find(value.substr(1).toLower());
             if (it == renderers.end())
-                throw Exception{"Widget refers to renderer with name '" + value.substring(1) + "', but no such renderer was found"};
+                throw Exception{"Widget refers to renderer with name '" + value.substr(1) + "', but no such renderer was found"};
 
             setRenderer(it->second);
         }
 
         for (const auto& childNode : node->children)
         {
-            if (toLower(childNode->name) == "tooltip")
+            if (childNode->name.toLower() == "tooltip")
             {
                 for (const auto& pair : childNode->propertyValuePairs)
                 {
                     if (pair.first == "initialdelay")
-                        ToolTip::setInitialDelay(std::chrono::duration<float>(strToFloat(pair.second->value)));
+                        ToolTip::setInitialDelay(std::chrono::duration<float>(pair.second->value.toFloat()));
                     else if (pair.first == "distancetomouse")
                         ToolTip::setDistanceToMouse(Vector2f{pair.second->value});
                 }
@@ -1091,13 +1092,13 @@ namespace tgui
                         throw Exception{"No construct function exists for widget type '" + toolTipWidgetNode->name + "'."};
                 }
             }
-            else if (toLower(childNode->name) == "renderer")
+            else if (childNode->name.toLower() == "renderer")
                 setRenderer(RendererData::createFromDataIONode(childNode.get()));
 
             /// TODO: Signals?
         }
         node->children.erase(std::remove_if(node->children.begin(), node->children.end(), [](const std::unique_ptr<DataIO::Node>& child){
-                return (toLower(child->name) == "tooltip") || (toLower(child->name) == "renderer");
+                return (child->name.toLower() == "tooltip") || (child->name.toLower() == "renderer");
             }), node->children.end());
     }
 
@@ -1119,7 +1120,7 @@ namespace tgui
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    void Widget::rendererChangedCallback(const std::string& property)
+    void Widget::rendererChangedCallback(const String& property)
     {
         rendererChanged(property);
     }

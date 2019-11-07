@@ -35,8 +35,8 @@ TEST_CASE("[Picture]")
     {
         REQUIRE_NOTHROW(picture->connect("DoubleClicked", [](){}));
         REQUIRE_NOTHROW(picture->connect("DoubleClicked", [](tgui::Vector2f){}));
-        REQUIRE_NOTHROW(picture->connect("DoubleClicked", [](tgui::Widget::Ptr, std::string){}));
-        REQUIRE_NOTHROW(picture->connect("DoubleClicked", [](tgui::Widget::Ptr, std::string, tgui::Vector2f){}));
+        REQUIRE_NOTHROW(picture->connect("DoubleClicked", [](tgui::Widget::Ptr, tgui::String){}));
+        REQUIRE_NOTHROW(picture->connect("DoubleClicked", [](tgui::Widget::Ptr, tgui::String, tgui::Vector2f){}));
     }
 
     SECTION("WidgetType")

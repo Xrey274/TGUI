@@ -36,13 +36,11 @@ TEST_CASE("[TreeView]")
         for (const auto& signal : {"ItemSelected", "ItemSelected", "ItemSelected", "ItemSelected"})
         {
             REQUIRE_NOTHROW(treeView->connect(signal, [](){}));
-            REQUIRE_NOTHROW(treeView->connect(signal, [](sf::String){}));
-            REQUIRE_NOTHROW(treeView->connect(signal, [](std::string){}));
-            REQUIRE_NOTHROW(treeView->connect(signal, [](std::vector<sf::String>){}));
-            REQUIRE_NOTHROW(treeView->connect(signal, [](tgui::Widget::Ptr, std::string){}));
-            REQUIRE_NOTHROW(treeView->connect(signal, [](tgui::Widget::Ptr, std::string, sf::String){}));
-            REQUIRE_NOTHROW(treeView->connect(signal, [](tgui::Widget::Ptr, std::string, std::string){}));
-            REQUIRE_NOTHROW(treeView->connect(signal, [](tgui::Widget::Ptr, std::string, std::vector<sf::String>){}));
+            REQUIRE_NOTHROW(treeView->connect(signal, [](tgui::String){}));
+            REQUIRE_NOTHROW(treeView->connect(signal, [](std::vector<tgui::String>){}));
+            REQUIRE_NOTHROW(treeView->connect(signal, [](tgui::Widget::Ptr, tgui::String){}));
+            REQUIRE_NOTHROW(treeView->connect(signal, [](tgui::Widget::Ptr, tgui::String, tgui::String){}));
+            REQUIRE_NOTHROW(treeView->connect(signal, [](tgui::Widget::Ptr, tgui::String, std::vector<tgui::String>){}));
         }
     }
 
@@ -141,7 +139,7 @@ TEST_CASE("[TreeView]")
         {
             treeView->addItem({"One"});
             REQUIRE(!treeView->addItem({"Two", "Sub"}, false));
-            REQUIRE(!treeView->addItem(std::vector<sf::String>()));
+            REQUIRE(!treeView->addItem(std::vector<tgui::String>()));
             REQUIRE(!treeView->removeItem({"One", "Sub"}));
         }
     }
@@ -194,20 +192,20 @@ TEST_CASE("[TreeView]")
         REQUIRE(treeView->getSelectedItem().empty());
 
         REQUIRE(treeView->selectItem({"Vehicles"}));
-        REQUIRE(treeView->getSelectedItem() == std::vector<sf::String>{"Vehicles"});
+        REQUIRE(treeView->getSelectedItem() == std::vector<tgui::String>{"Vehicles"});
 
         REQUIRE(!treeView->selectItem({"Unexisting"}));
-        REQUIRE(treeView->getSelectedItem() == std::vector<sf::String>{"Vehicles"});
+        REQUIRE(treeView->getSelectedItem() == std::vector<tgui::String>{"Vehicles"});
 
         REQUIRE(treeView->selectItem({"Smilies", "Neither"}));
-        REQUIRE(treeView->getSelectedItem() == std::vector<sf::String>{"Smilies", "Neither"});
+        REQUIRE(treeView->getSelectedItem() == std::vector<tgui::String>{"Smilies", "Neither"});
 
         REQUIRE(!treeView->selectItem({"Vehicles", "Parts", "Unexisting"}));
-        REQUIRE(treeView->getSelectedItem() == std::vector<sf::String>{"Smilies", "Neither"});
+        REQUIRE(treeView->getSelectedItem() == std::vector<tgui::String>{"Smilies", "Neither"});
 
         treeView->collapseAll();
         REQUIRE(treeView->selectItem({"Vehicles", "Parts", "Wheel"}));
-        REQUIRE(treeView->getSelectedItem() == std::vector<sf::String>{"Vehicles", "Parts", "Wheel"});
+        REQUIRE(treeView->getSelectedItem() == std::vector<tgui::String>{"Vehicles", "Parts", "Wheel"});
         REQUIRE(treeView->selectItem({"Vehicles", "Parts", "Wheel"}));
 
         treeView->deselectItem();

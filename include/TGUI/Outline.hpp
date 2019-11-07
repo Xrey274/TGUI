@@ -268,7 +268,7 @@ namespace tgui
         /// @return String representation of outline
         ///
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        std::string toString() const
+        String toString() const
         {
             return "(" + m_left.toString() + ", " + m_top.toString() + ", " + m_right.toString() + ", " + m_bottom.toString() + ")";
         }

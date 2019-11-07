@@ -139,7 +139,7 @@ int main()
 
         label = tgui::Label::create();
         label->setRenderer(theme.getRenderer("Label"));
-        label->setText(std::to_string(progressBar->getValue()) + "%");
+        label->setText(tgui::String::fromNumber(progressBar->getValue()) + "%");
         label->setPosition(220, 500);
         label->setTextSize(18);
         gui.add(label);

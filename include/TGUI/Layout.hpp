@@ -96,7 +96,7 @@ namespace tgui
         /// @param expression  String to parse
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         Layout(const char* expression) :
-            Layout{std::string{expression}}
+            Layout{String{expression}}
         {
         }
 
@@ -106,7 +106,7 @@ namespace tgui
         ///
         /// @param expression  String to parse
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        Layout(std::string expression);
+        Layout(String expression);
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -177,7 +177,7 @@ namespace tgui
         ///
         /// @return String representation of layout
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        std::string toString() const;
+        String toString() const;
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -231,7 +231,7 @@ namespace tgui
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Find the widget corresponding to the given name and bind it if found
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        void parseBindingString(const std::string& expression, Widget* widget, bool xAxis);
+        void parseBindingString(const String& expression, Widget* widget, bool xAxis);
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -243,7 +243,7 @@ namespace tgui
         std::unique_ptr<Layout> m_leftOperand = nullptr; // The left operand of the operation in case the operation is a math operation
         std::unique_ptr<Layout> m_rightOperand = nullptr; // The left operand of the operation in case the operation is a math operation
         Widget* m_boundWidget = nullptr; // The widget on which this layout depends in case the operation is a binding
-        std::string m_boundString; // String referring to a widget on which this layout depends in case the layout was created from a string and contains a binding operation
+        String m_boundString; // String referring to a widget on which this layout depends in case the layout was created from a string and contains a binding operation
         std::function<void()> m_connectedWidgetCallback = nullptr; // Function to call when the value of the layout changes in case the layout and sublayouts are not all constants
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -317,7 +317,7 @@ namespace tgui
         ///
         /// The expression will be passed to both the x and y layouts.
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        Layout2d(const std::string& expression) :
+        Layout2d(const String& expression) :
             x{expression},
             y{expression}
         {
@@ -341,7 +341,7 @@ namespace tgui
         ///
         /// @return String representation of layout
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        std::string toString() const
+        String toString() const
         {
             return "(" + x.toString() + ", " + y.toString() + ")";
         }

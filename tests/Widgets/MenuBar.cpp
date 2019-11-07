@@ -34,13 +34,11 @@ TEST_CASE("[MenuBar]")
     SECTION("Signals")
     {
         REQUIRE_NOTHROW(menuBar->connect("MenuItemClicked", [](){}));
-        REQUIRE_NOTHROW(menuBar->connect("MenuItemClicked", [](sf::String){}));
-        REQUIRE_NOTHROW(menuBar->connect("MenuItemClicked", [](std::string){}));
-        REQUIRE_NOTHROW(menuBar->connect("MenuItemClicked", [](std::vector<sf::String>){}));
-        REQUIRE_NOTHROW(menuBar->connect("MenuItemClicked", [](tgui::Widget::Ptr, std::string){}));
-        REQUIRE_NOTHROW(menuBar->connect("MenuItemClicked", [](tgui::Widget::Ptr, std::string, sf::String){}));
-        REQUIRE_NOTHROW(menuBar->connect("MenuItemClicked", [](tgui::Widget::Ptr, std::string, std::string){}));
-        REQUIRE_NOTHROW(menuBar->connect("MenuItemClicked", [](tgui::Widget::Ptr, std::string, std::vector<sf::String>){}));
+        REQUIRE_NOTHROW(menuBar->connect("MenuItemClicked", [](tgui::String){}));
+        REQUIRE_NOTHROW(menuBar->connect("MenuItemClicked", [](std::vector<tgui::String>){}));
+        REQUIRE_NOTHROW(menuBar->connect("MenuItemClicked", [](tgui::Widget::Ptr, tgui::String){}));
+        REQUIRE_NOTHROW(menuBar->connect("MenuItemClicked", [](tgui::Widget::Ptr, tgui::String, tgui::String){}));
+        REQUIRE_NOTHROW(menuBar->connect("MenuItemClicked", [](tgui::Widget::Ptr, tgui::String, std::vector<tgui::String>){}));
 
         REQUIRE_NOTHROW(menuBar->connectMenuItem("File", "Save", [](){}));
         REQUIRE_NOTHROW(menuBar->connectMenuItem({"Help", "About", "Version"}, [](){}));
@@ -211,7 +209,7 @@ TEST_CASE("[MenuBar]")
             menuBar->addMenu("File");
             REQUIRE(!menuBar->addMenuItem("Edit", "Item"));
 
-            REQUIRE(!menuBar->addMenuItem(std::vector<sf::String>()));
+            REQUIRE(!menuBar->addMenuItem(std::vector<tgui::String>()));
             REQUIRE(!menuBar->removeMenuItem({"File", "Other", "Print"}));
             REQUIRE(!menuBar->addMenuItem({"File", "Other", "Extra", "Quit"}, false));
         }

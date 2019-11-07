@@ -188,7 +188,7 @@ TEST_CASE("[Texture]")
         unsigned int count = 0;
         auto oldImageLoader = tgui::Texture::getImageLoader();
 
-        auto func = [&](const sf::String&) {
+        auto func = [&](const tgui::String&) {
             auto image = std::make_shared<sf::Image>();
             image->create(1,1);
             count++;
@@ -207,7 +207,7 @@ TEST_CASE("[Texture]")
         unsigned int count = 0;
         auto oldTextureLoader = tgui::Texture::getTextureLoader();
 
-        auto func = [&](tgui::Texture&, const sf::String&, const tgui::UIntRect&, bool) {
+        auto func = [&](tgui::Texture&, const tgui::String&, const tgui::UIntRect&, bool) {
             count++;
             auto data = std::make_shared<tgui::TextureData>();
             data->texture.emplace();

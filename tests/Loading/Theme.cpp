@@ -152,13 +152,13 @@ TEST_CASE("[Theme]")
     {
         struct CustomThemeLoader : public tgui::BaseThemeLoader
         {
-            void preload(const std::string& one) override
+            void preload(const tgui::String& one) override
             {
                 REQUIRE(one == "resources/Black.txt");
                 preloadCount++;
             }
 
-            const std::map<sf::String, sf::String>& load(const std::string& one, const std::string& two) override
+            const std::map<tgui::String, tgui::String>& load(const tgui::String& one, const tgui::String& two) override
             {
                 if (one != "")
                 {
@@ -172,12 +172,12 @@ TEST_CASE("[Theme]")
                 return retVal;
             }
 
-            bool canLoad(const std::string&, const std::string&) override
+            bool canLoad(const tgui::String&, const tgui::String&) override
             {
                 return true;
             }
 
-            std::map<sf::String, sf::String> retVal;
+            std::map<tgui::String, tgui::String> retVal;
             unsigned int preloadCount = 0;
             unsigned int loadCount = 0;
         };

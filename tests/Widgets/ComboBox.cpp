@@ -36,16 +36,12 @@ TEST_CASE("[ComboBox]")
     {
         REQUIRE_NOTHROW(comboBox->connect("ItemSelected", [](){}));
         REQUIRE_NOTHROW(comboBox->connect("ItemSelected", [](int){}));
-        REQUIRE_NOTHROW(comboBox->connect("ItemSelected", [](sf::String){}));
-        REQUIRE_NOTHROW(comboBox->connect("ItemSelected", [](std::string){}));
-        REQUIRE_NOTHROW(comboBox->connect("ItemSelected", [](sf::String, sf::String){}));
-        REQUIRE_NOTHROW(comboBox->connect("ItemSelected", [](std::string, std::string){}));
-        REQUIRE_NOTHROW(comboBox->connect("ItemSelected", [](tgui::Widget::Ptr, std::string){}));
-        REQUIRE_NOTHROW(comboBox->connect("ItemSelected", [](tgui::Widget::Ptr, std::string, int){}));
-        REQUIRE_NOTHROW(comboBox->connect("ItemSelected", [](tgui::Widget::Ptr, std::string, sf::String){}));
-        REQUIRE_NOTHROW(comboBox->connect("ItemSelected", [](tgui::Widget::Ptr, std::string, std::string){}));
-        REQUIRE_NOTHROW(comboBox->connect("ItemSelected", [](tgui::Widget::Ptr, std::string, sf::String, sf::String){}));
-        REQUIRE_NOTHROW(comboBox->connect("ItemSelected", [](tgui::Widget::Ptr, std::string, std::string, std::string){}));
+        REQUIRE_NOTHROW(comboBox->connect("ItemSelected", [](tgui::String){}));
+        REQUIRE_NOTHROW(comboBox->connect("ItemSelected", [](tgui::String, tgui::String){}));
+        REQUIRE_NOTHROW(comboBox->connect("ItemSelected", [](tgui::Widget::Ptr, tgui::String){}));
+        REQUIRE_NOTHROW(comboBox->connect("ItemSelected", [](tgui::Widget::Ptr, tgui::String, int){}));
+        REQUIRE_NOTHROW(comboBox->connect("ItemSelected", [](tgui::Widget::Ptr, tgui::String, tgui::String){}));
+        REQUIRE_NOTHROW(comboBox->connect("ItemSelected", [](tgui::Widget::Ptr, tgui::String, tgui::String, tgui::String){}));
     }
 
     SECTION("WidgetType")
@@ -250,7 +246,7 @@ TEST_CASE("[ComboBox]")
 
     SECTION("DefaultText")
     {
-        REQUIRE(comboBox->getDefaultText().isEmpty());
+        REQUIRE(comboBox->getDefaultText().empty());
         comboBox->setDefaultText("Hello");
         REQUIRE(comboBox->getDefaultText() == "Hello");
     }

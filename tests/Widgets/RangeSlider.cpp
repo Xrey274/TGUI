@@ -38,8 +38,8 @@ TEST_CASE("[RangeSlider]")
     {
         REQUIRE_NOTHROW(slider->connect("RangeChanged", [](){}));
         REQUIRE_NOTHROW(slider->connect("RangeChanged", [](float, float){}));
-        REQUIRE_NOTHROW(slider->connect("RangeChanged", [](tgui::Widget::Ptr, std::string){}));
-        REQUIRE_NOTHROW(slider->connect("RangeChanged", [](tgui::Widget::Ptr, std::string, float, float){}));
+        REQUIRE_NOTHROW(slider->connect("RangeChanged", [](tgui::Widget::Ptr, tgui::String){}));
+        REQUIRE_NOTHROW(slider->connect("RangeChanged", [](tgui::Widget::Ptr, tgui::String, float, float){}));
     }
 
     SECTION("WidgetType")

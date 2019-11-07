@@ -31,17 +31,17 @@
 
 namespace tgui
 {
-    std::map<sf::String, std::list<TextureDataHolder>> TextureManager::m_imageMap;
+    std::map<String, std::list<TextureDataHolder>> TextureManager::m_imageMap;
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    std::shared_ptr<TextureData> TextureManager::getTexture(Texture& texture, const sf::String& filename, const UIntRect& partRect, bool smooth)
+    std::shared_ptr<TextureData> TextureManager::getTexture(Texture& texture, const String& filename, const UIntRect& partRect, bool smooth)
     {
         // Let the texture alert the texture manager when it is being copied or destroyed
         texture.setCopyCallback(&TextureManager::copyTexture);
         texture.setDestructCallback(&TextureManager::removeTexture);
 
-        const bool isSvg = ((filename.getSize() > 4) && (toLower(filename.substring(filename.getSize() - 4, 4)) == ".svg"));
+        const bool isSvg = ((filename.length() > 4) && (filename.substr(filename.length() - 4, 4).toLower() == ".svg"));
 
         // Look if we already had this image
         auto imageIt = m_imageMap.find(filename);
@@ -106,7 +106,7 @@ namespace tgui
 
         // Load the image
         auto data = imageIt->second.back().data;
-        if ((filename.getSize() > 4) && (toLower(filename.substring(filename.getSize() - 4, 4)) == ".svg"))
+        if ((filename.length() > 4) && (filename.substr(filename.length() - 4, 4).toLower() == ".svg"))
         {
             data->svgImage.emplace(filename);
             if (data->svgImage->isSet())
