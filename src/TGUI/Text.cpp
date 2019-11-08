@@ -429,7 +429,11 @@ namespace tgui
 
     String Text::wordWrap(float maxWidth, const String& text, Font font, unsigned int textSize, bool bold, bool dropLeadingSpace)
     {
-        /// TODO: Optimize function to decode and encode UTF-8 on the fly to avoid copy to and from UTF-32
+        /// TODO: Optimize function to decode and encode UTF-8 on the fly to avoid copy to and from UTF-32?
+        ///       Word-wrap should be implemented differently to do this, as moving back is extra difficult.
+        ///       Instead of finding the length of the line and then figuring out if it is too long, the length
+        ///       of the next word should be searched to then determine if it is added to the line or to the next.
+
         return String(wordWrap(maxWidth, std::u32string(text), font, textSize, bold, dropLeadingSpace));
     }
 

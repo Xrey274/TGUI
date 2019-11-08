@@ -34,7 +34,6 @@
 
 #include <SFML/Graphics/Image.hpp>
 #include <SFML/Graphics/Texture.hpp>
-#include <SFML/Graphics/Shader.hpp>
 
 #include <memory>
 #include <string>

@@ -24,6 +24,7 @@
 
 
 #include <TGUI/String.hpp>
+#include <TGUI/Utf.hpp>
 
 #include <cctype> // tolower, toupper, isspace
 
@@ -182,27 +183,22 @@ namespace tgui
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    String::String(const std::string& str)
-        : m_string{str}
-    {
-    }
-
     String::String(const std::wstring& str)
     {
         m_string.reserve(str.length()+1); // Minimum size needed
-        sf::Utf8::fromWide(str.begin(), str.end(), std::back_inserter(m_string));
+        utf::convertWidetoUtf8(str, m_string);
     }
 
     String::String(const std::u16string& str)
     {
         m_string.reserve(str.length()+1); // Minimum size needed
-        sf::Utf16::toUtf8(str.begin(), str.end(), std::back_inserter(m_string));
+        utf::convertUtf16toUtf8(str, m_string);
     }
 
     String::String(const std::u32string& str)
     {
         m_string.reserve(str.length()+1); // Minimum size needed
-        sf::Utf32::toUtf8(str.begin(), str.end(), std::back_inserter(m_string));
+        utf::convertUtf32toUtf8(str, m_string);
     }
 
     String::String(char ansiChar)
@@ -222,7 +218,7 @@ namespace tgui
 
     String::String(char32_t wideChar)
     {
-        sf::Utf8::encode(static_cast<sf::Uint32>(wideChar), std::back_inserter(m_string));
+        utf::encodeCharUtf8(wideChar, m_string);
     }
 
     String::String(const wchar_t* str)

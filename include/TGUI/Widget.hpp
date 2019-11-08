@@ -43,7 +43,6 @@
 #include <TGUI/Aurora/SmartPtr/CopiedPtr.hpp>
 #include <TGUI/Aurora/Tools/Downcast.hpp>
 
-#include <SFML/System/Time.hpp>
 #include <SFML/Window/Event.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
 

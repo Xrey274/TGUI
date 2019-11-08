@@ -27,8 +27,6 @@
 #include <TGUI/ToolTip.hpp>
 #include <TGUI/Clipping.hpp>
 
-#include <SFML/Graphics/RenderTexture.hpp>
-
 #include <cassert>
 
 #ifdef TGUI_SYSTEM_WINDOWS

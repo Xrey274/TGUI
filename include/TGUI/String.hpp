@@ -174,7 +174,11 @@ namespace tgui
 
         String() = default;
 
-        String(const std::string& str);
+        String(const std::string& str) :
+            m_string(str)
+        {
+        }
+
         String(const std::wstring& str);
         String(const std::u16string& str);
         String(const std::u32string& str);

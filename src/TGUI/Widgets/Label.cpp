@@ -639,7 +639,7 @@ namespace tgui
 
                 string = Text::wordWrap(maxWidth, m_string, m_fontCached, m_textSize, m_textStyleCached & TextStyle::Bold);
 
-                const auto newLineCount = std::count(string.begin(), string.end(), static_cast<sf::Uint32>('\n')) + 1;
+                const auto newLineCount = std::count(string.begin(), string.end(), '\n') + 1;
                 requiredTextHeight = newLineCount * m_fontCached.getLineSpacing(m_textSize)
                                      + Text::calculateExtraVerticalSpace(m_fontCached, m_textSize, m_textStyleCached)
                                      + Text::getExtraVerticalPadding(m_textSize);
